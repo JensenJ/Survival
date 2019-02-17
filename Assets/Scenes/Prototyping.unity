@@ -305,8 +305,6 @@ GameObject:
   m_Component:
   - component: {fileID: 336468595}
   - component: {fileID: 336468594}
-  - component: {fileID: 336468597}
-  - component: {fileID: 336468596}
   m_Layer: 0
   m_Name: EnvironmentController
   m_TagString: Untagged
@@ -327,9 +325,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sun: {fileID: 170076734}
+  bIsTimeEnabled: 1
   timeMultiplier: 1
-  DaysInMonth: 30
-  MonthsInYear: 4
+  daysInMonth: 30
+  monthsInYear: 12
   currentTimeOfDay: 0
   Seconds: 0
   Minutes: 0
@@ -338,6 +337,14 @@ MonoBehaviour:
   Month: 1
   Year: 1
   Clockwork: 0
+  seasonEnum: 0
+  tempMultiplier: 1
+  bIsTempFahrenheit: 0
+  temperature: 0
+  windStrengthMultiplier: 1
+  windStrength: 0
+  windAngle: 0
+  weatherEnum: 0
 --- !u!4 &336468595
 Transform:
   m_ObjectHideFlags: 0
@@ -352,30 +359,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &336468596
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 336468593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc4d0805e763b9542903c8ddf3167da3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &336468597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 336468593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 184fe56a72d691843a6db1c29eb7e516, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &454802663 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: fadddc63520db414bbc9126cbf4743ad,

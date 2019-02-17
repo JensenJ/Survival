@@ -5,14 +5,14 @@ using UnityEngine;
 public class EnvironmentController : MonoBehaviour
 {
 
-    [Header("References: ")]
+    [Header("References:")]
     [SerializeField] private Light sun;
 
-    [Header("Time: ")]
+    [Header("Time:")]
     [SerializeField] private bool bIsTimeEnabled = true;
     [SerializeField] private float timeMultiplier = 1f;
-    [SerializeField] private int DaysInMonth = 30;
-    [SerializeField] private int MonthsInYear = 12;
+    [SerializeField] private int daysInMonth = 30;
+    [SerializeField] private int monthsInYear = 12;
 
     [Range(0, 1)] [SerializeField] private float currentTimeOfDay = 0;
 
@@ -26,7 +26,8 @@ public class EnvironmentController : MonoBehaviour
     [SerializeField] private float Clockwork;
 
     enum ESeasonEnum { ENone, ESpring, ESummer, EAutumn, EWinter };
-    [SerializeField] ESeasonEnum SeasonEnum;
+    [SerializeField] ESeasonEnum seasonEnum;
+
 
     private float DayTick;
     private float sunInitialIntensity;
@@ -35,6 +36,7 @@ public class EnvironmentController : MonoBehaviour
     [Header("Temperature:")]
     [SerializeField] float tempMultiplier = 1;
     [SerializeField] bool bIsTempFahrenheit = false;
+    [SerializeField] float temperature = 0;
     bool bNewGenerationTemp = true;
     bool bHasGeneratedTemp = false;
     float lastTemp = 0;
@@ -44,10 +46,39 @@ public class EnvironmentController : MonoBehaviour
     float[] gameTemp;
     float averageTemp;
 
+    [Header("Wind:")]
+    [SerializeField] float windStrengthMultiplier = 1;
+    [SerializeField] float windStrength = 0;
+    bool bNewGenerationWind = true;
+    bool bHasGeneratedWind = false;
+    float lastWind;
+    float generatedWind;
+    float[] gameWind;
+    float averageWind;
+
+    [SerializeField] float windAngle = 0;
+    bool bNewGenerationWindAngle = true;
+    bool bHasGeneratedWindAngle = false;
+    float lastWindAngle;
+    float generatedWindAngle;
+    float[] gameWindAngle;
+    float averageWindAngle;
+
+    [Header("Weather:")]
+    [SerializeField] EWeatherEnum weatherEnum;
+    bool bNewGenerationWeather = true;
+    bool bHasGeneratedWeather = false;
+    int counter;
+    enum EWeatherEnum { ENone, ESunny, EOvercast, ECloudy, ERain, ESnow, EThunder, EFog };
+    EWeatherEnum lastWeather;
+    EWeatherEnum weather;
+
     void Start()
     {
         sunInitialIntensity = sun.intensity;
         gameTemp = new float[3];
+        gameWind = new float[3];
+        gameWindAngle = new float[3];
     }
 
     void Update()
@@ -60,9 +91,12 @@ public class EnvironmentController : MonoBehaviour
         Clock();
         Calendar();
 
+        Season();
         UpdateSun();
         Temperature();
-        Season();
+        WindStrength();
+        WindAngle();
+        Weather();
     }
 
     void SetClockwork()
@@ -76,11 +110,12 @@ public class EnvironmentController : MonoBehaviour
         DayTick = NewDayTick;
         currentTimeOfDay = NewDayTick;
 
-        if(currentTimeOfDay >= 1)
+        if (currentTimeOfDay >= 1)
         {
             currentTimeOfDay = 0;
         }
     }
+
     void Clock()
     {
         // Seconds
@@ -100,6 +135,7 @@ public class EnvironmentController : MonoBehaviour
         DayNightHours = NewHours % 60.0f;
         Hours = Mathf.FloorToInt(DayNightHours);
     }
+
     void UpdateSun()
     {
         sun.transform.localRotation = Quaternion.Euler((currentTimeOfDay * 360f) - 90, 170, 0);
@@ -121,47 +157,48 @@ public class EnvironmentController : MonoBehaviour
 
         sun.intensity = sunInitialIntensity * intensityMultiplier;
     }
+
     void Calendar()
     {
         Day = (int)DayTick + Day;
-        if (Day > DaysInMonth)
+        if (Day > daysInMonth)
         {
             Day = 1;
             Month++;
         }
-        if (Month > MonthsInYear)
+        if (Month > monthsInYear)
         {
             Month = 1;
             Year++;
         }
     }
 
-    ESeasonEnum Season()
+    void Season()
     {
         if (Month == 12 || Month == 1 || Month == 2)
         {
-            return ESeasonEnum.EWinter;
+            seasonEnum = ESeasonEnum.EWinter;
         }
         else if (Month == 3 || Month == 4 || Month == 5)
         {
-            return ESeasonEnum.ESpring;
+            seasonEnum = ESeasonEnum.ESpring;
         }
         else if (Month == 6 || Month == 7 || Month == 8)
         {
-            return ESeasonEnum.ESummer;
+            seasonEnum = ESeasonEnum.ESummer;
         }
         else if (Month == 9 || Month == 10 || Month == 11)
         {
-            return ESeasonEnum.EAutumn;
+            seasonEnum = ESeasonEnum.EAutumn;
         }
         else
         {
             print("Season::Setting season failed!");
-            return ESeasonEnum.ENone;
+            seasonEnum = ESeasonEnum.ENone;
         }
     }
 
-    float Temperature()
+    void Temperature()
     {
         if (bNewGenerationTemp)
         {
@@ -169,28 +206,28 @@ public class EnvironmentController : MonoBehaviour
             bNewGenerationTemp = false;
         }
 
-        if(Minutes == 0)
+        if (Minutes == 0)
         {
             if (!bHasGeneratedTemp)
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    if (SeasonEnum == ESeasonEnum.EWinter)
+                    if (seasonEnum == ESeasonEnum.EWinter)
                     {
                         maxGenTemp = 8.0f * tempMultiplier;
                         minGenTemp = -7.0f * tempMultiplier;
                     }
-                    else if (SeasonEnum == ESeasonEnum.ESpring)
+                    else if (seasonEnum == ESeasonEnum.ESpring)
                     {
                         maxGenTemp = 12.0f * tempMultiplier;
                         minGenTemp = 2.0f * tempMultiplier;
                     }
-                    else if (SeasonEnum == ESeasonEnum.ESummer)
+                    else if (seasonEnum == ESeasonEnum.ESummer)
                     {
                         maxGenTemp = 20.0f * tempMultiplier;
                         minGenTemp = 7.0f * tempMultiplier;
                     }
-                    else if (SeasonEnum == ESeasonEnum.EAutumn)
+                    else if (seasonEnum == ESeasonEnum.EAutumn)
                     {
                         maxGenTemp = 13.0f * tempMultiplier;
                         minGenTemp = -3.0f * tempMultiplier;
@@ -202,18 +239,18 @@ public class EnvironmentController : MonoBehaviour
 
                     generatedTemp = Random.Range(minGenTemp, maxGenTemp);
 
-                    if((generatedTemp - lastTemp) > 4)
+                    if ((generatedTemp - lastTemp) > 4)
                     {
                         generatedTemp = lastTemp + Random.Range(2.0f, 3.5f);
-                    }else if ((lastTemp - generatedTemp) > 4)
+                    } else if ((lastTemp - generatedTemp) > 4)
                     {
                         generatedTemp = lastTemp - Random.Range(0.0f, 2.5f);
                     }
 
-                    if(Hours <= 13 && Hours > 1)
+                    if (Hours <= 13 && Hours > 1)
                     {
                         generatedTemp = generatedTemp + Random.Range(1.5f, 3.0f);
-                    }else if(Hours > 13 && Hours < 24)
+                    } else if (Hours > 13 && Hours < 24)
                     {
                         generatedTemp = generatedTemp - Random.Range(0.2f, 1.5f);
                     }
@@ -221,7 +258,7 @@ public class EnvironmentController : MonoBehaviour
                 }
                 averageTemp = (gameTemp[0] + gameTemp[1] + gameTemp[2]) / 3;
 
-                //averageTemp = averageTemp - windFloat / 5;
+                averageTemp = averageTemp - (windStrength / 5);
 
                 if (averageTemp < -273.0f)
                 {
@@ -241,6 +278,410 @@ public class EnvironmentController : MonoBehaviour
         {
             bHasGeneratedTemp = false;
         }
-        return averageTemp;
+        temperature = averageTemp;
+    }
+
+    void WindStrength()
+    {
+        if (bNewGenerationWind)
+        {
+            lastWind = Random.Range(0, 7);
+            bNewGenerationWind = false;
+        }
+
+        if ((Hours == 0 && Minutes == 0) ||
+            (Hours == 6 && Minutes == 0) ||
+            (Hours == 12 && Minutes == 0) ||
+            (Hours == 18 && Minutes == 0))
+        {
+            if (!bHasGeneratedWind)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    generatedWind = Random.Range(-3.0f, 3.0f);
+
+                    if ((generatedWind - lastWind) > 3)
+                    {
+                        generatedWind = lastWind + Random.Range(0.0f, 3.0f);
+                    } else if ((lastWind - generatedWind) < 3)
+                    {
+                        generatedWind = lastWind - Random.Range(0.0f, 3.0f);
+                    }
+
+                    gameWind[i] = generatedWind;
+                }
+
+                averageWind = (gameWind[0] + gameWind[1] + gameWind[2]) / 3;
+
+                if (averageWind > 2.5f)
+                {
+                    averageWind = averageWind - Random.Range(0.3f, 0.9f);
+                } else if (averageWind < 0)
+                {
+                    averageWind = Random.Range(0.3f, 1.3f);
+                }
+                lastWind = averageWind;
+                averageWind = averageWind * windStrengthMultiplier;
+                bHasGeneratedWind = true;
+            }
+        }
+        else
+        {
+            bHasGeneratedWind = false;
+        }
+        windStrength = averageWind;
+    }
+
+    void WindAngle() {
+        if (bNewGenerationWindAngle) {
+            lastWindAngle = Random.Range(0.0f, 360.0f);
+            bNewGenerationWindAngle = false;
+        }
+
+        if (Minutes == 0) { 
+            if (!bHasGeneratedWindAngle) {
+                for (int i = 0; i < 3; i++) { 
+                    generatedWindAngle = Random.Range(0.0f, 360.0f);
+
+                    
+                    if ((generatedWindAngle - lastWindAngle) > 15) {
+                        generatedWindAngle = lastWindAngle + Random.Range(0.0f, 10.0f);
+                    }
+                    else if ((lastWindAngle - generatedWindAngle) < 15) {
+                        generatedWindAngle = lastWindAngle - Random.Range(0.0f, 10.0f);
+                    }
+                    gameWindAngle[i] = generatedWindAngle;
+                }
+
+                
+                averageWindAngle = (gameWindAngle[0] + gameWindAngle[1] + gameWindAngle[2]) / 3;
+
+                if (averageWindAngle < 0) {
+                    averageWindAngle = 340 - averageWindAngle;
+                }
+                else if (averageWindAngle > 360) {
+                    averageWindAngle = averageWindAngle - 340;
+                }
+                lastWindAngle = averageWindAngle;
+                bHasGeneratedWindAngle = true; 
+            }
+        }
+        else {
+            bHasGeneratedWindAngle = false; 
+        }
+
+        windAngle = averageWindAngle; 
+    }
+
+    void Weather()
+    {
+        if (Minutes == 0) { 
+            if (!bHasGeneratedWeather) {
+                if (bNewGenerationWeather == true) {
+
+                    int GeneratedWeather = Random.Range(1, 4);
+
+                    if (GeneratedWeather == 1) {
+                        weather = EWeatherEnum.ESunny;
+                    }
+                    else if (GeneratedWeather == 2) {
+                        weather = EWeatherEnum.ECloudy;
+                    }
+                    else if (GeneratedWeather == 3) {
+                        weather = EWeatherEnum.EOvercast;
+                    }
+                    else if (GeneratedWeather == 4) {
+                        weather = EWeatherEnum.ERain;
+                    }
+                    else {
+                        weather = EWeatherEnum.ENone;
+                    }
+                    bNewGenerationWeather = false;
+                }
+                else if (bNewGenerationWeather == false) {
+                    if (Hours == 0) {
+                    }
+                    else if (lastWeather == EWeatherEnum.ESunny) {
+                        if (seasonEnum == ESeasonEnum.ESpring) {
+                            int Sun = Random.Range(0, 2);
+                            if (Sun == 0 || Sun == 1) {
+                                weather = EWeatherEnum.ESunny;
+                            }
+                            else if (Sun == 2) {
+                                weather = EWeatherEnum.ECloudy;
+                            }
+                            else {
+                                weather = EWeatherEnum.ENone;
+                            }
+                        }
+                        else if (seasonEnum == ESeasonEnum.ESummer) {
+                            int Sun = Random.Range(0, 4);
+                            if (Sun == 0 || Sun == 2 || Sun == 3) {
+                                weather = EWeatherEnum.ESunny;
+                            }
+                            else if (Sun == 4) {
+                                weather = EWeatherEnum.ECloudy;
+                            }
+                            else {
+                                weather = EWeatherEnum.ENone;
+                            }
+                        }
+                        else if (seasonEnum == ESeasonEnum.EAutumn) {
+                            int Sun = Random.Range(0, 1);
+                            if (Sun == 0) {
+                                weather = EWeatherEnum.ESunny;
+                            }
+                            else if (Sun == 1) {
+                                weather = EWeatherEnum.ECloudy;
+                            }
+                            else {
+                                weather = EWeatherEnum.ENone;
+                            }
+                        }
+                        else if (seasonEnum == ESeasonEnum.EWinter) {
+                            int Sun = Random.Range(0, 2);
+                            if (Sun == 0) {
+                                weather = EWeatherEnum.ESunny;
+                            }
+                            else if (Sun == 1 || Sun == 2) {
+                                weather = EWeatherEnum.ECloudy;
+                            }
+                            else {
+                                weather = EWeatherEnum.ENone;
+                            }
+                        }
+                    }
+                    else if (lastWeather == EWeatherEnum.ECloudy) {
+                        if (seasonEnum == ESeasonEnum.ESpring) {
+                            int Cloudy = Random.Range(0, 7);
+                            if (Cloudy == 0 || Cloudy == 1) {
+                                weather = EWeatherEnum.ECloudy;
+                            }
+                            else if (Cloudy == 2 || Cloudy == 3 || Cloudy == 4) {
+                                weather = EWeatherEnum.ESunny;
+                            }
+                            else if (Cloudy == 5 || Cloudy == 6) {
+                                weather = EWeatherEnum.EOvercast;
+                            }
+                            else if (Cloudy == 7) {
+                                weather = EWeatherEnum.EFog;
+                            }
+                            else {
+                                weather = EWeatherEnum.ENone;
+                            }
+                        }
+                        else if (seasonEnum == ESeasonEnum.ESummer) {
+                            int Cloudy = Random.Range(0, 7);
+                            if (Cloudy == 0 || Cloudy == 1 || Cloudy == 2) {
+                                weather = EWeatherEnum.ECloudy;
+                            }
+                            else if (Cloudy == 3 || Cloudy == 4 || Cloudy == 5 || Cloudy == 6) {
+                                weather = EWeatherEnum.ESunny;
+                            }
+                            else if (Cloudy == 7) {
+                                weather = EWeatherEnum.EOvercast;
+                            }
+                            else if (Cloudy == 8) {
+                                weather = EWeatherEnum.EFog;
+                            }
+                            else {
+                                weather = EWeatherEnum.ENone;
+                            }
+                        }
+                        else if (seasonEnum == ESeasonEnum.EAutumn) {
+                            int Cloudy = Random.Range(0, 9);
+                            if (Cloudy == 0 || Cloudy == 1 || Cloudy == 2 || Cloudy == 3 || Cloudy == 4) {
+                                weather = EWeatherEnum.ECloudy;
+                            }
+                            else if (Cloudy == 5 || Cloudy == 6) {
+                                weather = EWeatherEnum.ESunny;
+                            }
+                            else if (Cloudy == 7 || Cloudy == 8) {
+                                weather = EWeatherEnum.EOvercast;
+                            }
+                            else if (Cloudy == 9) {
+                                weather = EWeatherEnum.EFog;
+                            }
+                            else {
+                                weather = EWeatherEnum.ENone;
+                            }
+                        }
+                        else if (seasonEnum == ESeasonEnum.EWinter) {
+                            int Cloudy = Random.Range(0, 8);
+                            if (Cloudy == 0 || Cloudy == 1 || Cloudy == 2 || Cloudy == 3) {
+                                weather = EWeatherEnum.ECloudy;
+                            }
+                            else if (Cloudy == 4) {
+                                weather = EWeatherEnum.ESunny;
+                            }
+                            else if (Cloudy == 5 || Cloudy == 6 || Cloudy == 7) {
+                                weather = EWeatherEnum.EOvercast;
+                            }
+                            else if (Cloudy == 8) {
+                                weather = EWeatherEnum.EFog;
+                            }
+                            else {
+                                weather = EWeatherEnum.ENone;
+                            }
+                        }
+                    }
+                    else if (lastWeather == EWeatherEnum.EOvercast) {
+                        if (seasonEnum == ESeasonEnum.ESpring) {
+                            int Overcast = Random.Range(0, 9);
+                            if (Overcast == 0 || Overcast == 1 || Overcast == 2) {
+                                weather = EWeatherEnum.EOvercast;
+                            }
+                            else if (Overcast == 3 || Overcast == 4 || Overcast == 5 || Overcast == 6) {
+                                weather = EWeatherEnum.ECloudy;
+                            }
+                            else if (Overcast == 7 || Overcast == 8) {
+                                weather = EWeatherEnum.ERain;
+                            }
+                            else if (Overcast == 9) {
+                                weather = EWeatherEnum.EThunder;
+                            }
+                            else {
+                                weather = EWeatherEnum.ENone;
+                            }
+                        }
+                        else if (seasonEnum == ESeasonEnum.ESummer) {
+                            int Overcast = Random.Range(0, 5);
+                            if (Overcast == 0 || Overcast == 1) {
+                                weather = EWeatherEnum.EOvercast;
+                            }
+                            else if (Overcast == 2 || Overcast == 3 || Overcast == 4) {
+                                weather = EWeatherEnum.ECloudy;
+                            }
+                            else if (Overcast == 5) {
+                                weather = EWeatherEnum.ERain;
+                            }
+                            else {
+                                weather = EWeatherEnum.ENone;
+                            }
+                        }
+                        else if (seasonEnum == ESeasonEnum.EAutumn) {
+                            int Overcast = Random.Range(0, 8);
+                            if (Overcast == 0 || Overcast == 1 || Overcast == 2) {
+                                weather = EWeatherEnum.EOvercast;
+                            }
+                            else if (Overcast == 3 || Overcast == 4 || Overcast == 5) {
+                                weather = EWeatherEnum.ECloudy;
+                            }
+                            else if (Overcast == 6 || Overcast == 7) {
+                                weather = EWeatherEnum.ERain;
+                            }
+                            else if (Overcast == 8) {
+                                weather = EWeatherEnum.EThunder;
+                            }
+                            else {
+                                weather = EWeatherEnum.ENone;
+                            }
+                        }
+                        else if (seasonEnum == ESeasonEnum.EWinter) {
+                            int Overcast = Random.Range(0, 9);
+                            if (Overcast == 0 || Overcast == 1 || Overcast == 2) {
+                                weather = EWeatherEnum.EOvercast;
+                            }
+                            else if (Overcast == 3 || Overcast == 4) {
+                                weather = EWeatherEnum.ECloudy;
+                            }
+                            else if (Overcast == 5) {
+                                weather = EWeatherEnum.ESnow;
+                            }
+                            else if (Overcast == 6 || Overcast == 7 || Overcast == 8) {
+                                weather = EWeatherEnum.ERain;
+                            }
+                            else if (Overcast == 9) {
+                                weather = EWeatherEnum.EThunder;
+                            }
+                            else {
+                                weather = EWeatherEnum.ENone;
+                            }
+                        }
+                    }
+                    else if (lastWeather == EWeatherEnum.ERain) {
+                        int Rain = Random.Range(0, 8);
+                        if (Rain == 0 || Rain == 1 || Rain == 2 || Rain == 3) {
+                            weather = EWeatherEnum.ERain;
+                        }
+                        else if (Rain == 4 || Rain == 5 || Rain == 6) {
+                            weather = EWeatherEnum.EOvercast;
+                        }
+                        else if (Rain == 7) {
+                            weather = EWeatherEnum.EFog;
+                        }
+                        else if (Rain == 8) {
+                            weather = EWeatherEnum.EThunder;
+                        }
+                        else {
+                            weather = EWeatherEnum.ENone;
+                        }
+                    }
+                    else if (lastWeather == EWeatherEnum.EThunder) {
+                        int Thunder = Random.Range(0, 6);
+                        if (Thunder == 0 || Thunder == 1) {
+                            weather = EWeatherEnum.EThunder;
+                        }
+                        else if (Thunder == 2 || Thunder == 3 || Thunder == 4) {
+                            weather = EWeatherEnum.ERain;
+                        }
+                        else if (Thunder == 5) {
+                            weather = EWeatherEnum.EOvercast;
+                        }
+                        else if (Thunder == 6) {
+                            weather = EWeatherEnum.ECloudy;
+                        }
+                        else {
+                            weather = EWeatherEnum.ENone;
+                        }
+                    }
+                    else if (lastWeather == EWeatherEnum.EFog) {
+                        int Fog = Random.Range(0, 3);
+                        if (Fog == 0) {
+                            weather = EWeatherEnum.EFog;
+                        }
+                        else if (Fog == 1 || Fog == 2) {
+                            weather = EWeatherEnum.ESunny;
+                        }
+                        else if (Fog == 3) {
+                            weather = EWeatherEnum.ECloudy;
+                        }
+                        else {
+                            weather = EWeatherEnum.ENone;
+                        }
+                    }
+                    else if (lastWeather == EWeatherEnum.ESnow) {
+                        int Snow = Random.Range(0, 3);
+                        if (Snow == 0 || Snow == 1) {
+                            weather = EWeatherEnum.ESnow;
+                        }
+                        else if (Snow == 2) {
+                            weather = EWeatherEnum.ECloudy;
+                        }
+                        else if (Snow == 3) {
+                            weather = EWeatherEnum.EOvercast;
+                        }
+                        else {
+                            weather = EWeatherEnum.ENone;
+                        }
+                    }
+                }
+                else {
+                    weather = EWeatherEnum.ENone;
+                }
+
+                lastWeather = weather;
+                counter++;
+                if (counter >= 1) {
+                    bNewGenerationWeather = false;
+                }
+                bHasGeneratedWeather = true; //Makes sure generation only happens once
+            }
+
+        }
+        else {
+            bHasGeneratedWeather = false; //Resets the variable for the next hour
+        }
+        weatherEnum = weather;
     }
 }
