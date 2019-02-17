@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimeController : MonoBehaviour
+public class EnvironmentController : MonoBehaviour
 {
+
+    [Header("References: ")]
     [SerializeField] private Light sun;
+
+    //[Space(20)]
+    [Header("Time: ")]
+    [SerializeField] private bool bIsTimeEnabled = true;
     [SerializeField] private float timeMultiplier = 1f;
     [SerializeField] private int DaysInMonth = 30;
     [SerializeField] private int MonthsInYear = 4;
@@ -27,18 +33,41 @@ public class TimeController : MonoBehaviour
     private float DayNightHours;
     private int dayTracker = 1;
 
+    //[Space(20)]
+    [Header("Temperature:")]
+    [SerializeField] float tempMultiplier = 1;
+    [SerializeField] bool bNewGenerationTemp = true;
+    [SerializeField] bool bHasGeneratedTemp = false;
+    [SerializeField] bool bIsTempFahrenheit = false;
+    float lastTemp = 0;
+    float minGenTemp = 0;
+    float maxGenTemp = 7;
+    float generatedTemp = 5.0f;
+    float[] gameTemp;
+    float averageTemp;
+
     void Start()
     {
         sunInitialIntensity = sun.intensity;
+        gameTemp = new float[3];
     }
 
     void Update()
     {
-        SetClockwork();
-        Clock();
-        Calendar();
+        if (bIsTimeEnabled)
+        {
+            SetClockwork();
+            Clock();
+            Calendar();
+            UpdateSun();
+        }
 
-        UpdateSun();
+        UpdateEnvironment();
+    }
+
+    void UpdateEnvironment()
+    {
+        print(Temperature());
     }
 
     void SetClockwork()
@@ -57,7 +86,6 @@ public class TimeController : MonoBehaviour
             currentTimeOfDay = 0;
         }
     }
-
     void Clock()
     {
         // Seconds
@@ -77,7 +105,6 @@ public class TimeController : MonoBehaviour
         DayNightHours = NewHours % 60.0f;
         Hours = Mathf.FloorToInt(DayNightHours);
     }
-
     void UpdateSun()
     {
         sun.transform.localRotation = Quaternion.Euler((currentTimeOfDay * 360f) - 90, 170, 0);
@@ -99,7 +126,6 @@ public class TimeController : MonoBehaviour
 
         sun.intensity = sunInitialIntensity * intensityMultiplier;
     }
-
     void Calendar()
     {
         Day = (int)DayTick + Day;
@@ -113,5 +139,64 @@ public class TimeController : MonoBehaviour
             Month = 1;
             Year++;
         }
+    }
+
+    float Temperature()
+    {
+        if (bNewGenerationTemp)
+        {
+            lastTemp = Random.Range(0, 7);
+            bNewGenerationTemp = false;
+        }
+
+        if(Minutes == 0)
+        {
+            if (!bHasGeneratedTemp)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    //TODO Season Check
+                    generatedTemp = Random.Range(minGenTemp, maxGenTemp);
+
+                    if((generatedTemp - lastTemp) > 4)
+                    {
+                        generatedTemp = lastTemp + Random.Range(2.0f, 3.5f);
+                    }else if ((lastTemp - generatedTemp) > 4)
+                    {
+                        generatedTemp = lastTemp - Random.Range(0.0f, 2.5f);
+                    }
+
+                    if(Hours <= 13 && Hours > 1)
+                    {
+                        generatedTemp = generatedTemp + Random.Range(1.5f, 3.0f);
+                    }else if(Hours > 13 && Hours < 24)
+                    {
+                        generatedTemp = generatedTemp - Random.Range(0.2f, 1.5f);
+                    }
+                    gameTemp[i] = generatedTemp;
+                }
+                averageTemp = (gameTemp[0] + gameTemp[1] + gameTemp[2]) / 3;
+
+                //averageTemp = averageTemp - windFloat / 5;
+
+                if (averageTemp < -273.0f)
+                {
+                    averageTemp = -273.0f;
+                }
+                lastTemp = averageTemp;
+
+                if (bIsTempFahrenheit)
+                {
+                    averageTemp = (averageTemp * (9 / 5)) + 32;
+                }
+
+                bHasGeneratedTemp = true;
+            }
+        }
+        else
+        {
+            bHasGeneratedTemp = false;
+        }
+        return averageTemp;
     }
 }
