@@ -11,7 +11,6 @@ public class PlayerMotor : MonoBehaviour
     private float gravityStrength = 9.81f;
 
     [SerializeField] private float cameraRotationLimit = 85.0f;
-
     [SerializeField] private Camera cam;
     private Rigidbody rb;
 
@@ -26,6 +25,7 @@ public class PlayerMotor : MonoBehaviour
     {
         PerformMovement();
         PerformRotation();
+        PerformJump();
     }
 
     //Gets move velocity from player controller input.
@@ -45,9 +45,10 @@ public class PlayerMotor : MonoBehaviour
         cameraRotationX = m_cameraRotation;
     }
 
-    public void Thrust(float m_thrust)
+    public void Jump(float m_thrust, float m_gravity)
     {
         thrust = m_thrust;
+        gravityStrength = m_gravity;
     }
 
     //Performs movement
@@ -57,9 +58,28 @@ public class PlayerMotor : MonoBehaviour
         {
             rb.MovePosition(rb.position + (velocity * Time.fixedDeltaTime));
         }
+    }
 
-        print(thrust);
-        if(thrust != 0)
+    //Performs rotation
+    void PerformRotation()
+    {
+        rb.MoveRotation(rb.rotation * Quaternion.Euler(rotation));
+        //Makes sure camera is actually there.
+        if (cam != null)
+        {
+            currentCameraRotationX -= cameraRotationX;
+            currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -cameraRotationLimit, cameraRotationLimit);
+            cam.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0.0f, 0.0f);
+        }
+        else
+        {
+            Debug.LogError("PerformRotation::No camera found");
+        }
+    }
+
+    void PerformJump()
+    {
+        if (thrust != 0)
         {
             //Upwards
             rb.AddForce(new Vector3(0.0f, thrust, 0.0f) * Time.fixedDeltaTime);
@@ -67,28 +87,17 @@ public class PlayerMotor : MonoBehaviour
         else
         {
             //Gravity
-            rb.AddForce(new Vector3(0.0f, (-gravityStrength * 200), 0.0f) * Time.fixedDeltaTime);
+            rb.AddForce(new Vector3(0.0f, -gravityStrength * 300, 0.0f) * Time.fixedDeltaTime);
         }
         int layerMask = 1 << 8;
         layerMask = ~layerMask;
 
+        //Stops collision with ground when moving vertically in thrust or falling.
         RaycastHit hit;
         if (Physics.Raycast(transform.position, -Vector3.up, out hit, Mathf.Infinity, layerMask))
         {
             //Negative Gravity (Up)
-            rb.AddForce(transform.up * (gravityStrength / (hit.distance / 5f)));
-        }
-    }
-
-    //Performs rotation
-    void PerformRotation()
-    {
-        rb.MoveRotation(rb.rotation * Quaternion.Euler(rotation));
-        if (cam != null)
-        {
-            currentCameraRotationX -= cameraRotationX;
-            currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -cameraRotationLimit, cameraRotationLimit);
-            cam.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0.0f, 0.0f);
+            rb.AddForce(transform.up * (gravityStrength / (hit.distance / 9f)));
         }
     }
 }

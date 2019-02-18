@@ -1016,6 +1016,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2300000, guid: 66a13889798137c498eae4b3acdafe19, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 76ff537c8e1a84345868e6aeee938ab3, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66a13889798137c498eae4b3acdafe19, type: 3}
 --- !u!1 &760103663 stripped
@@ -1057,7 +1061,7 @@ GameObject:
   - component: {fileID: 764069427}
   - component: {fileID: 764069426}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Tool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1503,7 +1507,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1483604197}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 857873771}
@@ -1552,9 +1556,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13bf23cdb06aca9479fab93bbcaad04d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bCanMove: 1
+  bCanSprint: 1
+  bCanJump: 1
   speed: 5
+  sprintSpeed: 8
   sensitivity: 3
   thrust: 2000
+  gravityStrength: 10
+  jumpSpeed: 8
+  sprintMeter: 100
+  sprintMeterDrainMultiplier: 20
+  sprintMeterRecoveryMultiplier: 20
+  jumpMeter: 100
+  jumpMeterDrainMultiplier: 50
+  jumpMeterRecoveryMultiplier: 10
 --- !u!114 &1483604202
 MonoBehaviour:
   m_ObjectHideFlags: 0
