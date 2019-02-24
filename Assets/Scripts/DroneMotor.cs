@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMotor : MonoBehaviour
+public class DroneMotor : MonoBehaviour
 {
     //Variables to be taken from playerController;
     private Vector3 velocity = Vector3.zero;
@@ -9,16 +9,20 @@ public class PlayerMotor : MonoBehaviour
     private float cameraRotationX = 0.0f;
     private float currentCameraRotationX = 0.0f;
     private float thrust = 0.0f;
-    private float gravityStrength = 9.81f;
 
     //Camera settings and reference
     [SerializeField] private float cameraRotationLimit = 85.0f;
     [SerializeField] private Camera cam;
+    private DroneController dc;
     private Rigidbody rb;
+
+    private float minimumDistFromGround = 0.8f;
+    private float emergencyThrusterForce = 500.0f;
 
 
     void Start()
     {
+        dc = GetComponent<DroneController>();
         rb = GetComponent<Rigidbody>();
         cam = transform.GetChild(1).GetComponent<Camera>();
     }
@@ -29,6 +33,12 @@ public class PlayerMotor : MonoBehaviour
         PerformMovement();
         PerformRotation();
         PerformJump();
+    }
+
+    public void Setup(float m_minimumDistFromGround, float m_emergencyThrusterForce)
+    {
+        minimumDistFromGround = m_minimumDistFromGround;
+        emergencyThrusterForce = m_emergencyThrusterForce;
     }
 
     //Gets move velocity from player controller input.
@@ -50,10 +60,9 @@ public class PlayerMotor : MonoBehaviour
     }
 
     //Gets jump thrust and gravity from player controller input.
-    public void Jump(float m_thrust, float m_gravity)
+    public void Jump(float m_thrust)
     {
         thrust = m_thrust;
-        gravityStrength = m_gravity;
     }
 
     //Performs movement
@@ -88,28 +97,27 @@ public class PlayerMotor : MonoBehaviour
 
     //Performs jump calculation
     void PerformJump()
-    {
-        //If thrusting
-        if (thrust != 0)
-        {
-            //add upwards force
-            rb.AddForce(new Vector3(0.0f, thrust, 0.0f) * Time.fixedDeltaTime);
-        }
-        else
-        {
-            //add downwards force
-            rb.AddForce(new Vector3(0.0f, -gravityStrength * 300, 0.0f) * Time.fixedDeltaTime);
-        }
-        //Layer mask for raytrace
-        int layerMask = 1 << 8;
-        layerMask = ~layerMask;
-
-        //Stops collision with ground when moving vertically in thrust or falling.
+    { 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, -Vector3.up, out hit, Mathf.Infinity, layerMask))
+        if (Physics.Raycast(transform.position, -Vector3.up, out hit, Mathf.Infinity))
         {
-            //Add upwards force for floating effect on player
-            rb.AddForce(transform.up * (gravityStrength / (hit.distance / 9f)));
+            if (hit.distance > minimumDistFromGround)
+            {
+                //If thrusting
+                if (thrust != 0)
+                {
+                    //add vertical force
+                    rb.AddForce(new Vector3(0.0f, thrust, 0.0f) * Time.fixedDeltaTime);
+                }
+            }
+            else
+            {
+                rb.AddForce(new Vector3(0.0f, emergencyThrusterForce, 0.0f) * Time.fixedDeltaTime);
+            }
+
+            //this means 30 minutes of use real-time before recharge assuming y-axis remains constant at 1
+            //and that boost or any other drainage of energy.
+            dc.ChangeEnergyLevel(-hit.distance / 100.0f);
         }
     }
 }
