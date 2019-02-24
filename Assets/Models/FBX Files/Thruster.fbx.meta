@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: 3440c8b2add755e47b64d9d9078de329
+guid: a273320b6c214f747b63f017e1a687d0
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: ThrusterMainMat
-    2100002: ThrusterInsideMat
-    2100004: ThrusterAltMat
+    2100000: MainMat
+    2100002: InsideMat
+    2100004: AltMat
     2300000: //RootNode
     3300000: //RootNode
     4300000: Thruster
