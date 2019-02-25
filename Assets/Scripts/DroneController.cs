@@ -1,16 +1,20 @@
-﻿using UnityEngine;
+﻿// Copyright (c) 2019 JensenJ
+// NAME: DroneController
+// PURPOSE: Controls player input, specifically for the drone.
 
-//Player controller class is mainly for player input, movement is handled by motor.
+using UnityEngine;
+
+//Drone controller class is mainly for player input, movement is handled by motor.
 [RequireComponent(typeof(DroneMotor))]
 public class DroneController : MonoBehaviour
 {
-    //bools for enabling/disabling certain character abilities.
+    //bools for enabling/disabling certain drone abilities.
     [Header("Movement Settings:")]
     [SerializeField] private bool bCanMove = true;
     [SerializeField] private bool bCanBoost = true;
     [SerializeField] private bool bCanThrust = true;
 
-    //basic movement 
+    //basic movement settings
     [Space(15)]
     [SerializeField] private float speed = 5.0f;
     [SerializeField] private float boostSpeed = 10.0f;
@@ -28,14 +32,15 @@ public class DroneController : MonoBehaviour
     [SerializeField] private float maxEnergyMeter = 100.0f;
     [SerializeField] private float energyMeter;
     [SerializeField] private float energyMeterDrainSpeed = 20.0f;
-    [SerializeField] private float energyMeterRecoverySpeed = 20.0f;
     [SerializeField] private float energyPercentage = 100.0f;
 
+    //Energy Depleted Settings
     [Space(15)]
     [SerializeField] private float energyDrainJumpMultiplier = 2.5f;
     [SerializeField] private float energyDrainBoostMultiplier = 2.0f;
     [SerializeField] private float speedWithDrainedEnergy = 1.0f;
 
+    //Initial setup variables
     [Space(15)]
     [SerializeField] private float initialSpeed = 5.0f;
     [SerializeField] private float initialBoostSpeed = 10.0f;
@@ -44,6 +49,7 @@ public class DroneController : MonoBehaviour
     //Variables for checking whether player is currently doing an action. 
     private bool bIsBoosting = false;
     private bool bIsThrusting = false;
+
 
     private DroneMotor motor;
 
@@ -68,29 +74,20 @@ public class DroneController : MonoBehaviour
             Thrust();
         }
 
+        //Energy related stuff
         EnergyMeter();
         energyPercentage = (energyMeter / maxEnergyMeter) * 100;
     }
 
+    //Function for changing energy level, negatives allowed for deducting energy
     public void ChangeEnergyLevel(float amount)
     {
         energyMeter += amount;
     }
 
     void EnergyMeter()
-    {
-        //drain stamina if player is sprinting and restore if not
-        if (bIsBoosting)
-        {
-            energyMeter -= Time.deltaTime * energyMeterDrainSpeed * energyDrainBoostMultiplier;
-        }
-
-        if (bIsThrusting)
-        {
-            energyMeter -= Time.deltaTime * energyMeterDrainSpeed * energyDrainJumpMultiplier;
-        }
-
-        //Makes sure stamina does not go negative and also disables sprinting if out of stamina.
+    { 
+        //Makes sure energy does not go negative and also slows drone if out
         if(energyMeter <= 0.0f)
         {
             speed = speedWithDrainedEnergy;
@@ -99,6 +96,7 @@ public class DroneController : MonoBehaviour
 
             energyMeter = 0.0f;
         }
+        //Otherwise, keep normal speed
         else
         {
             speed = initialSpeed;
@@ -116,13 +114,14 @@ public class DroneController : MonoBehaviour
     void Thrust()
     {
         float localThrust;
-        //Check whether player is attempting to jump, if so set local thrust to defined thrust
-        if (Input.GetButton("MoveUp"))
+        //Check whether player is attempting to thrust, if so set local thrust to defined thrust
+        if (Input.GetButton("Jump"))
         {
             bIsThrusting = true;
             localThrust = thrust * thrustMultiplier;
+            energyMeter -= Time.deltaTime * energyMeterDrainSpeed * energyDrainJumpMultiplier;
         }
-        else if (Input.GetButton("MoveDown"))
+        else if (Input.GetButton("Crouch"))
         {
             bIsThrusting = true;
             localThrust = -thrust * thrustMultiplier;
@@ -134,8 +133,8 @@ public class DroneController : MonoBehaviour
             localThrust = 0.0f;
         }
 
-        //Apply jump with given force
-        motor.Jump(localThrust);
+        //Apply thrust with given force
+        motor.Thrust(localThrust);
         
     }
 
@@ -149,10 +148,12 @@ public class DroneController : MonoBehaviour
         Vector3 moveHorizontal = transform.right * xMove;
         Vector3 moveVertical = transform.forward * zMove;
 
-        //Check whether player is attempting to sprint
-        if (Input.GetButton("MoveFast"))
+        //Check whether player is attempting to boost
+        if (Input.GetButton("Run"))
         {
             bIsBoosting = true;
+            //drain stamina if player is boosting and restore if not
+            energyMeter -= Time.deltaTime * energyMeterDrainSpeed * energyDrainBoostMultiplier;
         }
         else
         {
@@ -161,17 +162,17 @@ public class DroneController : MonoBehaviour
 
         float calculationSpeed;
         //Set speed based on various factors.
-        //Is jumping and is sprinting
+        //Is thrusting and is boosting
         if (bIsThrusting && bCanThrust && bIsBoosting && bCanBoost)
         {
             calculationSpeed = (thrustMultiplier / 2) + (boostSpeed / 2);
         }
-        //Jumping
+        //thrusting
         else if (bIsThrusting && bCanThrust)
         {
             calculationSpeed = thrustMultiplier;
         }
-        //Sprinting
+        //boosting
         else if(bIsBoosting && bCanBoost)
         {
             calculationSpeed = boostSpeed;

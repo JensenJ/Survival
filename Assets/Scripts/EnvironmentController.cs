@@ -1,5 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿// Copyright (c) 2019 JensenJ
+// NAME: EnvironmentController
+// PURPOSE: Controls the environmental settings, such as time, weather and temperature.
+
 using UnityEngine;
 
 public class EnvironmentController : MonoBehaviour

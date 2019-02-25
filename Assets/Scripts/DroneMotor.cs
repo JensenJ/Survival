@@ -1,5 +1,10 @@
-﻿using UnityEngine;
+﻿// Copyright (c) 2019 JensenJ
+// NAME: DroneMotor
+// PURPOSE: Performs physics calculations that are called from the DroneController.
 
+using UnityEngine;
+
+//Drone controller class is mainly for player input, movement is handled by motor.
 [RequireComponent(typeof(Rigidbody))]
 public class DroneMotor : MonoBehaviour
 {
@@ -15,13 +20,13 @@ public class DroneMotor : MonoBehaviour
     [SerializeField] private Camera cam;
     private DroneController dc;
     private Rigidbody rb;
-
     private float minimumDistFromGround = 0.8f;
     private float emergencyThrusterForce = 500.0f;
 
 
     void Start()
     {
+        //Default refs
         dc = GetComponent<DroneController>();
         rb = GetComponent<Rigidbody>();
         cam = transform.GetChild(1).GetComponent<Camera>();
@@ -32,35 +37,36 @@ public class DroneMotor : MonoBehaviour
         //Perform calculations every tick
         PerformMovement();
         PerformRotation();
-        PerformJump();
+        PerformThrust();
     }
 
+    //Set default settings
     public void Setup(float m_minimumDistFromGround, float m_emergencyThrusterForce)
     {
         minimumDistFromGround = m_minimumDistFromGround;
         emergencyThrusterForce = m_emergencyThrusterForce;
     }
 
-    //Gets move velocity from player controller input.
+    //Gets move velocity from drone controller input.
     public void Move(Vector3 m_velocity)
     {
         velocity = m_velocity;
     }
 
-    //Gets rotation from player controller input.
+    //Gets rotation from drone controller input.
     public void Rotate(Vector3 m_rotation)
     {
         rotation = m_rotation;
     }
 
-    //Gets camera rotation from player controller input.
+    //Gets camera rotation from drone controller input.
     public void RotateCamera(float m_cameraRotation)
     {
         cameraRotationX = m_cameraRotation;
     }
 
-    //Gets jump thrust and gravity from player controller input.
-    public void Jump(float m_thrust)
+    //Gets thrust and gravity from drone controller input.
+    public void Thrust(float m_thrust)
     {
         thrust = m_thrust;
     }
@@ -81,7 +87,7 @@ public class DroneMotor : MonoBehaviour
     {
         //Rotates to new rotation
         rb.MoveRotation(rb.rotation * Quaternion.Euler(rotation));
-        //Makes sure camera is actually there and logs an error if not
+        //Makes sure camera is actually present and logs an error if not
         if (cam != null)
         {
             //Camera rotation
@@ -91,12 +97,13 @@ public class DroneMotor : MonoBehaviour
         }
         else
         {
+            //Error log
             Debug.LogError("PerformRotation::No camera found");
         }
     }
 
     //Performs jump calculation
-    void PerformJump()
+    void PerformThrust()
     { 
         RaycastHit hit;
         if (Physics.Raycast(transform.position, -Vector3.up, out hit, Mathf.Infinity))
@@ -112,11 +119,12 @@ public class DroneMotor : MonoBehaviour
             }
             else
             {
+                //Add positive y-axis force to stop collision with ground
                 rb.AddForce(new Vector3(0.0f, emergencyThrusterForce, 0.0f) * Time.fixedDeltaTime);
             }
 
             //this means 30 minutes of use real-time before recharge assuming y-axis remains constant at 1
-            //and that boost or any other drainage of energy.
+            //and that boost or any other drainage of energy, and max energy is 10000.
             dc.ChangeEnergyLevel(-hit.distance / 100.0f);
         }
     }
