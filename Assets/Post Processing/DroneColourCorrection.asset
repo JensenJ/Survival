@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a3bdb2cd68f901469e7cc149151eb49, type: 3}
-  m_Name: ColorCorrection
+  m_Name: DroneColourCorrection
   m_EditorClassIdentifier: 
   debugViews:
     m_Enabled: 1
@@ -45,7 +45,7 @@ MonoBehaviour:
     m_Settings:
       intensity: 0.75
       radius: 0.4
-      sampleCount: 16
+      sampleCount: 10
       downsampling: 1
       forceForwardCompatibility: 0
       ambientOnly: 0
@@ -72,9 +72,9 @@ MonoBehaviour:
   depthOfField:
     m_Enabled: 0
     m_Settings:
-      focusDistance: 4.82
-      aperture: 1.7
-      focalLength: 1
+      focusDistance: 10
+      aperture: 5.6
+      focalLength: 50
       useCameraFov: 0
       kernelSize: 1
   motionBlur:
@@ -122,10 +122,10 @@ MonoBehaviour:
         neutralWhiteClip: 10
       basic:
         postExposure: 1.5
-        temperature: 0
-        tint: 0
-        hueShift: 0
-        saturation: 1
+        temperature: -6.5
+        tint: -3.9
+        hueShift: -7
+        saturation: 1.2
         contrast: 1
       channelMixer:
         red: {x: 1, y: 0, z: 0}
@@ -135,9 +135,9 @@ MonoBehaviour:
       colorWheels:
         mode: 1
         log:
-          slope: {r: 1, g: 1, b: 1, a: 0}
-          power: {r: 1, g: 1, b: 1, a: 0}
-          offset: {r: 1, g: 1, b: 1, a: 0}
+          slope: {r: 1, g: 0.82976204, b: 0.7978879, a: 0}
+          power: {r: 0.8420407, g: 0.94142604, b: 1, a: 0}
+          offset: {r: 0.949235, g: 1, b: 0.87303966, a: 0}
         linear:
           lift: {r: 0, g: 0, b: 0, a: 0}
           gamma: {r: 0, g: 0, b: 0, a: 0}
@@ -321,9 +321,9 @@ MonoBehaviour:
     m_Enabled: 1
     m_Settings:
       mode: 0
-      color: {r: 0, g: 0, b: 0, a: 1}
+      color: {r: 0, g: 0.41993025, b: 0.4433962, a: 1}
       center: {x: 0.5, y: 0.5}
-      intensity: 0.25
+      intensity: 0.35
       smoothness: 0.2
       roundness: 1
       mask: {fileID: 0}

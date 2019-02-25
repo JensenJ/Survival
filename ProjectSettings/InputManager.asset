@@ -150,23 +150,7 @@ InputManager:
     axis: 2
     joyNum: 0
   - serializedVersion: 3
-    m_Name: MoveUp
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: left alt
-    altNegativeButton: 
-    altPositiveButton: 
-    gravity: 0
-    dead: 0
-    sensitivity: 0.1
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 2
-    joyNum: 0
-  - serializedVersion: 3
-    m_Name: MoveDown
+    m_Name: Crouch
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
@@ -182,7 +166,7 @@ InputManager:
     axis: 2
     joyNum: 0
   - serializedVersion: 3
-    m_Name: MoveFast
+    m_Name: Run
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
