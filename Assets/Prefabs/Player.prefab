@@ -297,6 +297,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d811200aac2c0a04287814a96a9e3277, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  droneToSpawn: {fileID: 7700677335218062932, guid: a9f0cc05d586596438a9fcd1731d73ad,
+    type: 3}
   bCanMove: 1
   speed: 5
   sensitivity: 3
