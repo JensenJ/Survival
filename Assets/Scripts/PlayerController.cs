@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float speed = 5.0f;
     [SerializeField] private float sensitivity = 3.0f;
+    [SerializeField] private float jumpForce = 2.0f;
     PlayerMotor motor;
 
     // Start is called before the first frame update
@@ -28,6 +29,7 @@ public class PlayerController : MonoBehaviour
         {
             Move();
             Rotate();
+            Jump();
         }
     }
 
@@ -53,5 +55,19 @@ public class PlayerController : MonoBehaviour
         float CameraRotationX = xRot * sensitivity;
         motor.Rotate(rotation);
         motor.RotateCamera(CameraRotationX);
+    }
+
+    void Jump()
+    {
+        float power;
+        if (Input.GetButtonDown("Jump"))
+        {
+            power = jumpForce;
+        }
+        else
+        {
+            power = 0;
+        }
+        motor.Jump(power);
     }
 }

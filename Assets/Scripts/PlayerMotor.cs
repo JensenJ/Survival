@@ -9,12 +9,15 @@ public class PlayerMotor : MonoBehaviour
 {
 
     private Rigidbody rb;
+    private CapsuleCollider cc;
 
     private Vector3 velocity = Vector3.zero;
     private Vector3 rotation = Vector3.zero;
     private float cameraRotationX = 0.0f;
     private float currentCameraRotationX = 0.0f;
+    private float jumpForce = 2f;
 
+    [SerializeField] private float raycastDistance = 1.1f;
     [SerializeField] private float cameraRotationLimit = 85.0f;
     [SerializeField] private Camera cam;
 
@@ -40,6 +43,20 @@ public class PlayerMotor : MonoBehaviour
     public void Rotate(Vector3 m_rotation)
     {
         rotation = m_rotation;
+    }
+
+    public void Jump(float m_jumpForce)
+    {
+        jumpForce = m_jumpForce;
+        if (IsGrounded())
+        {
+            rb.AddForce(0.0f, jumpForce, 0.0f, ForceMode.Impulse);
+        }
+    }
+
+    bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, raycastDistance);
     }
 
     public void RotateCamera(float m_cameraRotation)
