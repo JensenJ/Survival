@@ -36,6 +36,12 @@ public class PlayerMotor : MonoBehaviour
         PerformRotate();
     }
 
+    //Function for setting rigidbody constraints
+    public void Freeze(RigidbodyConstraints m_constraints)
+    {
+        rb.constraints = m_constraints;
+    }
+
     //Sets movement velocity from player controller
     public void Move(Vector3 m_velocity)
     {

@@ -94,8 +94,8 @@ MonoBehaviour:
   bCanMove: 1
   bCanBoost: 1
   bCanThrust: 1
-  speed: 5
-  boostSpeed: 10
+  speed: 7
+  boostSpeed: 15
   sensitivity: 3
   thrust: 100
   thrustMultiplier: 8
