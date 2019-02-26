@@ -8,6 +8,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
+    //Variables
     [Header("Movement Settings")]
     [SerializeField] private bool bCanMove = true;
 
@@ -16,15 +17,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 2.0f;
     PlayerMotor motor;
 
-    // Start is called before the first frame update
+    // Setup
     void Start()
     {
         motor = GetComponent<PlayerMotor>();
     }
 
-    // Update is called once per frame
+    // Update movement
     void Update()
     {
+        //Checks whether player can move
         if (bCanMove)
         {
             Move();
@@ -33,6 +35,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Movement
     void Move()
     {
         float xMove = Input.GetAxisRaw("Horizontal");
@@ -46,6 +49,7 @@ public class PlayerController : MonoBehaviour
         motor.Move(velocity);
     }
 
+    //Rotation
     void Rotate()
     {
         float yRot = Input.GetAxisRaw("Mouse X");
@@ -57,6 +61,7 @@ public class PlayerController : MonoBehaviour
         motor.RotateCamera(CameraRotationX);
     }
 
+    //Jumping
     void Jump()
     {
         float power;
