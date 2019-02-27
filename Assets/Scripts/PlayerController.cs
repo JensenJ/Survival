@@ -4,6 +4,7 @@
 
 using UnityEngine;
 
+[RequireComponent(typeof(Compass))]
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerController : MonoBehaviour
 {
@@ -33,9 +34,10 @@ public class PlayerController : MonoBehaviour
         droneSpawnLocation.position = droneSpawnPos + transform.position;
     }
 
-    // Update movement
+    // Update every frame
     void Update()
     {
+        //Movement
         Move();
         Rotate();
         Jump();

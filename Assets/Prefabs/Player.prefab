@@ -353,3 +353,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e15d7dc72559b94ea72766eeee0d887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotation: 0
+  currentDirection: 0
+  markers:
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - name: 
+    bIsEnabled: 0
+    location: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}

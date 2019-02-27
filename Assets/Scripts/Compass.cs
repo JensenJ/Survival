@@ -1,20 +1,41 @@
 ﻿// Copyright (c) 2019 JensenJ
 // NAME: Compass
-// PURPOSE: Give Direction of object based on angle
+// PURPOSE: Give direction of object based on angle
 using UnityEngine;
 
 public class Compass : MonoBehaviour
 {
 
     //Variables
+
     enum Direction { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest};
 
     [SerializeField] private float rotation = 0.0f;
     [SerializeField] private Direction currentDirection = Direction.North;
 
+    [SerializeField] int MaxMarkerAmount = 16;
+    [SerializeField] Marker[] markers;
+
+    void Start()
+    {
+        //Sets array max length for markers
+        markers = new Marker[MaxMarkerAmount];
+    }
+
     // Update every frame
     void Update()
     {
+        
+        //Test code for marker system
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            AddMarker("test", transform.position, Color.blue);
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            RemoveMarker(1);
+        }
         //Update rotation
         rotation = transform.rotation.eulerAngles.y;
 
@@ -49,4 +70,55 @@ public class Compass : MonoBehaviour
             currentDirection = Direction.North;
         }
     }
+
+    //Adds marker with specified parameters
+    void AddMarker(string m_name, Vector3 m_location, Color m_color)
+    {
+        //Keeps track of current iteration in for each loop
+        int iteration = 0;
+
+        //Checks whether space is actually useable or whether player has met max limit on markers
+        if(markers[markers.Length - 1].bIsEnabled == true)
+        {
+            print("All marker space taken");
+            return;
+        }
+
+        //Loops through each marker space to check for next available one.
+        foreach (Marker i in markers)
+        {   
+
+            //Checks whether the space is free for a marker
+            if(i.bIsEnabled == false)
+            {
+                //Sets variables for marker
+                markers[iteration].bIsEnabled = true;
+                markers[iteration].color = m_color;
+                markers[iteration].location = m_location;
+                markers[iteration].name = m_name;
+                //Breaks out of loop
+                break;
+            }
+            //Increases which element we are on.
+            iteration++;
+        }
+    }
+
+    //Clears data of marker at specified index.
+    void RemoveMarker(int index)
+    {
+        markers[index].bIsEnabled = false;
+        markers[index].name = "";
+        markers[index].location = Vector3.zero;
+        markers[index].color = Color.black;
+    }
+}
+
+//Struct for markers and what they shouuld contain
+[System.Serializable]
+public struct Marker {
+    public bool bIsEnabled;
+    public string name;
+    public Vector3 location;
+    public Color color;
 }
