@@ -247,6 +247,7 @@ GameObject:
   - component: {fileID: 1356891896924076041}
   - component: {fileID: 223999268319857645}
   - component: {fileID: 186366239117299017}
+  - component: {fileID: 4664071848733114513}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -340,3 +341,15 @@ MonoBehaviour:
   droneSpawnLocation: {fileID: 4858397947767219443}
   bHasDeployedDrone: 0
   spawnedDrone: {fileID: 0}
+--- !u!114 &4664071848733114513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8252071941842025488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e15d7dc72559b94ea72766eeee0d887, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

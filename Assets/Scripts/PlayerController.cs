@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     
     //Variables
     [Header("Drone Settings")]
-    [SerializeField] private GameObject droneToSpawn;
+    [SerializeField] private GameObject droneToSpawn = null;
     [SerializeField] private Vector3 droneSpawnPos = Vector3.zero;
     [SerializeField] private float droneRetrievalDistance = 5.0f;
 
