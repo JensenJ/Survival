@@ -76,21 +76,14 @@ public class Compass : MonoBehaviour
     {
         //Keeps track of current iteration in for each loop
         int iteration = 0;
-
-        //Checks whether space is actually useable or whether player has met max limit on markers
-        if(markers[markers.Length - 1].bIsEnabled == true)
-        {
-            print("All marker space taken");
-            return;
-        }
-
+        bool bHasFilled = false;
         //Loops through each marker space to check for next available one.
         foreach (Marker i in markers)
         {   
-
             //Checks whether the space is free for a marker
             if(i.bIsEnabled == false)
             {
+                bHasFilled = true;
                 //Sets variables for marker
                 markers[iteration].bIsEnabled = true;
                 markers[iteration].color = m_color;
@@ -101,6 +94,12 @@ public class Compass : MonoBehaviour
             }
             //Increases which element we are on.
             iteration++;
+        }
+
+        //Checks whether a space was actually able to be filled and prints out if not.
+        if(bHasFilled == false)
+        {
+            print("All marker slots taken.");
         }
     }
 
