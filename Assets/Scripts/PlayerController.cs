@@ -48,38 +48,40 @@ public class PlayerController : MonoBehaviour
     void SpawnDrone()
     {
         //Check for drone key
-        if (Input.GetKeyDown(KeyCode.Z))
-        {   
-            //Check whether a drone has already been deployed.
-            if (!bHasDeployedDrone)
+        if (motor.IsGrounded()) {
+            if (Input.GetKeyDown(KeyCode.Z))
             {
-                //Spawns new drone and disable player controller movement
-                spawnedDrone = Instantiate(droneToSpawn, droneSpawnLocation.position, transform.rotation, transform);
-                bCanMove = false;
-                bHasDeployedDrone = true;
-                motor.Freeze(RigidbodyConstraints.FreezeAll);
-            }
-            else
-            {
-                //Checks whether drone actually exists
-                if (spawnedDrone != null)
+                //Check whether a drone has already been deployed.
+                if (!bHasDeployedDrone)
                 {
-                    //Makes sure drone is within distance to be able to be picked up by player
-                    if (spawnedDrone.transform.position.x - transform.position.x <= droneRetrievalDistance &&
-                        spawnedDrone.transform.position.y - transform.position.y <= droneRetrievalDistance &&
-                        spawnedDrone.transform.position.z - transform.position.z <= droneRetrievalDistance)
+                    //Spawns new drone and disable player controller movement
+                    spawnedDrone = Instantiate(droneToSpawn, droneSpawnLocation.position, transform.rotation, transform);
+                    bCanMove = false;
+                    bHasDeployedDrone = true;
+                    motor.Freeze(RigidbodyConstraints.FreezeAll);
+                }
+                else
+                {
+                    //Checks whether drone actually exists
+                    if (spawnedDrone != null)
                     {
-                        //Destroys currently spawned drone and enables movement
-                        Destroy(spawnedDrone);
-                        bCanMove = true;
-                        bHasDeployedDrone = false;
-                        motor.Freeze(RigidbodyConstraints.FreezeRotation);
-                    }
-                    else
-                    {
-                        Debug.Log("Drone needs to be closer to player in order to retrieve.");
-                        bHasDeployedDrone = true;
-                        motor.Freeze(RigidbodyConstraints.FreezeAll);
+                        //Makes sure drone is within distance to be able to be picked up by player
+                        if (spawnedDrone.transform.position.x - transform.position.x <= droneRetrievalDistance &&
+                            spawnedDrone.transform.position.y - transform.position.y <= droneRetrievalDistance &&
+                            spawnedDrone.transform.position.z - transform.position.z <= droneRetrievalDistance)
+                        {
+                            //Destroys currently spawned drone and enables movement
+                            Destroy(spawnedDrone);
+                            bCanMove = true;
+                            bHasDeployedDrone = false;
+                            motor.Freeze(RigidbodyConstraints.FreezeRotation);
+                        }
+                        else
+                        {
+                            Debug.Log("Drone needs to be closer to player in order to retrieve.");
+                            bHasDeployedDrone = true;
+                            motor.Freeze(RigidbodyConstraints.FreezeAll);
+                        }
                     }
                 }
             }

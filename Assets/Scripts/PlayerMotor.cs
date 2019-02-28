@@ -7,8 +7,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMotor : MonoBehaviour
 {
-
-
     //Local variables
     private Rigidbody rb;
     private Vector3 velocity = Vector3.zero;
@@ -66,7 +64,7 @@ public class PlayerMotor : MonoBehaviour
     }
 
     //Checks whether player is on the ground
-    bool IsGrounded()
+    public bool IsGrounded()
     {
         return Physics.Raycast(transform.position, Vector3.down, raycastDistance);
     }
