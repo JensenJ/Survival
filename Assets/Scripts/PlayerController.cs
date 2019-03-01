@@ -8,30 +8,44 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerController : MonoBehaviour
 {
-    
     //Variables
-    [Header("Drone Settings")]
+    [Header("Drone Settings:")]
     [SerializeField] private GameObject droneToSpawn = null;
     [SerializeField] private Vector3 droneSpawnPos = Vector3.zero;
     [SerializeField] private float droneRetrievalDistance = 5.0f;
 
-    [Header("Movement Settings")]
+    [Header("Movement Settings:")]
     [SerializeField] private bool bCanMove = true;
     [SerializeField] private float speed = 5.0f;
     [SerializeField] private float sensitivity = 3.0f;
     [SerializeField] private float jumpForce = 2.0f;
 
-    [Header("Debug")]
+    [Header("Debug:")]
     [SerializeField] private PlayerMotor motor;
     [SerializeField] private Transform droneSpawnLocation;
     [SerializeField] private bool bHasDeployedDrone = false;
     [SerializeField] private GameObject spawnedDrone = null;
+
+    [Header("Attributes:")]
+    [SerializeField] private bool bIsDead = false;
+    [SerializeField] private float maxHealthMeter = 100.0f;
+    [SerializeField] private float healthMeter;
+    [SerializeField] private float healthMeterDrainSpeed = 20.0f;
+    [SerializeField] private float healthPercentage = 100.0f;
+
+    [Space(15)]
+    [SerializeField] private bool bIsExhausted = false;
+    [SerializeField] private float maxStaminaMeter = 100.0f;
+    [SerializeField] private float staminaMeter;
+    [SerializeField] private float staminaMeterDrainSpeed = 20.0f;
+    [SerializeField] private float staminaPercentage = 100.0f;
     // Setup
     void Start()
     {
         motor = GetComponent<PlayerMotor>();
         droneSpawnLocation = transform.GetChild(2);
         droneSpawnLocation.position = droneSpawnPos + transform.position;
+        healthMeter = maxHealthMeter;
     }
 
     // Update every frame
@@ -43,6 +57,68 @@ public class PlayerController : MonoBehaviour
         Jump();
         
         SpawnDrone();
+
+        HealthMeter();
+        healthPercentage = (healthMeter / maxHealthMeter) * 100;
+
+        StaminaMeter();
+        staminaPercentage = (staminaMeter / maxStaminaMeter) * 100;
+    }
+
+    //Function for changing health level, negatives allowed for deducting health
+    public void ChangeStaminaLevel(float amount)
+    {
+        staminaMeter += amount;
+    }
+
+    void StaminaMeter()
+    {
+        //Makes sure health does not go negative.
+        if (staminaMeter <= 0.0f)
+        {
+            bIsExhausted = true;
+            staminaMeter = 0.0f;
+
+        }
+        //Otherwise, keep normal
+        else
+        {
+            bIsExhausted = false;
+        }
+
+        //Makes sure health does not regenerate over the max limit
+        if (staminaMeter >= maxStaminaMeter)
+        {
+            staminaMeter = maxStaminaMeter;
+        }
+    }
+
+    //Function for changing health level, negatives allowed for deducting health
+    public void ChangeHealthLevel(float amount)
+    {
+        healthMeter += amount;
+    }
+
+    void HealthMeter()
+    {
+        //Makes sure health does not go negative.
+        if (healthMeter <= 0.0f)
+        {
+            bIsDead = true;
+            healthMeter = 0.0f;
+
+        }
+        //Otherwise, keep normal
+        else
+        {
+            bIsDead = false;
+        }
+
+        //Makes sure health does not regenerate over the max limit
+        if (healthMeter >= maxHealthMeter)
+        {
+            healthMeter = maxHealthMeter;
+        }
     }
 
     void SpawnDrone()

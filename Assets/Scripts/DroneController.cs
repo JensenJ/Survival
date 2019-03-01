@@ -28,8 +28,15 @@ public class DroneController : MonoBehaviour
     [SerializeField] private float minimumDistFromGround = 0.8f;
     [SerializeField] private float emergencyThrusterForce = 500.0f;
 
-    //Energy Meter
+
+    //Initial setup variables
     [Space(15)]
+    [SerializeField] private float initialSpeed = 5.0f;
+    [SerializeField] private float initialBoostSpeed = 10.0f;
+    [SerializeField] private float initialThrustMultiplier = 8.0f;
+    //Energy Meter
+    
+    [Header("Attributes:")]
     [SerializeField] private float maxEnergyMeter = 100.0f;
     [SerializeField] private float energyMeter;
     [SerializeField] private float energyMeterDrainSpeed = 20.0f;
@@ -40,12 +47,6 @@ public class DroneController : MonoBehaviour
     [SerializeField] private float energyDrainJumpMultiplier = 2.5f;
     [SerializeField] private float energyDrainBoostMultiplier = 2.0f;
     [SerializeField] private float speedWithDrainedEnergy = 1.0f;
-
-    //Initial setup variables
-    [Space(15)]
-    [SerializeField] private float initialSpeed = 5.0f;
-    [SerializeField] private float initialBoostSpeed = 10.0f;
-    [SerializeField] private float initialThrustMultiplier = 8.0f;
 
     //Variables for checking whether player is currently doing an action. 
     private bool bIsBoosting = false;
