@@ -17,8 +17,28 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Settings:")]
     [SerializeField] private bool bCanMove = true;
     [SerializeField] private float speed = 5.0f;
+    [SerializeField] private float sprintSpeed = 7.0f;
     [SerializeField] private float sensitivity = 3.0f;
     [SerializeField] private float jumpForce = 2.0f;
+
+
+    [Header("Attributes:")]
+    [SerializeField] private bool bIsDead = false;
+    [SerializeField] private bool bCanRegenHealth = true;
+    [SerializeField] private float maxHealthMeter = 100.0f;
+    [SerializeField] private float healthMeter;
+    [SerializeField] private float healthMeterDrainSpeed = 20.0f;
+    [SerializeField] private float healthMeterRegenSpeed = 10.0f;
+    [SerializeField] private float healthPercentage = 100.0f;
+
+    [Space(15)]
+    [SerializeField] private bool bIsExhausted = false;
+    [SerializeField] private bool bCanRegenStamina = true;
+    [SerializeField] private float maxStaminaMeter = 100.0f;
+    [SerializeField] private float staminaMeter;
+    [SerializeField] private float staminaMeterDrainSpeed = 20.0f;
+    [SerializeField] private float staminaMeterRegenSpeed = 10.0f;
+    [SerializeField] private float staminaPercentage = 100.0f;
 
     [Header("Debug:")]
     [SerializeField] private PlayerMotor motor;
@@ -26,19 +46,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool bHasDeployedDrone = false;
     [SerializeField] private GameObject spawnedDrone = null;
 
-    [Header("Attributes:")]
-    [SerializeField] private bool bIsDead = false;
-    [SerializeField] private float maxHealthMeter = 100.0f;
-    [SerializeField] private float healthMeter;
-    [SerializeField] private float healthMeterDrainSpeed = 20.0f;
-    [SerializeField] private float healthPercentage = 100.0f;
-
-    [Space(15)]
-    [SerializeField] private bool bIsExhausted = false;
-    [SerializeField] private float maxStaminaMeter = 100.0f;
-    [SerializeField] private float staminaMeter;
-    [SerializeField] private float staminaMeterDrainSpeed = 20.0f;
-    [SerializeField] private float staminaPercentage = 100.0f;
     // Setup
     void Start()
     {
@@ -46,6 +53,7 @@ public class PlayerController : MonoBehaviour
         droneSpawnLocation = transform.GetChild(2);
         droneSpawnLocation.position = droneSpawnPos + transform.position;
         healthMeter = maxHealthMeter;
+        staminaMeter = maxStaminaMeter;
     }
 
     // Update every frame
@@ -73,6 +81,11 @@ public class PlayerController : MonoBehaviour
 
     void StaminaMeter()
     {
+
+        if (bCanRegenStamina)
+        {
+            staminaMeter += Time.deltaTime * staminaMeterRegenSpeed;
+        }
         //Makes sure health does not go negative.
         if (staminaMeter <= 0.0f)
         {
@@ -101,6 +114,11 @@ public class PlayerController : MonoBehaviour
 
     void HealthMeter()
     {
+        if (bCanRegenHealth)
+        {
+            healthMeter += Time.deltaTime * healthMeterRegenSpeed;
+        }
+
         //Makes sure health does not go negative.
         if (healthMeter <= 0.0f)
         {
@@ -177,7 +195,41 @@ public class PlayerController : MonoBehaviour
             Vector3 moveHorizontal = transform.right * xMove;
             Vector3 moveVertical = transform.forward * zMove;
 
-            velocity = (moveHorizontal + moveVertical).normalized * speed;
+            //Sprinting
+            if (Input.GetButton("Run"))
+            {
+                //Disables stamina regen while running
+                bCanRegenStamina = false;
+                //Check for exhausted
+                if (!bIsExhausted)
+                {   
+                    //drain stamina when player attempts to run
+                    staminaMeter -= Time.deltaTime * staminaMeterDrainSpeed;
+                    //Stop speed boost when stamina meter is below 10
+                    if(!(staminaMeter <= 10.0f))
+                    {
+                        //Apply speed boost
+                        velocity = (moveHorizontal + moveVertical).normalized * sprintSpeed;
+                    }
+                    else
+                    {
+                        //Apply normal speed
+                        velocity = (moveHorizontal + moveVertical).normalized * speed;
+                    }
+                }
+                else
+                {
+                    //Apply normal speed
+                    velocity = (moveHorizontal + moveVertical).normalized * speed;
+                }
+            }
+            else
+            {
+                //Otherwise allow regen of stamina
+                bCanRegenStamina = true;
+                //Apply normal speed
+                velocity = (moveHorizontal + moveVertical).normalized * speed;
+            }
 
         }
         motor.Move(velocity);
