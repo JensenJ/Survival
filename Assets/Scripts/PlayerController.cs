@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Attributes:")]
+    //Health
     [SerializeField] private bool bIsDead = false;
     [SerializeField] private bool bCanRegenHealth = true;
     [SerializeField] private float maxHealthMeter = 100.0f;
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float healthPercentage = 100.0f;
 
     [Space(15)]
+    //Stamina
     [SerializeField] private bool bIsExhausted = false;
     [SerializeField] private bool bCanRegenStamina = true;
     [SerializeField] private float maxStaminaMeter = 100.0f;
@@ -39,6 +41,26 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float staminaMeterDrainSpeed = 20.0f;
     [SerializeField] private float staminaMeterRegenSpeed = 10.0f;
     [SerializeField] private float staminaPercentage = 100.0f;
+
+    [Space(15)]
+    //Hunger
+    [SerializeField] private bool bIsStarving = false;
+    [SerializeField] private bool bCanRegenHunger = false;
+    [SerializeField] private float maxHungerMeter = 100.0f;
+    [SerializeField] private float hungerMeter;
+    [SerializeField] private float hungerMeterDrainSpeed = 20.0f;
+    [SerializeField] private float hungerMeterRegenSpeed = 10.0f;
+    [SerializeField] private float hungerPercentage = 100.0f;
+
+    [Space(15)]
+    //Thirst
+    [SerializeField] private bool bIsDehydrated = false;
+    [SerializeField] private bool bCanRegenThirst = false;
+    [SerializeField] private float maxThirstMeter = 100.0f;
+    [SerializeField] private float thirstMeter;
+    [SerializeField] private float thirstMeterDrainSpeed = 20.0f;
+    [SerializeField] private float thirstMeterRegenSpeed = 10.0f;
+    [SerializeField] private float thirstPercentage = 100.0f;
 
     [Header("Debug:")]
     [SerializeField] private PlayerMotor motor;
@@ -54,6 +76,7 @@ public class PlayerController : MonoBehaviour
         droneSpawnLocation.position = droneSpawnPos + transform.position;
         healthMeter = maxHealthMeter;
         staminaMeter = maxStaminaMeter;
+        hungerMeter = maxHungerMeter;
     }
 
     // Update every frame
@@ -67,17 +90,81 @@ public class PlayerController : MonoBehaviour
         SpawnDrone();
 
         HealthMeter();
-        healthPercentage = (healthMeter / maxHealthMeter) * 100;
+        healthPercentage = (healthMeter / maxHealthMeter) * 100.0f;
 
         StaminaMeter();
-        staminaPercentage = (staminaMeter / maxStaminaMeter) * 100;
+        staminaPercentage = (staminaMeter / maxStaminaMeter) * 100.0f;
+
+        HungerMeter();
+        hungerPercentage = (hungerMeter / maxHungerMeter) * 100.0f;
+
+        ThirstMeter();
+        thirstPercentage = (thirstMeter / maxThirstMeter) * 100.0f;
     }
 
-    //Function for changing health level, negatives allowed for deducting health
-    public void ChangeStaminaLevel(float amount)
+    void ThirstMeter()
     {
-        staminaMeter += amount;
+        if (bCanRegenThirst)
+        {
+            thirstMeter += Time.deltaTime * thirstMeterRegenSpeed;
+        }
+        //Makes sure thirst does not go negative.
+        if (thirstMeter <= 0.0f)
+        {
+            bIsDehydrated = true;
+            thirstMeter = 0.0f;
+
+        }
+        //Otherwise, keep normal
+        else
+        {
+            bIsDehydrated = false;
+        }
+
+        //Makes sure thirst does not regenerate over the max limit
+        if (thirstMeter >= maxThirstMeter)
+        {
+            thirstMeter = maxThirstMeter;
+        }
     }
+
+    //Function for changing hunger level, negatives allowed for deducting hunger
+    public void ChangeHungerLevel(float m_amount)
+    {
+        hungerMeter += m_amount;
+    }
+
+    void HungerMeter()
+    {
+        if (bCanRegenHunger)
+        {
+            hungerMeter += Time.deltaTime * hungerMeterRegenSpeed;
+        }
+        //Makes sure hunger does not go negative.
+        if (staminaMeter <= 0.0f)
+        {
+            bIsStarving = true;
+            hungerMeter = 0.0f;
+
+        }
+        //Otherwise, keep normal
+        else
+        {
+            bIsStarving = false;
+        }
+
+        //Makes sure hunger does not regenerate over the max limit
+        if (hungerMeter >= maxHungerMeter)
+        {
+            hungerMeter = maxHungerMeter;
+        }
+    }
+    //Function for changing stamina level, negatives allowed for deducting stamina
+    public void ChangeStaminaLevel(float m_amount)
+    {
+        staminaMeter += m_amount;
+    }
+
 
     void StaminaMeter()
     {
@@ -86,7 +173,7 @@ public class PlayerController : MonoBehaviour
         {
             staminaMeter += Time.deltaTime * staminaMeterRegenSpeed;
         }
-        //Makes sure health does not go negative.
+        //Makes sure stamina does not go negative.
         if (staminaMeter <= 0.0f)
         {
             bIsExhausted = true;
@@ -99,7 +186,7 @@ public class PlayerController : MonoBehaviour
             bIsExhausted = false;
         }
 
-        //Makes sure health does not regenerate over the max limit
+        //Makes sure stamina does not regenerate over the max limit
         if (staminaMeter >= maxStaminaMeter)
         {
             staminaMeter = maxStaminaMeter;
@@ -107,9 +194,9 @@ public class PlayerController : MonoBehaviour
     }
 
     //Function for changing health level, negatives allowed for deducting health
-    public void ChangeHealthLevel(float amount)
+    public void ChangeHealthLevel(float m_amount)
     {
-        healthMeter += amount;
+        healthMeter += m_amount;
     }
 
     void HealthMeter()
@@ -130,6 +217,17 @@ public class PlayerController : MonoBehaviour
         else
         {
             bIsDead = false;
+        }
+
+        if (bIsDead)
+        {
+            bCanMove = false;
+            bCanRegenHealth = false;
+        }
+        else
+        {
+            bCanMove = true;
+            bCanRegenHealth = true;
         }
 
         //Makes sure health does not regenerate over the max limit
