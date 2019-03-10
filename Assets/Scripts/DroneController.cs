@@ -57,6 +57,11 @@ public class DroneController : MonoBehaviour
 
     void Start()
     {
+        if (maxEnergyMeter <= 0.0f)
+        {
+            maxEnergyMeter = 100.0f;
+        }
+
         //Setting defaults.
         motor = GetComponent<DroneMotor>();
         energyMeter = maxEnergyMeter;
@@ -64,6 +69,20 @@ public class DroneController : MonoBehaviour
         boostSpeed = initialBoostSpeed;
         thrustMultiplier = initialThrustMultiplier;
         motor.Setup(minimumDistFromGround, emergencyThrusterForce);
+
+        if (energyDrainBoostMultiplier <= 0.0f)
+        {
+            energyDrainBoostMultiplier = 2.5f;
+        }
+        if (energyDrainJumpMultiplier <= 0.0f)
+        {
+            energyDrainBoostMultiplier = 2.0f;
+        }
+        if (energyMeterDrainSpeed <= 0.0f)
+        {
+            energyMeterDrainSpeed = 20.0f;
+        }
+
     }
 
     void Update()

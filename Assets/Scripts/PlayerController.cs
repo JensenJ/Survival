@@ -28,8 +28,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool bCanRegenHealth = true;
     [SerializeField] private float maxHealthMeter = 100.0f;
     [SerializeField] private float healthMeter;
-    [SerializeField] private float healthMeterDrainSpeed = 20.0f;
-    [SerializeField] private float healthMeterRegenSpeed = 10.0f;
+    [SerializeField] private float healthMeterDrainSpeed = 1.0f;
+    [SerializeField] private float healthMeterRegenSpeed = 0.5f;
     [SerializeField] private float healthPercentage = 100.0f;
 
     [Space(15)]
@@ -38,8 +38,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool bCanRegenStamina = true;
     [SerializeField] private float maxStaminaMeter = 100.0f;
     [SerializeField] private float staminaMeter;
-    [SerializeField] private float staminaMeterDrainSpeed = 20.0f;
-    [SerializeField] private float staminaMeterRegenSpeed = 10.0f;
+    [SerializeField] private float staminaMeterDrainSpeed = 10.0f;
+    [SerializeField] private float staminaMeterRegenSpeed = 3.0f;
     [SerializeField] private float staminaPercentage = 100.0f;
 
     [Space(15)]
@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool bCanRegenHunger = false;
     [SerializeField] private float maxHungerMeter = 100.0f;
     [SerializeField] private float hungerMeter;
-    [SerializeField] private float hungerMeterDrainSpeed = 20.0f;
+    [SerializeField] private float hungerMeterDrainSpeed = 0.25f;
     [SerializeField] private float hungerMeterRegenSpeed = 10.0f;
     [SerializeField] private float hungerPercentage = 100.0f;
 
@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool bCanRegenThirst = false;
     [SerializeField] private float maxThirstMeter = 100.0f;
     [SerializeField] private float thirstMeter;
-    [SerializeField] private float thirstMeterDrainSpeed = 20.0f;
+    [SerializeField] private float thirstMeterDrainSpeed = 0.125f;
     [SerializeField] private float thirstMeterRegenSpeed = 10.0f;
     [SerializeField] private float thirstPercentage = 100.0f;
 
@@ -71,13 +71,89 @@ public class PlayerController : MonoBehaviour
     // Setup
     void Start()
     {
+        //Drone and movement setup
         motor = GetComponent<PlayerMotor>();
         droneSpawnLocation = transform.GetChild(2);
         droneSpawnLocation.position = droneSpawnPos + transform.position;
+
+        AttributesSetup();
+    }
+
+    void AttributesSetup()
+    {
+        //Makes sure max variables are not negative
+        
+        //Health
+        if (maxHealthMeter <= 0.0f)
+        {
+            maxHealthMeter = 100.0f;
+        }
+
+        //Stamina
+        if (maxStaminaMeter <= 0.0f)
+        {
+            maxStaminaMeter = 100.0f;
+        }
+
+        //Hunger
+        if (maxHungerMeter <= 0.0f)
+        {
+            maxHungerMeter = 100.0f;
+        }
+
+        //Thirst
+        if (maxThirstMeter <= 0.0f)
+        {
+            maxThirstMeter = 100.0f;
+        }
+
+        //Attributes setup
         healthMeter = maxHealthMeter;
         staminaMeter = maxStaminaMeter;
         hungerMeter = maxHungerMeter;
         thirstMeter = maxThirstMeter;
+        
+        //Makes sure drain and regen variables do not go negative when set
+
+        //Health
+        if (healthMeterDrainSpeed <= 0.0f)
+        {
+            healthMeterDrainSpeed = 1.0f;
+        }
+        if (healthMeterRegenSpeed <= 0.0f)
+        {
+            healthMeterRegenSpeed = 0.5f;
+        }
+
+        //Stamina
+        if (staminaMeterDrainSpeed <= 0.0f)
+        {
+            staminaMeterDrainSpeed = 10.0f;
+        }
+        if (staminaMeterRegenSpeed <= 0.0f)
+        {
+            staminaMeterRegenSpeed = 3.0f;
+        }
+
+        //Hunger
+        if (hungerMeterDrainSpeed <= 0.0f)
+        {
+            hungerMeterDrainSpeed = 0.25f;
+        }
+        if (hungerMeterRegenSpeed <= 0.0f)
+        {
+            hungerMeterRegenSpeed = 10.0f;
+        }
+
+        //Thirst
+        if (thirstMeterDrainSpeed <= 0.0f)
+        {
+            thirstMeterDrainSpeed = 0.125f;
+        }
+        if (thirstMeterRegenSpeed <= 0.0f)
+        {
+            thirstMeterRegenSpeed = 10.0f;
+        }
     }
 
     // Update every frame

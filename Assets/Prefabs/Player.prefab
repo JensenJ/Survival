@@ -343,8 +343,8 @@ MonoBehaviour:
   bCanRegenHealth: 1
   maxHealthMeter: 100
   healthMeter: 0
-  healthMeterDrainSpeed: 10
-  healthMeterRegenSpeed: 2
+  healthMeterDrainSpeed: 1
+  healthMeterRegenSpeed: 0.5
   healthPercentage: 100
   bIsExhausted: 0
   bCanRegenStamina: 1
@@ -357,14 +357,14 @@ MonoBehaviour:
   bCanRegenHunger: 0
   maxHungerMeter: 100
   hungerMeter: 0
-  hungerMeterDrainSpeed: 1
+  hungerMeterDrainSpeed: 0.25
   hungerMeterRegenSpeed: 10
   hungerPercentage: 100
   bIsDehydrated: 0
   bCanRegenThirst: 0
   maxThirstMeter: 100
   thirstMeter: 0
-  thirstMeterDrainSpeed: 1
+  thirstMeterDrainSpeed: 0.125
   thirstMeterRegenSpeed: 10
   thirstPercentage: 100
   motor: {fileID: 0}
