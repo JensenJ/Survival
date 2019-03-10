@@ -333,10 +333,40 @@ MonoBehaviour:
     type: 3}
   droneSpawnPos: {x: 0, y: 1.5, z: 1}
   droneRetrievalDistance: 5
+  bCanSpawnDrone: 1
   bCanMove: 1
   speed: 5
+  sprintSpeed: 10
   sensitivity: 3
   jumpForce: 4
+  bIsDead: 0
+  bCanRegenHealth: 1
+  maxHealthMeter: 100
+  healthMeter: 0
+  healthMeterDrainSpeed: 1
+  healthMeterRegenSpeed: 0.5
+  healthPercentage: 100
+  bIsExhausted: 0
+  bCanRegenStamina: 1
+  maxStaminaMeter: 100
+  staminaMeter: 0
+  staminaMeterDrainSpeed: 10
+  staminaMeterRegenSpeed: 3
+  staminaPercentage: 100
+  bIsStarving: 0
+  bCanRegenHunger: 0
+  maxHungerMeter: 100
+  hungerMeter: 0
+  hungerMeterDrainSpeed: 0.25
+  hungerMeterRegenSpeed: 10
+  hungerPercentage: 100
+  bIsDehydrated: 0
+  bCanRegenThirst: 0
+  maxThirstMeter: 100
+  thirstMeter: 0
+  thirstMeterDrainSpeed: 0.125
+  thirstMeterRegenSpeed: 10
+  thirstPercentage: 100
   motor: {fileID: 0}
   droneSpawnLocation: {fileID: 4858397947767219443}
   bHasDeployedDrone: 0
@@ -355,68 +385,69 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotation: 0
   currentDirection: 0
+  MaxMarkerAmount: 16
   markers:
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - name: 
-    bIsEnabled: 0
-    location: {fileID: 0}
+  - bIsEnabled: 0
+    name: 
+    location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}

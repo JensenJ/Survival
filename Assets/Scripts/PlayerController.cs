@@ -8,30 +8,152 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerController : MonoBehaviour
 {
-    
     //Variables
-    [Header("Drone Settings")]
+    [Header("Drone Settings:")]
     [SerializeField] private GameObject droneToSpawn = null;
     [SerializeField] private Vector3 droneSpawnPos = Vector3.zero;
     [SerializeField] private float droneRetrievalDistance = 5.0f;
+    [SerializeField] private bool bCanSpawnDrone = true;
 
-    [Header("Movement Settings")]
+    [Header("Movement Settings:")]
     [SerializeField] private bool bCanMove = true;
     [SerializeField] private float speed = 5.0f;
+    [SerializeField] private float sprintSpeed = 7.0f;
     [SerializeField] private float sensitivity = 3.0f;
     [SerializeField] private float jumpForce = 2.0f;
 
-    [Header("Debug")]
+    [Header("Attributes:")]
+    //Health
+    [SerializeField] private bool bIsDead = false;
+    [SerializeField] private bool bCanRegenHealth = true;
+    [SerializeField] private float maxHealthMeter = 100.0f;
+    [SerializeField] private float healthMeter;
+    [SerializeField] private float healthMeterDrainSpeed = 1.0f;
+    [SerializeField] private float healthMeterRegenSpeed = 0.5f;
+    [SerializeField] private float healthPercentage = 100.0f;
+
+    [Space(15)]
+    //Stamina
+    [SerializeField] private bool bIsExhausted = false;
+    [SerializeField] private bool bCanRegenStamina = true;
+    [SerializeField] private float maxStaminaMeter = 100.0f;
+    [SerializeField] private float staminaMeter;
+    [SerializeField] private float staminaMeterDrainSpeed = 10.0f;
+    [SerializeField] private float staminaMeterRegenSpeed = 3.0f;
+    [SerializeField] private float staminaPercentage = 100.0f;
+
+    [Space(15)]
+    //Hunger
+    [SerializeField] private bool bIsStarving = false;
+    [SerializeField] private bool bCanRegenHunger = false;
+    [SerializeField] private float maxHungerMeter = 100.0f;
+    [SerializeField] private float hungerMeter;
+    [SerializeField] private float hungerMeterDrainSpeed = 0.25f;
+    [SerializeField] private float hungerMeterRegenSpeed = 10.0f;
+    [SerializeField] private float hungerPercentage = 100.0f;
+
+    [Space(15)]
+    //Thirst
+    [SerializeField] private bool bIsDehydrated = false;
+    [SerializeField] private bool bCanRegenThirst = false;
+    [SerializeField] private float maxThirstMeter = 100.0f;
+    [SerializeField] private float thirstMeter;
+    [SerializeField] private float thirstMeterDrainSpeed = 0.125f;
+    [SerializeField] private float thirstMeterRegenSpeed = 10.0f;
+    [SerializeField] private float thirstPercentage = 100.0f;
+
+    [Header("Debug:")]
     [SerializeField] private PlayerMotor motor;
     [SerializeField] private Transform droneSpawnLocation;
     [SerializeField] private bool bHasDeployedDrone = false;
     [SerializeField] private GameObject spawnedDrone = null;
+
     // Setup
     void Start()
     {
+        //Drone and movement setup
         motor = GetComponent<PlayerMotor>();
         droneSpawnLocation = transform.GetChild(2);
         droneSpawnLocation.position = droneSpawnPos + transform.position;
+
+        AttributesSetup();
+    }
+
+    void AttributesSetup()
+    {
+        //Makes sure max variables are not negative
+        
+        //Health
+        if (maxHealthMeter <= 0.0f)
+        {
+            maxHealthMeter = 100.0f;
+        }
+
+        //Stamina
+        if (maxStaminaMeter <= 0.0f)
+        {
+            maxStaminaMeter = 100.0f;
+        }
+
+        //Hunger
+        if (maxHungerMeter <= 0.0f)
+        {
+            maxHungerMeter = 100.0f;
+        }
+
+        //Thirst
+        if (maxThirstMeter <= 0.0f)
+        {
+            maxThirstMeter = 100.0f;
+        }
+
+        //Attributes setup
+        healthMeter = maxHealthMeter;
+        staminaMeter = maxStaminaMeter;
+        hungerMeter = maxHungerMeter;
+        thirstMeter = maxThirstMeter;
+        
+        //Makes sure drain and regen variables do not go negative when set
+
+        //Health
+        if (healthMeterDrainSpeed <= 0.0f)
+        {
+            healthMeterDrainSpeed = 1.0f;
+        }
+        if (healthMeterRegenSpeed <= 0.0f)
+        {
+            healthMeterRegenSpeed = 0.5f;
+        }
+
+        //Stamina
+        if (staminaMeterDrainSpeed <= 0.0f)
+        {
+            staminaMeterDrainSpeed = 10.0f;
+        }
+        if (staminaMeterRegenSpeed <= 0.0f)
+        {
+            staminaMeterRegenSpeed = 3.0f;
+        }
+
+        //Hunger
+        if (hungerMeterDrainSpeed <= 0.0f)
+        {
+            hungerMeterDrainSpeed = 0.25f;
+        }
+        if (hungerMeterRegenSpeed <= 0.0f)
+        {
+            hungerMeterRegenSpeed = 10.0f;
+        }
+
+        //Thirst
+        if (thirstMeterDrainSpeed <= 0.0f)
+        {
+            thirstMeterDrainSpeed = 0.125f;
+        }
+        if (thirstMeterRegenSpeed <= 0.0f)
+        {
+            thirstMeterRegenSpeed = 10.0f;
+        }
     }
 
     // Update every frame
@@ -43,43 +165,205 @@ public class PlayerController : MonoBehaviour
         Jump();
         
         SpawnDrone();
+
+        HealthMeter();
+        healthPercentage = (healthMeter / maxHealthMeter) * 100.0f;
+
+        StaminaMeter();
+        staminaPercentage = (staminaMeter / maxStaminaMeter) * 100.0f;
+
+        HungerMeter();
+        hungerPercentage = (hungerMeter / maxHungerMeter) * 100.0f;
+
+        ThirstMeter();
+        thirstPercentage = (thirstMeter / maxThirstMeter) * 100.0f;
+    }
+
+    void ThirstMeter()
+    {
+        thirstMeter -= Time.deltaTime * thirstMeterDrainSpeed;
+
+
+        if (bCanRegenThirst)
+        {
+            thirstMeter += Time.deltaTime * thirstMeterRegenSpeed;
+        }
+        //Makes sure thirst does not go negative.
+        if (thirstMeter <= 0.0f)
+        {
+            bIsDehydrated = true;
+            healthMeter -= Time.deltaTime * healthMeterDrainSpeed;
+            thirstMeter = 0.0f;
+
+        }
+        //Otherwise, keep normal
+        else
+        {
+            bIsDehydrated = false;
+        }
+
+        //Makes sure thirst does not regenerate over the max limit
+        if (thirstMeter >= maxThirstMeter)
+        {
+            thirstMeter = maxThirstMeter;
+        }
+    }
+
+    //Function for changing hunger level, negatives allowed for deducting hunger
+    public void ChangeHungerLevel(float m_amount)
+    {
+        hungerMeter += m_amount;
+    }
+
+    void HungerMeter()
+    {
+        hungerMeter -= Time.deltaTime * hungerMeterDrainSpeed;
+
+        if (bCanRegenHunger)
+        {
+            hungerMeter += Time.deltaTime * hungerMeterRegenSpeed;
+        }
+        //Makes sure hunger does not go negative.
+        if (hungerMeter <= 0.0f)
+        {
+            bIsStarving = true;
+            healthMeter -= Time.deltaTime * healthMeterDrainSpeed;
+            hungerMeter = 0.0f;
+
+        }
+        //Otherwise, keep normal
+        else
+        {
+            bIsStarving = false;
+        }
+
+        //Makes sure hunger does not regenerate over the max limit
+        if (hungerMeter >= maxHungerMeter)
+        {
+            hungerMeter = maxHungerMeter;
+        }
+    }
+    //Function for changing stamina level, negatives allowed for deducting stamina
+    public void ChangeStaminaLevel(float m_amount)
+    {
+        staminaMeter += m_amount;
+    }
+
+
+    void StaminaMeter()
+    {
+
+        if (bCanRegenStamina)
+        {
+            staminaMeter += Time.deltaTime * staminaMeterRegenSpeed;
+        }
+        //Makes sure stamina does not go negative.
+        if (staminaMeter <= 0.0f || bIsDehydrated || bIsStarving)
+        {
+            bIsExhausted = true;
+            staminaMeter = 0.0f;
+
+        }
+        //Otherwise, keep normal
+        else
+        {
+            bIsExhausted = false;
+        }
+
+        //Makes sure stamina does not regenerate over the max limit
+        if (staminaMeter >= maxStaminaMeter)
+        {
+            staminaMeter = maxStaminaMeter;
+        }
+    }
+
+    //Function for changing health level, negatives allowed for deducting health
+    public void ChangeHealthLevel(float m_amount)
+    {
+        healthMeter += m_amount;
+    }
+
+    void HealthMeter()
+    {
+        if (bCanRegenHealth)
+        {
+            healthMeter += Time.deltaTime * healthMeterRegenSpeed;
+        }
+
+        //Makes sure health does not go negative.
+        if (healthMeter <= 0.0f)
+        {
+            bIsDead = true;
+            bCanSpawnDrone = false;
+            if (bHasDeployedDrone)
+            {
+                Destroy(spawnedDrone);
+            }
+            healthMeter = 0.0f;
+
+        }
+        //Otherwise, keep normal
+        else
+        {
+            bIsDead = false;
+            bCanSpawnDrone = true;
+        }
+
+        if (bIsDead)
+        {
+            bCanMove = false;
+            bCanRegenHealth = false;
+        }
+        else
+        {
+            bCanMove = true;
+            bCanRegenHealth = true;
+        }
+
+        //Makes sure health does not regenerate over the max limit
+        if (healthMeter >= maxHealthMeter)
+        {
+            healthMeter = maxHealthMeter;
+        }
     }
 
     void SpawnDrone()
     {
         //Check for drone key
-        if (Input.GetKeyDown(KeyCode.Z))
-        {   
-            //Check whether a drone has already been deployed.
-            if (!bHasDeployedDrone)
+        if (motor.IsGrounded() && bCanSpawnDrone) {
+            if (Input.GetKeyDown(KeyCode.Z))
             {
-                //Spawns new drone and disable player controller movement
-                spawnedDrone = Instantiate(droneToSpawn, droneSpawnLocation.position, transform.rotation, transform);
-                bCanMove = false;
-                bHasDeployedDrone = true;
-                motor.Freeze(RigidbodyConstraints.FreezeAll);
-            }
-            else
-            {
-                //Checks whether drone actually exists
-                if (spawnedDrone != null)
+                //Check whether a drone has already been deployed.
+                if (!bHasDeployedDrone)
                 {
-                    //Makes sure drone is within distance to be able to be picked up by player
-                    if (spawnedDrone.transform.position.x - transform.position.x <= droneRetrievalDistance &&
-                        spawnedDrone.transform.position.y - transform.position.y <= droneRetrievalDistance &&
-                        spawnedDrone.transform.position.z - transform.position.z <= droneRetrievalDistance)
+                    //Spawns new drone and disable player controller movement
+                    spawnedDrone = Instantiate(droneToSpawn, droneSpawnLocation.position, transform.rotation, transform);
+                    bCanMove = false;
+                    bHasDeployedDrone = true;
+                    motor.Freeze(RigidbodyConstraints.FreezeAll);
+                }
+                else
+                {
+                    //Checks whether drone actually exists
+                    if (spawnedDrone != null)
                     {
-                        //Destroys currently spawned drone and enables movement
-                        Destroy(spawnedDrone);
-                        bCanMove = true;
-                        bHasDeployedDrone = false;
-                        motor.Freeze(RigidbodyConstraints.FreezeRotation);
-                    }
-                    else
-                    {
-                        Debug.Log("Drone needs to be closer to player in order to retrieve.");
-                        bHasDeployedDrone = true;
-                        motor.Freeze(RigidbodyConstraints.FreezeAll);
+                        //Makes sure drone is within distance to be able to be picked up by player
+                        if (spawnedDrone.transform.position.x - transform.position.x <= droneRetrievalDistance &&
+                            spawnedDrone.transform.position.y - transform.position.y <= droneRetrievalDistance &&
+                            spawnedDrone.transform.position.z - transform.position.z <= droneRetrievalDistance)
+                        {
+                            //Destroys currently spawned drone and enables movement
+                            Destroy(spawnedDrone);
+                            bCanMove = true;
+                            bHasDeployedDrone = false;
+                            motor.Freeze(RigidbodyConstraints.FreezeRotation);
+                        }
+                        else
+                        {
+                            Debug.Log("Drone needs to be closer to player in order to retrieve.");
+                            bHasDeployedDrone = true;
+                            motor.Freeze(RigidbodyConstraints.FreezeAll);
+                        }
                     }
                 }
             }
@@ -99,7 +383,41 @@ public class PlayerController : MonoBehaviour
             Vector3 moveHorizontal = transform.right * xMove;
             Vector3 moveVertical = transform.forward * zMove;
 
-            velocity = (moveHorizontal + moveVertical).normalized * speed;
+            //Sprinting
+            if (Input.GetButton("Run") && (xMove != 0.0f || zMove != 0.0f))
+            {
+                //Disables stamina regen while running
+                bCanRegenStamina = false;
+                //Check for exhausted
+                if (!bIsExhausted)
+                {   
+                    //drain stamina when player attempts to run
+                    staminaMeter -= Time.deltaTime * staminaMeterDrainSpeed;
+                    //Stop speed boost when stamina meter is below 10
+                    if(!(staminaMeter <= 10.0f))
+                    {
+                        //Apply speed boost
+                        velocity = (moveHorizontal + moveVertical).normalized * sprintSpeed;
+                    }
+                    else
+                    {
+                        //Apply normal speed
+                        velocity = (moveHorizontal + moveVertical).normalized * speed;
+                    }
+                }
+                else
+                {
+                    //Apply normal speed
+                    velocity = (moveHorizontal + moveVertical).normalized * speed;
+                }
+            }
+            else
+            {
+                //Otherwise allow regen of stamina
+                bCanRegenStamina = true;
+                //Apply normal speed
+                velocity = (moveHorizontal + moveVertical).normalized * speed;
+            }
 
         }
         motor.Move(velocity);

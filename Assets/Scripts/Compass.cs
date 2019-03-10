@@ -25,7 +25,9 @@ public class Compass : MonoBehaviour
     // Update every frame
     void Update()
     {
-        
+        //logs current direction
+        print(currentDirection.ToString());
+
         //Test code for marker system
         if (Input.GetKeyDown(KeyCode.Q))
         {
