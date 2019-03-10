@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject droneToSpawn = null;
     [SerializeField] private Vector3 droneSpawnPos = Vector3.zero;
     [SerializeField] private float droneRetrievalDistance = 5.0f;
+    [SerializeField] private bool bCanSpawnDrone = true;
 
     [Header("Movement Settings:")]
     [SerializeField] private bool bCanMove = true;
@@ -20,7 +21,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float sprintSpeed = 7.0f;
     [SerializeField] private float sensitivity = 3.0f;
     [SerializeField] private float jumpForce = 2.0f;
-
 
     [Header("Attributes:")]
     //Health
@@ -77,6 +77,7 @@ public class PlayerController : MonoBehaviour
         healthMeter = maxHealthMeter;
         staminaMeter = maxStaminaMeter;
         hungerMeter = maxHungerMeter;
+        thirstMeter = maxThirstMeter;
     }
 
     // Update every frame
@@ -104,6 +105,9 @@ public class PlayerController : MonoBehaviour
 
     void ThirstMeter()
     {
+        thirstMeter -= Time.deltaTime * thirstMeterDrainSpeed;
+
+
         if (bCanRegenThirst)
         {
             thirstMeter += Time.deltaTime * thirstMeterRegenSpeed;
@@ -112,6 +116,7 @@ public class PlayerController : MonoBehaviour
         if (thirstMeter <= 0.0f)
         {
             bIsDehydrated = true;
+            healthMeter -= Time.deltaTime * healthMeterDrainSpeed;
             thirstMeter = 0.0f;
 
         }
@@ -136,14 +141,17 @@ public class PlayerController : MonoBehaviour
 
     void HungerMeter()
     {
+        hungerMeter -= Time.deltaTime * hungerMeterDrainSpeed;
+
         if (bCanRegenHunger)
         {
             hungerMeter += Time.deltaTime * hungerMeterRegenSpeed;
         }
         //Makes sure hunger does not go negative.
-        if (staminaMeter <= 0.0f)
+        if (hungerMeter <= 0.0f)
         {
             bIsStarving = true;
+            healthMeter -= Time.deltaTime * healthMeterDrainSpeed;
             hungerMeter = 0.0f;
 
         }
@@ -174,7 +182,7 @@ public class PlayerController : MonoBehaviour
             staminaMeter += Time.deltaTime * staminaMeterRegenSpeed;
         }
         //Makes sure stamina does not go negative.
-        if (staminaMeter <= 0.0f)
+        if (staminaMeter <= 0.0f || bIsDehydrated || bIsStarving)
         {
             bIsExhausted = true;
             staminaMeter = 0.0f;
@@ -210,6 +218,11 @@ public class PlayerController : MonoBehaviour
         if (healthMeter <= 0.0f)
         {
             bIsDead = true;
+            bCanSpawnDrone = false;
+            if (bHasDeployedDrone)
+            {
+                Destroy(spawnedDrone);
+            }
             healthMeter = 0.0f;
 
         }
@@ -217,6 +230,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             bIsDead = false;
+            bCanSpawnDrone = true;
         }
 
         if (bIsDead)
@@ -240,7 +254,7 @@ public class PlayerController : MonoBehaviour
     void SpawnDrone()
     {
         //Check for drone key
-        if (motor.IsGrounded()) {
+        if (motor.IsGrounded() && bCanSpawnDrone) {
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 //Check whether a drone has already been deployed.

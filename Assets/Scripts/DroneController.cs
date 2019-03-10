@@ -11,7 +11,7 @@ public class DroneController : MonoBehaviour
 {
     //bools for enabling/disabling certain drone abilities.
     [Header("Movement Settings:")]
-    [SerializeField] private bool bCanMove = true;
+    [SerializeField] public bool bCanMove = true;
     [SerializeField] private bool bCanBoost = true;
     [SerializeField] private bool bCanThrust = true;
 
@@ -68,14 +68,10 @@ public class DroneController : MonoBehaviour
 
     void Update()
     {
-        //Checking whether character can actually move before allowing movement calculations.
-        if (bCanMove)
-        {
-            Move();
-            Rotate();
-            Thrust();
-        }
-
+        //movement calculations.
+        Move();
+        Rotate();
+        Thrust();
         //Energy related stuff
         EnergyMeter();
         energyPercentage = (energyMeter / maxEnergyMeter) * 100;
@@ -115,91 +111,105 @@ public class DroneController : MonoBehaviour
 
     void Thrust()
     {
-        float localThrust;
+        float localThrust = 0.0f;
         //Check whether player is attempting to thrust, if so set local thrust to defined thrust
-        if (Input.GetButton("Jump"))
+        if (bCanMove)
         {
-            bIsThrusting = true;
-            localThrust = thrust * thrustMultiplier;
-            energyMeter -= Time.deltaTime * energyMeterDrainSpeed * energyDrainJumpMultiplier;
+            if (Input.GetButton("Jump"))
+            {
+                bIsThrusting = true;
+                localThrust = thrust * thrustMultiplier;
+                energyMeter -= Time.deltaTime * energyMeterDrainSpeed * energyDrainJumpMultiplier;
+            }
+            else if (Input.GetButton("Crouch"))
+            {
+                bIsThrusting = true;
+                localThrust = -thrust * thrustMultiplier;
+            }
+            //Other wise set thrust to 0
+            else
+            {
+                bIsThrusting = false;
+                localThrust = 0.0f;
+            }
         }
-        else if (Input.GetButton("Crouch"))
-        {
-            bIsThrusting = true;
-            localThrust = -thrust * thrustMultiplier;
-        }
-        //Other wise set thrust to 0
-        else
-        {
-            bIsThrusting = false;
-            localThrust = 0.0f;
-        }
-
         //Apply thrust with given force
         motor.Thrust(localThrust);
         
     }
 
     void Move()
-    {  
-        //Get axis for x and z axis.
-        float xMove = Input.GetAxisRaw("Horizontal");
-        float zMove = Input.GetAxisRaw("Vertical");
+    {
+        Vector3 velocity = Vector3.zero;
 
-        //get actual relative movement from transform.right/forward
-        Vector3 moveHorizontal = transform.right * xMove;
-        Vector3 moveVertical = transform.forward * zMove;
+        if (bCanMove)
+        {
+            //Get axis for x and z axis.
+            float xMove = Input.GetAxisRaw("Horizontal");
+            float zMove = Input.GetAxisRaw("Vertical");
 
-        //Check whether player is attempting to boost
-        if (Input.GetButton("Run"))
-        {
-            bIsBoosting = true;
-            //drain stamina if player is boosting and restore if not
-            energyMeter -= Time.deltaTime * energyMeterDrainSpeed * energyDrainBoostMultiplier;
-        }
-        else
-        {
-            bIsBoosting = false;
-        }
+            //get actual relative movement from transform.right/forward
+            Vector3 moveHorizontal = transform.right * xMove;
+            Vector3 moveVertical = transform.forward * zMove;
 
-        float calculationSpeed;
-        //Set speed based on various factors.
-        //Is thrusting and is boosting
-        if (bIsThrusting && bCanThrust && bIsBoosting && bCanBoost)
-        {
-            calculationSpeed = (thrustMultiplier / 2) + (boostSpeed / 2);
-        }
-        //thrusting
-        else if (bIsThrusting && bCanThrust)
-        {
-            calculationSpeed = thrustMultiplier;
-        }
-        //boosting
-        else if(bIsBoosting && bCanBoost)
-        {
-            calculationSpeed = boostSpeed;
-        }
-        //Normal
-        else
-        {
-            calculationSpeed = speed;
-        }
-        //Final velocity
-        Vector3 velocity = (moveHorizontal + moveVertical).normalized * calculationSpeed;
+            //Check whether player is attempting to boost
+            if (Input.GetButton("Run"))
+            {
+                bIsBoosting = true;
+                //drain stamina if player is boosting and restore if not
+                energyMeter -= Time.deltaTime * energyMeterDrainSpeed * energyDrainBoostMultiplier;
+            }
+            else
+            {
+                bIsBoosting = false;
+            }
 
+            float calculationSpeed;
+            //Set speed based on various factors.
+            //Is thrusting and is boosting
+            if (bIsThrusting && bCanThrust && bIsBoosting && bCanBoost)
+            {
+                calculationSpeed = (thrustMultiplier / 2) + (boostSpeed / 2);
+            }
+            //thrusting
+            else if (bIsThrusting && bCanThrust)
+            {
+                calculationSpeed = thrustMultiplier;
+            }
+            //boosting
+            else if (bIsBoosting && bCanBoost)
+            {
+                calculationSpeed = boostSpeed;
+            }
+            //Normal
+            else
+            {
+                calculationSpeed = speed;
+            }
+            //Final velocity
+            velocity = (moveHorizontal + moveVertical).normalized * calculationSpeed;
+
+        }
         //Apply movement on motor
         motor.Move(velocity);
     }
 
     void Rotate()
     {
+        Vector3 rotation = Vector3.zero;
+        float cameraRotationX = 0.0f;
+
         //Get axis for rotation
         float yRot = Input.GetAxisRaw("Mouse X");
         float xRot = Input.GetAxisRaw("Mouse Y");
 
-        Vector3 rotation = new Vector3(0.0f, yRot, 0.0f) * sensitivity;
-        float cameraRotationX = xRot * sensitivity;
+        if (bCanMove)
+        {
+            rotation = new Vector3(0.0f, yRot, 0.0f) * sensitivity;
+            cameraRotationX = xRot * sensitivity;
+        }
         //Apply rotations
+
         motor.Rotate(rotation);
         motor.RotateCamera(cameraRotationX);
     }
