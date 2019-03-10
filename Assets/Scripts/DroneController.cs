@@ -153,7 +153,7 @@ public class DroneController : MonoBehaviour
             Vector3 moveVertical = transform.forward * zMove;
 
             //Check whether player is attempting to boost
-            if (Input.GetButton("Run"))
+            if (Input.GetButton("Run") && xMove != 0.0f && zMove != 0.0f)
             {
                 bIsBoosting = true;
                 //drain stamina if player is boosting and restore if not

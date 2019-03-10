@@ -308,7 +308,7 @@ public class PlayerController : MonoBehaviour
             Vector3 moveVertical = transform.forward * zMove;
 
             //Sprinting
-            if (Input.GetButton("Run"))
+            if (Input.GetButton("Run") && (xMove != 0.0f || zMove != 0.0f))
             {
                 //Disables stamina regen while running
                 bCanRegenStamina = false;
