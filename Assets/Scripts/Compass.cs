@@ -7,63 +7,78 @@ public class Compass : MonoBehaviour
 {
 
     //Variables
-
     enum Direction { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest};
 
-    [SerializeField] private float rotation = 0.0f;
     [SerializeField] private Direction currentDirection = Direction.North;
 
     [SerializeField] int MaxMarkerAmount = 16;
     [SerializeField] Marker[] markers;
 
+    [SerializeField] PlayerController pc = null;
+
+    [SerializeField] Vector3 targetTransform = Vector3.zero;
+    [SerializeField] private float targetRotation = 0.0f;
+
+    private GameObject spawnedDrone = null;
+
     void Start()
     {
         //Sets array max length for markers
         markers = new Marker[MaxMarkerAmount];
+        pc = GetComponent<PlayerController>();
     }
 
     // Update every frame
     void Update()
     {
+        if (pc.bHasDeployedDrone)
+        {
+            spawnedDrone = pc.spawnedDrone;
+            targetTransform = spawnedDrone.transform.position;
+            targetRotation = spawnedDrone.transform.rotation.eulerAngles.y;
+        }
+        else
+        {
+            spawnedDrone = null;
+            targetTransform = transform.position;
+            targetRotation = transform.rotation.eulerAngles.y;
+        }
         //logs current direction
         print(currentDirection.ToString());
-
         //Test code for marker system
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            AddMarker("test", transform.position, Color.blue);
+            AddMarker("test", targetTransform, Color.blue);
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
             RemoveMarker(1);
         }
-        //Update rotation
-        rotation = transform.rotation.eulerAngles.y;
 
         //Cycle through if statements until angle is within a bracket then set direction based on angle.
-        if(rotation >= 360 - 22)
+        if(targetRotation >= 360 - 22)
         {
             currentDirection = Direction.North;
-        }else if (rotation >= 270 + 22)
+        }else if (targetRotation >= 270 + 22)
         {
             currentDirection = Direction.NorthWest;
-        }else if(rotation >= 270 - 22)
+        }else if(targetRotation >= 270 - 22)
         {
             currentDirection = Direction.West;
-        }else if(rotation >= 180 + 22)
+        }else if(targetRotation >= 180 + 22)
         {
             currentDirection = Direction.SouthWest;
-        }else if(rotation >= 180 - 22)
+        }else if(targetRotation >= 180 - 22)
         {
             currentDirection = Direction.South;
-        }else if(rotation >= 90 + 22)
+        }else if(targetRotation >= 90 + 22)
         {
             currentDirection = Direction.SouthEast;
-        }else if(rotation >= 90 - 22)
+        }else if(targetRotation >= 90 - 22)
         {
             currentDirection = Direction.East;
-        }else if(rotation >= 0 + 22)
+        }else if(targetRotation >= 0 + 22)
         {
             currentDirection = Direction.NorthEast;
         }

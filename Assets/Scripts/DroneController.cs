@@ -5,7 +5,6 @@
 using UnityEngine;
 
 //Drone controller class is mainly for player input, movement is handled by motor.
-[RequireComponent(typeof(Compass))]
 [RequireComponent(typeof(DroneMotor))]
 public class DroneController : MonoBehaviour
 {

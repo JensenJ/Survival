@@ -65,8 +65,8 @@ public class PlayerController : MonoBehaviour
     [Header("Debug:")]
     [SerializeField] private PlayerMotor motor;
     [SerializeField] private Transform droneSpawnLocation;
-    [SerializeField] private bool bHasDeployedDrone = false;
-    [SerializeField] private GameObject spawnedDrone = null;
+    [SerializeField] public bool bHasDeployedDrone = false;
+    [SerializeField] public GameObject spawnedDrone = null;
 
     // Setup
     void Start()
