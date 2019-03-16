@@ -34,8 +34,11 @@ public class Compass : MonoBehaviour
         if (pc.bHasDeployedDrone)
         {
             spawnedDrone = pc.spawnedDrone;
-            targetTransform = spawnedDrone.transform.position;
-            targetRotation = spawnedDrone.transform.rotation.eulerAngles.y;
+            if(!(spawnedDrone == null))
+            {
+                targetTransform = spawnedDrone.transform.position;
+                targetRotation = spawnedDrone.transform.rotation.eulerAngles.y;
+            }
         }
         else
         {

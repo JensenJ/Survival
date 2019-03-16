@@ -277,12 +277,18 @@ public class PlayerController : MonoBehaviour
     {
         staminaBar.fillAmount = staminaPercentage;
 
+        //Stamina drains if starving or dehydrated.
+        if(bIsStarving || bIsDehydrated)
+        {
+            staminaMeter -= Time.deltaTime * staminaMeterDrainSpeed;
+        }
+
         if (bCanRegenStamina)
         {
             staminaMeter += Time.deltaTime * staminaMeterRegenSpeed;
         }
         //Makes sure stamina does not go negative.
-        if (staminaMeter <= 0.0f || bIsDehydrated || bIsStarving)
+        if (staminaMeter <= 0.0f)
         {
             bIsExhausted = true;
             staminaMeter = 0.0f;
@@ -410,7 +416,7 @@ public class PlayerController : MonoBehaviour
             Vector3 moveVertical = transform.forward * zMove;
 
             //Sprinting
-            if (Input.GetButton("Run") && (xMove != 0.0f || zMove != 0.0f))
+            if (Input.GetButton("Run") && (xMove != 0.0f || zMove != 0.0f) && !bHasDeployedDrone)
             {
                 //Disables stamina regen while running
                 bCanRegenStamina = false;
