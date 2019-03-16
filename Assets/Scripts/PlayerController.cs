@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour
     void AttributesSetup()
     {
         //UI setup
-        Transform panelTransform = transform.root.GetChild(1).GetChild(0);
+        Transform panelTransform = transform.root.GetChild(1).GetChild(0).GetChild(0);
         healthBar  = panelTransform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
         staminaBar = panelTransform.GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>();
         thirstBar  = panelTransform.GetChild(2).GetChild(0).GetChild(0).GetComponent<Image>();

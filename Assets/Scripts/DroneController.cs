@@ -3,6 +3,7 @@
 // PURPOSE: Controls player input, specifically for the drone.
 
 using UnityEngine;
+using UnityEngine.UI;
 
 //Drone controller class is mainly for player input, movement is handled by motor.
 [RequireComponent(typeof(DroneMotor))]
@@ -27,7 +28,6 @@ public class DroneController : MonoBehaviour
     [SerializeField] private float minimumDistFromGround = 0.8f;
     [SerializeField] private float emergencyThrusterForce = 500.0f;
 
-
     //Initial setup variables
     [Space(15)]
     [SerializeField] private float initialSpeed = 5.0f;
@@ -39,7 +39,8 @@ public class DroneController : MonoBehaviour
     [SerializeField] private float maxEnergyMeter = 100.0f;
     [SerializeField] private float energyMeter;
     [SerializeField] private float energyMeterDrainSpeed = 20.0f;
-    [SerializeField] private float energyPercentage = 100.0f;
+    [SerializeField] private float energyPercentage = 1.0f;
+    [SerializeField] private Image energyBar = null;
 
     //Energy Depleted Settings
     [Space(15)]
@@ -56,11 +57,6 @@ public class DroneController : MonoBehaviour
 
     void Start()
     {
-        if (maxEnergyMeter <= 0.0f)
-        {
-            maxEnergyMeter = 100.0f;
-        }
-
         //Setting defaults.
         motor = GetComponent<DroneMotor>();
         energyMeter = maxEnergyMeter;
@@ -69,19 +65,8 @@ public class DroneController : MonoBehaviour
         thrustMultiplier = initialThrustMultiplier;
         motor.Setup(minimumDistFromGround, emergencyThrusterForce);
 
-        if (energyDrainBoostMultiplier <= 0.0f)
-        {
-            energyDrainBoostMultiplier = 2.5f;
-        }
-        if (energyDrainJumpMultiplier <= 0.0f)
-        {
-            energyDrainBoostMultiplier = 2.0f;
-        }
-        if (energyMeterDrainSpeed <= 0.0f)
-        {
-            energyMeterDrainSpeed = 20.0f;
-        }
-
+        Transform panelTransform = transform.root.GetChild(1).GetChild(0).GetChild(1);
+        energyBar = panelTransform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
     }
 
     void Update()
@@ -92,7 +77,7 @@ public class DroneController : MonoBehaviour
         Thrust();
         //Energy related stuff
         EnergyMeter();
-        energyPercentage = (energyMeter / maxEnergyMeter) * 100;
+        energyPercentage = energyMeter / maxEnergyMeter;
     }
 
     //Function for changing energy level, negatives allowed for deducting energy
@@ -102,7 +87,9 @@ public class DroneController : MonoBehaviour
     }
 
     void EnergyMeter()
-    { 
+    {
+
+        energyBar.fillAmount = energyPercentage;
         //Makes sure energy does not go negative and also slows drone if out
         if(energyMeter <= 0.0f)
         {

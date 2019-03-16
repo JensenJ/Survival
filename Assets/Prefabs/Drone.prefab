@@ -107,7 +107,7 @@ MonoBehaviour:
   maxEnergyMeter: 10000
   energyMeter: 0
   energyMeterDrainSpeed: 20
-  energyPercentage: 100
+  energyPercentage: 1
   energyDrainJumpMultiplier: 2.5
   energyDrainBoostMultiplier: 2
   speedWithDrainedEnergy: 3
