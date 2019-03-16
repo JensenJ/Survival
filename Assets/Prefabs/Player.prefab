@@ -345,28 +345,32 @@ MonoBehaviour:
   healthMeter: 0
   healthMeterDrainSpeed: 1
   healthMeterRegenSpeed: 0.5
-  healthPercentage: 100
+  healthPercentage: 1
+  healthBar: {fileID: 0}
   bIsExhausted: 0
   bCanRegenStamina: 1
   maxStaminaMeter: 100
   staminaMeter: 0
   staminaMeterDrainSpeed: 10
   staminaMeterRegenSpeed: 3
-  staminaPercentage: 100
+  staminaPercentage: 1
+  staminaBar: {fileID: 0}
   bIsStarving: 0
   bCanRegenHunger: 0
   maxHungerMeter: 100
   hungerMeter: 0
   hungerMeterDrainSpeed: 0.25
   hungerMeterRegenSpeed: 10
-  hungerPercentage: 100
+  hungerPercentage: 1
+  hungerBar: {fileID: 0}
   bIsDehydrated: 0
   bCanRegenThirst: 0
   maxThirstMeter: 100
   thirstMeter: 0
   thirstMeterDrainSpeed: 0.125
   thirstMeterRegenSpeed: 10
-  thirstPercentage: 100
+  thirstPercentage: 1
+  thirstBar: {fileID: 0}
   motor: {fileID: 0}
   droneSpawnLocation: {fileID: 4858397947767219443}
   bHasDeployedDrone: 0
@@ -383,7 +387,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e15d7dc72559b94ea72766eeee0d887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotation: 0
   currentDirection: 0
   MaxMarkerAmount: 16
   markers:
@@ -451,3 +454,6 @@ MonoBehaviour:
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
+  pc: {fileID: 0}
+  targetTransform: {x: 0, y: 0, z: 0}
+  targetRotation: 0

@@ -3,6 +3,7 @@
 // PURPOSE: Controls for player character (getting input)
 
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Compass))]
 [RequireComponent(typeof(PlayerMotor))]
@@ -30,7 +31,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float healthMeter;
     [SerializeField] private float healthMeterDrainSpeed = 1.0f;
     [SerializeField] private float healthMeterRegenSpeed = 0.5f;
-    [SerializeField] private float healthPercentage = 100.0f;
+    [SerializeField] private float healthPercentage = 1.0f;
+    [SerializeField] private Image healthBar = null;
 
     [Space(15)]
     //Stamina
@@ -40,7 +42,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float staminaMeter;
     [SerializeField] private float staminaMeterDrainSpeed = 10.0f;
     [SerializeField] private float staminaMeterRegenSpeed = 3.0f;
-    [SerializeField] private float staminaPercentage = 100.0f;
+    [SerializeField] private float staminaPercentage = 1.0f;
+    [SerializeField] private Image staminaBar = null;
 
     [Space(15)]
     //Hunger
@@ -50,7 +53,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float hungerMeter;
     [SerializeField] private float hungerMeterDrainSpeed = 0.25f;
     [SerializeField] private float hungerMeterRegenSpeed = 10.0f;
-    [SerializeField] private float hungerPercentage = 100.0f;
+    [SerializeField] private float hungerPercentage = 1.0f;
+    [SerializeField] private Image hungerBar = null;
 
     [Space(15)]
     //Thirst
@@ -60,7 +64,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float thirstMeter;
     [SerializeField] private float thirstMeterDrainSpeed = 0.125f;
     [SerializeField] private float thirstMeterRegenSpeed = 10.0f;
-    [SerializeField] private float thirstPercentage = 100.0f;
+    [SerializeField] private float thirstPercentage = 1.0f;
+    [SerializeField] private Image thirstBar = null;
 
     [Header("Debug:")]
     [SerializeField] private PlayerMotor motor;
@@ -81,6 +86,18 @@ public class PlayerController : MonoBehaviour
 
     void AttributesSetup()
     {
+        //UI setup
+        Transform panelTransform = transform.root.GetChild(1).GetChild(0);
+        healthBar  = panelTransform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
+        staminaBar = panelTransform.GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>();
+        thirstBar  = panelTransform.GetChild(2).GetChild(0).GetChild(0).GetComponent<Image>();
+        hungerBar  = panelTransform.GetChild(3).GetChild(0).GetChild(0).GetComponent<Image>();
+
+        healthBar.fillAmount = healthPercentage;
+        staminaBar.fillAmount = staminaPercentage;
+        thirstBar.fillAmount = thirstPercentage;
+        hungerBar.fillAmount = hungerPercentage;
+        
         //Makes sure max variables are not negative
         
         //Health
@@ -167,22 +184,27 @@ public class PlayerController : MonoBehaviour
         SpawnDrone();
 
         HealthMeter();
-        healthPercentage = (healthMeter / maxHealthMeter) * 100.0f;
+        healthPercentage = healthMeter / maxHealthMeter;
 
         StaminaMeter();
-        staminaPercentage = (staminaMeter / maxStaminaMeter) * 100.0f;
+        staminaPercentage = staminaMeter / maxStaminaMeter;
 
         HungerMeter();
-        hungerPercentage = (hungerMeter / maxHungerMeter) * 100.0f;
+        hungerPercentage = hungerMeter / maxHungerMeter;
 
         ThirstMeter();
-        thirstPercentage = (thirstMeter / maxThirstMeter) * 100.0f;
+        thirstPercentage = thirstMeter / maxThirstMeter;
+    }
+
+    public void ChangeThirstAmount(float m_amount)
+    {
+        thirstMeter += m_amount;
     }
 
     void ThirstMeter()
     {
         thirstMeter -= Time.deltaTime * thirstMeterDrainSpeed;
-
+        thirstBar.fillAmount = thirstPercentage;
 
         if (bCanRegenThirst)
         {
@@ -218,6 +240,7 @@ public class PlayerController : MonoBehaviour
     void HungerMeter()
     {
         hungerMeter -= Time.deltaTime * hungerMeterDrainSpeed;
+        hungerBar.fillAmount = hungerPercentage;
 
         if (bCanRegenHunger)
         {
@@ -252,6 +275,7 @@ public class PlayerController : MonoBehaviour
 
     void StaminaMeter()
     {
+        staminaBar.fillAmount = staminaPercentage;
 
         if (bCanRegenStamina)
         {
@@ -285,6 +309,8 @@ public class PlayerController : MonoBehaviour
 
     void HealthMeter()
     {
+        healthBar.fillAmount = healthPercentage;
+
         if (bCanRegenHealth)
         {
             healthMeter += Time.deltaTime * healthMeterRegenSpeed;
