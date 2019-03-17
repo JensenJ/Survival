@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 507043996550712743}
   - component: {fileID: 2002841984830058313}
   m_Layer: 0
-  m_Name: Marker
+  m_Name: MarkerWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,6 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40bd9a7f24d68df488fee45b23df9992, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  markerManagerPrefab: {fileID: 5582169441487521416, guid: 55a5296927dcf7d408b61210d8a25681,
+    type: 3}
   MarkerID: 0
 --- !u!1 &507043997196612290
 GameObject:

@@ -2,6 +2,8 @@
 // NAME: Compass
 // PURPOSE: Give direction of object based on angle
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class Compass : MonoBehaviour
 {
@@ -14,6 +16,7 @@ public class Compass : MonoBehaviour
     [SerializeField] int MaxMarkerAmount = 16;
     [SerializeField] Marker[] markers;
     [SerializeField] GameObject markerPrefab = null;
+    [SerializeField] GameObject markerManagerPanel = null;
 
     [SerializeField] PlayerController pc = null;
 
@@ -27,6 +30,7 @@ public class Compass : MonoBehaviour
         //Sets array max length for markers
         markers = new Marker[MaxMarkerAmount];
         pc = GetComponent<PlayerController>();
+        markerManagerPanel = transform.root.GetChild(1).GetChild(1).gameObject;
     }
 
     // Update every frame
@@ -49,12 +53,12 @@ public class Compass : MonoBehaviour
         }
         //logs current direction
         print(currentDirection.ToString());
-        //Test code for marker system
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            AddMarker("test", targetTransform, Color.blue);
-        }
 
+        //Test code for marker system
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            markerManagerPanel.SetActive(!markerManagerPanel.activeSelf);
+        }
         if (Input.GetKeyDown(KeyCode.E))
         {
             RemoveMarker(1);
@@ -111,9 +115,10 @@ public class Compass : MonoBehaviour
                 markers[iteration].color = m_color;
                 markers[iteration].location = m_location;
                 markers[iteration].name = m_name;
-                GameObject go = Instantiate(markerPrefab, transform.position, transform.rotation, transform.root.GetChild(2));
-                Waypoint marker = go.GetComponent<Waypoint>();
-                marker.SetWaypointSettings(iteration, true, m_name, m_location, m_color);
+                GameObject marker = Instantiate(markerPrefab, transform.position, transform.rotation, transform.root.GetChild(2));
+                Waypoint waypoint = marker.GetComponent<Waypoint>();
+                waypoint.SetWaypointSettings(iteration, true, m_name, m_location, m_color);
+                
                 //Breaks out of loop
                 break;
             }
@@ -129,7 +134,7 @@ public class Compass : MonoBehaviour
     }
 
     //Clears data of marker at specified index.
-    void RemoveMarker(int index)
+    public void RemoveMarker(int index)
     {
         markers[index].index = 0;
         markers[index].bIsEnabled = false;
@@ -148,9 +153,19 @@ public class Compass : MonoBehaviour
             }
         }
     }
+
+    public void NewMarker()
+    {
+        AddMarker("test", targetTransform, Color.blue);
+    }
+
+    public void CloseMarkerManager()
+    {
+        markerManagerPanel.SetActive(false);
+    }
 }
 
-//Struct for markers and what they shouuld contain
+//Struct for markers and what they should contain
 [System.Serializable]
 public struct Marker {
     public int index;

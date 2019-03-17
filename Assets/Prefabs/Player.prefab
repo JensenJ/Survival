@@ -390,72 +390,91 @@ MonoBehaviour:
   currentDirection: 0
   MaxMarkerAmount: 16
   markers:
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
-  - bIsEnabled: 0
+  - index: 0
+    bIsEnabled: 0
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
   markerPrefab: {fileID: 507043996550712742, guid: 8c8d37d55ae6ea640a11e7e9405e8721,
     type: 3}
+  markerManagerPrefab: {fileID: 5582169441487521416, guid: 55a5296927dcf7d408b61210d8a25681,
+    type: 3}
+  markerManagerPanel: {fileID: 0}
   pc: {fileID: 0}
   targetTransform: {x: 0, y: 0, z: 0}
   targetRotation: 0
