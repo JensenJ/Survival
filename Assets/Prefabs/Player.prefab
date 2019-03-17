@@ -454,6 +454,8 @@ MonoBehaviour:
     name: 
     location: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
+  markerPrefab: {fileID: 507043996550712742, guid: 8c8d37d55ae6ea640a11e7e9405e8721,
+    type: 3}
   pc: {fileID: 0}
   targetTransform: {x: 0, y: 0, z: 0}
   targetRotation: 0

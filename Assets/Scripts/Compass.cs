@@ -13,6 +13,7 @@ public class Compass : MonoBehaviour
 
     [SerializeField] int MaxMarkerAmount = 16;
     [SerializeField] Marker[] markers;
+    [SerializeField] GameObject markerPrefab = null;
 
     [SerializeField] PlayerController pc = null;
 
@@ -105,10 +106,14 @@ public class Compass : MonoBehaviour
             {
                 bHasFilled = true;
                 //Sets variables for marker
+                markers[iteration].index = iteration;
                 markers[iteration].bIsEnabled = true;
                 markers[iteration].color = m_color;
                 markers[iteration].location = m_location;
                 markers[iteration].name = m_name;
+                GameObject go = Instantiate(markerPrefab, transform.position, transform.rotation, transform.root.GetChild(2));
+                Waypoint marker = go.GetComponent<Waypoint>();
+                marker.SetWaypointSettings(iteration, true, m_name, m_location, m_color);
                 //Breaks out of loop
                 break;
             }
@@ -126,16 +131,29 @@ public class Compass : MonoBehaviour
     //Clears data of marker at specified index.
     void RemoveMarker(int index)
     {
+        markers[index].index = 0;
         markers[index].bIsEnabled = false;
         markers[index].name = "";
         markers[index].location = Vector3.zero;
         markers[index].color = Color.black;
+
+        Transform markerList = transform.root.GetChild(2);
+        for (int i = 0; i < markerList.childCount; i++)
+        {
+            Waypoint marker = markerList.GetChild(i).GetComponent<Waypoint>();
+            if (marker.MarkerID == index)
+            {
+                marker.RemoveWaypoint();
+                break;
+            }
+        }
     }
 }
 
 //Struct for markers and what they shouuld contain
 [System.Serializable]
 public struct Marker {
+    public int index;
     public bool bIsEnabled;
     public string name;
     public Vector3 location;

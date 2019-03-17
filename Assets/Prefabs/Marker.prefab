@@ -98,7 +98,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
 --- !u!1 &507043996550712742
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40bd9a7f24d68df488fee45b23df9992, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MarkerID: 0
 --- !u!1 &507043997196612290
 GameObject:
   m_ObjectHideFlags: 0
