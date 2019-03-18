@@ -14,7 +14,6 @@ public class WaypointManager : MonoBehaviour
     [SerializeField] PlayerController pc = null;
 
     [SerializeField] Vector3 targetTransform = Vector3.zero;
-    [SerializeField] private float targetRotation = 0.0f;
 
     private GameObject spawnedDrone = null;
 
@@ -38,14 +37,12 @@ public class WaypointManager : MonoBehaviour
             if (!(spawnedDrone == null))
             {
                 targetTransform = spawnedDrone.transform.position;
-                targetRotation = spawnedDrone.transform.rotation.eulerAngles.y;
             }
         }
         else
         {
             spawnedDrone = null;
             targetTransform = pc.transform.position;
-            targetRotation = pc.transform.rotation.eulerAngles.y;
         }
 
         //Test code for waypoint system
@@ -103,15 +100,13 @@ public class WaypointManager : MonoBehaviour
     //Clears data of waypoint at specified index.
     public void RemoveWaypoint(int index)
     {
-        print("test");
-        print(waypoints[index].index);
-        print(waypoints[index].name);
         waypoints[index].index = 0;
         waypoints[index].bIsEnabled = false;
         waypoints[index].name = "";
         waypoints[index].location = Vector3.zero;
         waypoints[index].color = Color.black;
         Transform markerList = transform.root.GetChild(2);
+
         for (int i = 0; i < markerList.childCount; i++)
         {
             WaypointUI marker = markerList.GetChild(i).GetComponent<WaypointUI>();

@@ -175,6 +175,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8000114395741420055}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &40219789 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8000114395776700058, guid: ac858d21fb834384c84dfc2b4dc1e634,
+    type: 3}
+  m_PrefabInstance: {fileID: 8000114395741420055}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bceb2eb7d7145044c9810e311c78af92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &63538007 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: c09052c9b19f0ea4987bc4f4f981252f,
@@ -1417,8 +1429,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 616167266}
-        m_MethodName: CloseMarkerManager
+      - m_Target: {fileID: 40219789}
+        m_MethodName: CloseWaypointManager
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1467,18 +1479,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 599514003}
   m_CullTransparentMesh: 0
---- !u!114 &616167266 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1758035811773659634, guid: 3c6b4f4f86b7d9048bce4fe2c11f7f24,
-    type: 3}
-  m_PrefabInstance: {fileID: 1758035812250209936}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e15d7dc72559b94ea72766eeee0d887, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &626568099
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1676,8 +1676,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 616167266}
-        m_MethodName: NewMarker
+      - m_Target: {fileID: 40219789}
+        m_MethodName: NewWaypoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
