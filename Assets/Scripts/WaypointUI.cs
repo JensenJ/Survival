@@ -1,12 +1,12 @@
 ﻿// Copyright (c) 2019 JensenJ
-// NAME: FacePlayer
-// PURPOSE: Make game objects face the camera/player
+// NAME: Waypoint
+// PURPOSE: Responsible for waypoint menu
 
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class Waypoint : MonoBehaviour
+public class WaypointUI : MonoBehaviour
 {
     //Marker Widget settings
     private TextMeshProUGUI widgetDistanceMesh;
@@ -19,6 +19,7 @@ public class Waypoint : MonoBehaviour
     private TextMeshProUGUI managerLocationMesh;
     private TextMeshProUGUI managerNameMesh;
     private Image managerWaypointColor;
+    private GameObject markerManager = null;
 
     private Transform objectToFace = null;
     private Transform playerPos;
@@ -31,10 +32,12 @@ public class Waypoint : MonoBehaviour
     //Setup
     void Awake()
     {
+        //Defaults
         objectToFace = transform.root.GetChild(3).transform;
         playerPos = objectToFace;
         pc = objectToFace.GetComponent<PlayerController>();
 
+        //Where each object is
         widgetBackgroundPanel = transform.GetChild(0).GetChild(0).gameObject;
         widgetDistanceMesh = widgetBackgroundPanel.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         widgetNameMesh = widgetBackgroundPanel.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
@@ -47,19 +50,24 @@ public class Waypoint : MonoBehaviour
     //Function that is called when other functions, e.g. player controller changes waypoint settings.
     public void SetWaypointSettings(int index, bool m_bIsEnabled, string m_name, Vector3 m_location, Color m_color)
     {
+        //Waypoint settings
         MarkerID = index;
         widgetBackgroundPanel.SetActive(m_bIsEnabled);
         widgetWaypointColor.color = m_color;
         transform.position = m_location;
         widgetNameMesh.text = m_name;
 
-        GameObject markerManager = Instantiate(markerManagerPrefab, transform.position, Quaternion.identity, managerContentPanel.transform);
+        //Instantiate waypoint widget
+        markerManager = Instantiate(markerManagerPrefab, transform.position, Quaternion.identity, managerContentPanel.transform);
+        //Color
         managerWaypointColor = markerManager.transform.GetChild(0).GetComponent<Image>();
         managerWaypointColor.color = m_color;
 
+        //Name
         managerNameMesh = markerManager.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         managerNameMesh.text = m_name + "(enabled=" + m_bIsEnabled.ToString() + ")";
 
+        //Location
         managerLocationMesh = markerManager.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         managerLocationMesh.text = Mathf.Round(m_location.x).ToString() + ", " + Mathf.Round(m_location.y).ToString() + ", " + Mathf.Round(m_location.z).ToString();
 
@@ -69,6 +77,10 @@ public class Waypoint : MonoBehaviour
     public void RemoveWaypoint()
     {
         Destroy(gameObject);
+        if(markerManager != null)
+        {
+            Destroy(markerManager);
+        }
     }
 
     // Update is called once per frame

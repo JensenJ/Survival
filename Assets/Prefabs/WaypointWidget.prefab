@@ -194,8 +194,8 @@ RectTransform:
   - {fileID: 5582169441513367478}
   - {fileID: 5582169442711631721}
   - {fileID: 5902502544085499489}
-  - {fileID: 1927131764501651075}
   - {fileID: 2586400119296014679}
+  - {fileID: 1927131764501651075}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -814,7 +814,7 @@ GameObject:
   - component: {fileID: 8419362079610177323}
   - component: {fileID: 511308263820404131}
   m_Layer: 0
-  m_Name: Edit
+  m_Name: Delete
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -827,17 +827,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7936716187043646282}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2190000192542760821}
   m_Father: {fileID: 5582169441487521431}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -74.99997, y: 12.5}
+  m_AnchoredPosition: {x: -75.00003, y: 12.5}
   m_SizeDelta: {x: 150, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7753305126745853389
@@ -917,14 +917,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4664071848733114513, guid: 3c6b4f4f86b7d9048bce4fe2c11f7f24,
+      - m_Target: {fileID: 1758035811773659634, guid: 3c6b4f4f86b7d9048bce4fe2c11f7f24,
           type: 3}
         m_MethodName: RemoveMarker
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -944,7 +944,7 @@ GameObject:
   - component: {fileID: 2164323747936946796}
   - component: {fileID: 7872667556234149823}
   m_Layer: 0
-  m_Name: Delete
+  m_Name: Edit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -963,7 +963,7 @@ RectTransform:
   m_Children:
   - {fileID: 5795572682816894675}
   m_Father: {fileID: 5582169441487521431}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
