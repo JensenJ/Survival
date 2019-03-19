@@ -79,7 +79,7 @@ public class WaypointUI : MonoBehaviour
         managerLocationMesh.text = Mathf.Round(m_location.x).ToString() + ", " + Mathf.Round(m_location.y).ToString() + ", " + Mathf.Round(m_location.z).ToString();
 
         //Listeners for buttons.
-        Button btn = managerContentPanel.transform.GetChild(MarkerID).GetChild(4).GetComponent<Button>();
+        Button btn = markerManager.transform.GetChild(4).GetComponent<Button>();
         btn.onClick.AddListener(deleteButtonPressed);
     }
 
