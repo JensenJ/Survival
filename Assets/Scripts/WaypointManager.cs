@@ -8,16 +8,16 @@ public class WaypointManager : MonoBehaviour
 {
 
     [SerializeField] int MaxWaypointAmount = 16;
-    [SerializeField] GameObject waypointPrefab = null;
-    [SerializeField] GameObject waypointManagerPanel = null;
+    [SerializeField] private GameObject waypointPrefab = null;
+    [SerializeField] public GameObject waypointManagerPanel = null;
 
-    [SerializeField] PlayerController pc = null;
+    [SerializeField] private PlayerController pc = null;
 
-    [SerializeField] Vector3 targetTransform = Vector3.zero;
+    [SerializeField] private Vector3 targetTransform = Vector3.zero;
 
     private GameObject spawnedDrone = null;
 
-    [SerializeField] Waypoint[] waypoints;
+    [SerializeField] private Waypoint[] waypoints;
 
     // Start is called before the first frame update
     void Start()
@@ -43,20 +43,6 @@ public class WaypointManager : MonoBehaviour
         {
             spawnedDrone = null;
             targetTransform = pc.transform.position;
-        }
-
-        //Test code for waypoint system
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            waypointManagerPanel.SetActive(!waypointManagerPanel.activeSelf);
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            RemoveWaypoint(1);
-        }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            NewWaypoint();
         }
     }
 
@@ -126,6 +112,8 @@ public class WaypointManager : MonoBehaviour
     public void CloseWaypointManager()
     {
         waypointManagerPanel.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        pc.bCanMove = true;
     }
 }
 

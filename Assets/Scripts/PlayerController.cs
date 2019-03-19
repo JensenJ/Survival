@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool bCanSpawnDrone = true;
 
     [Header("Movement Settings:")]
-    [SerializeField] private bool bCanMove = true;
+    [SerializeField] public bool bCanMove = true;
     [SerializeField] private float speed = 5.0f;
     [SerializeField] private float sprintSpeed = 7.0f;
     [SerializeField] private float sensitivity = 3.0f;
@@ -67,12 +67,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float thirstPercentage = 1.0f;
     [SerializeField] private Image thirstBar = null;
 
+    [Header("Waypoints:")]
+    [SerializeField] private WaypointManager waypointManager = null;
+    [SerializeField] private bool bCanUseWaypointManager = true;
+
     [Header("Debug:")]
     [SerializeField] private PlayerMotor motor;
     [SerializeField] private Transform droneSpawnLocation;
     [SerializeField] public bool bHasDeployedDrone = false;
     [SerializeField] public GameObject spawnedDrone = null;
-
     // Setup
     void Start()
     {
@@ -80,8 +83,10 @@ public class PlayerController : MonoBehaviour
         motor = GetComponent<PlayerMotor>();
         droneSpawnLocation = transform.GetChild(2);
         droneSpawnLocation.position = droneSpawnPos + transform.position;
+        waypointManager = transform.root.GetChild(2).GetComponent<WaypointManager>();
 
         AttributesSetup();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void AttributesSetup()
@@ -176,6 +181,22 @@ public class PlayerController : MonoBehaviour
     // Update every frame
     void Update()
     {
+        //Waypoint Manager
+        if (Input.GetKeyDown(KeyCode.B) && bCanUseWaypointManager)
+        {
+            if(waypointManager.waypointManagerPanel.activeSelf == true)
+            {
+                waypointManager.waypointManagerPanel.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
+                bCanMove = true;
+            }
+            else
+            {
+                waypointManager.waypointManagerPanel.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                bCanMove = false;
+            }
+        }
         //Movement
         Move();
         Rotate();
@@ -348,7 +369,6 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            bCanMove = true;
             bCanRegenHealth = true;
         }
 
