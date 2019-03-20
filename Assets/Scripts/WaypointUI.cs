@@ -32,7 +32,6 @@ public class WaypointUI : MonoBehaviour
     void deleteButtonPressed()
     {
         WaypointManager wp = transform.parent.GetComponent<WaypointManager>();
-        print(MarkerID);
         wp.RemoveWaypoint(MarkerID);
     }
 

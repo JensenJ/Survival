@@ -3,6 +3,8 @@
 // PURPOSE: Manages the waypoint system
 
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class WaypointManager : MonoBehaviour
 {
@@ -10,10 +12,20 @@ public class WaypointManager : MonoBehaviour
     [SerializeField] int MaxWaypointAmount = 16;
     [SerializeField] private GameObject waypointPrefab = null;
     [SerializeField] public GameObject waypointManagerPanel = null;
-
     [SerializeField] private PlayerController pc = null;
-
     [SerializeField] private Vector3 targetTransform = Vector3.zero;
+
+    //Waypoint editor
+    [SerializeField] public GameObject waypointEditorPanel = null;
+    [SerializeField] private TMP_InputField waypointEditName;
+    [SerializeField] private TMP_InputField waypointEditX;
+    [SerializeField] private TMP_InputField waypointEditY;
+    [SerializeField] private TMP_InputField waypointEditZ;
+    [SerializeField] private Slider waypointEditR;
+    [SerializeField] private Slider waypointEditG;
+    [SerializeField] private Slider waypointEditB;
+    [SerializeField] private Image waypointEditColour;
+    [SerializeField] private Color waypointColour;
 
     private GameObject spawnedDrone = null;
 
@@ -26,6 +38,22 @@ public class WaypointManager : MonoBehaviour
         waypoints = new Waypoint[MaxWaypointAmount];
         pc = transform.root.GetChild(3).GetComponent<PlayerController>();
         waypointManagerPanel = transform.root.GetChild(1).GetChild(1).gameObject;
+        waypointEditorPanel = transform.root.GetChild(1).GetChild(2).gameObject;
+
+        waypointEditName = waypointEditorPanel.transform.GetChild(1).GetComponent<TMP_InputField>();
+
+        waypointEditX = waypointEditorPanel.transform.GetChild(2).GetChild(1).GetComponent<TMP_InputField>();
+        waypointEditY = waypointEditorPanel.transform.GetChild(2).GetChild(2).GetComponent<TMP_InputField>();
+        waypointEditZ = waypointEditorPanel.transform.GetChild(2).GetChild(3).GetComponent<TMP_InputField>();
+
+        waypointEditR = waypointEditorPanel.transform.GetChild(3).GetChild(1).GetComponent<Slider>();
+        waypointEditG = waypointEditorPanel.transform.GetChild(3).GetChild(2).GetComponent<Slider>();
+        waypointEditB = waypointEditorPanel.transform.GetChild(3).GetChild(3).GetComponent<Slider>();
+        waypointEditColour = waypointEditorPanel.transform.GetChild(3).GetChild(4).GetComponent<Image>();
+
+        waypointEditR.value = 1.0f;
+        waypointEditG.value = 1.0f;
+        waypointEditB.value = 1.0f;
     }
 
     // Update is called once per frame
@@ -44,6 +72,9 @@ public class WaypointManager : MonoBehaviour
             spawnedDrone = null;
             targetTransform = pc.transform.position;
         }
+
+        waypointColour = new Color(waypointEditR.value, waypointEditG.value, waypointEditB.value);
+        waypointEditColour.color = waypointColour;
     }
 
     //Adds waypoint with specified parameters
@@ -106,7 +137,26 @@ public class WaypointManager : MonoBehaviour
 
     public void NewWaypoint()
     {
-        AddWaypoint("test", targetTransform, Color.blue);
+        //Setting defaults for new waypoint.
+        waypointEditR.value = 1.0f;
+        waypointEditG.value = 1.0f;
+        waypointEditB.value = 1.0f;
+        waypointEditName.text = "New Waypoint";
+        waypointEditX.text = Mathf.Round(pc.transform.position.x).ToString();
+        waypointEditY.text = Mathf.Round(pc.transform.position.y).ToString();
+        waypointEditZ.text = Mathf.Round(pc.transform.position.z).ToString();
+
+        waypointEditorPanel.SetActive(true);
+        waypointManagerPanel.SetActive(false);
+    }
+
+    public void SaveWaypoint()
+    {
+        // TODO make sure user enters valid data.
+        Vector3 location = new Vector3(int.Parse(waypointEditX.text), int.Parse(waypointEditY.text), int.Parse(waypointEditZ.text));
+        AddWaypoint(waypointEditName.text, location, waypointColour);
+        waypointEditorPanel.SetActive(false);
+        waypointManagerPanel.SetActive(true);
     }
 
     public void CloseWaypointManager()
@@ -114,6 +164,12 @@ public class WaypointManager : MonoBehaviour
         waypointManagerPanel.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         pc.bCanMove = true;
+    }
+
+    public void CloseWaypointEditor()
+    {
+        waypointEditorPanel.SetActive(false);
+        waypointManagerPanel.SetActive(true);
     }
 }
 

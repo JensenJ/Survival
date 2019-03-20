@@ -187,6 +187,7 @@ public class PlayerController : MonoBehaviour
             if(waypointManager.waypointManagerPanel.activeSelf == true)
             {
                 waypointManager.waypointManagerPanel.SetActive(false);
+                waypointManager.waypointEditorPanel.SetActive(false);
                 Cursor.lockState = CursorLockMode.Locked;
                 bCanMove = true;
             }
