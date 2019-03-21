@@ -138,9 +138,9 @@ public class WaypointManager : MonoBehaviour
     public void NewWaypoint()
     {
         //Setting defaults for new waypoint.
-        waypointEditR.value = 1.0f;
-        waypointEditG.value = 1.0f;
-        waypointEditB.value = 1.0f;
+        waypointEditR.value = Random.Range(0.0f, 1.0f);
+        waypointEditG.value = Random.Range(0.0f, 1.0f);
+        waypointEditB.value = Random.Range(0.0f, 1.0f);
         waypointEditName.text = "New Waypoint";
         waypointEditX.text = Mathf.Round(pc.transform.position.x).ToString();
         waypointEditY.text = Mathf.Round(pc.transform.position.y).ToString();
