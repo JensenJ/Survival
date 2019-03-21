@@ -71,7 +71,7 @@ public class WaypointUI : MonoBehaviour
         widgetNameMesh.text = m_name;
 
         //Instantiate waypoint widget
-        markerManager = Instantiate(markerManagerPrefab, transform.position, Quaternion.identity, managerContentPanel.transform);
+        markerManager = Instantiate(markerManagerPrefab, m_location, Quaternion.identity, managerContentPanel.transform);
         //Color
         managerWaypointColor = markerManager.transform.GetChild(0).GetComponent<Image>();
         managerWaypointColor.color = m_color;

@@ -13,6 +13,7 @@ public class WaypointManager : MonoBehaviour
     [SerializeField] private GameObject waypointPrefab = null;
     [SerializeField] public GameObject waypointManagerPanel = null;
     [SerializeField] private PlayerController pc = null;
+    //[SerializeField] private DroneController dc = null;
     [SerializeField] private Vector3 targetTransform = Vector3.zero;
 
     //Waypoint editor
@@ -149,9 +150,18 @@ public class WaypointManager : MonoBehaviour
         waypointEditG.value = Random.Range(0.0f, 1.0f);
         waypointEditB.value = Random.Range(0.0f, 1.0f);
         waypointEditName.text = "New Waypoint";
-        waypointEditX.text = Mathf.Round(pc.transform.position.x).ToString();
-        waypointEditY.text = Mathf.Round(pc.transform.position.y).ToString();
-        waypointEditZ.text = Mathf.Round(pc.transform.position.z).ToString();
+        if (pc.bHasDeployedDrone)
+        {
+            waypointEditX.text = Mathf.Round(pc.transform.GetChild(3).position.x).ToString();
+            waypointEditY.text = Mathf.Round(pc.transform.GetChild(3).position.y).ToString();
+            waypointEditZ.text = Mathf.Round(pc.transform.GetChild(3).position.z).ToString();
+        }
+        else
+        {
+            waypointEditX.text = Mathf.Round(pc.transform.position.x).ToString();
+            waypointEditY.text = Mathf.Round(pc.transform.position.y).ToString();
+            waypointEditZ.text = Mathf.Round(pc.transform.position.z).ToString();
+        }
 
         waypointEditorPanel.SetActive(true);
         waypointManagerPanel.SetActive(false);
@@ -204,6 +214,10 @@ public class WaypointManager : MonoBehaviour
         waypointManagerPanel.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         pc.bCanMove = true;
+        if (pc.bHasDeployedDrone)
+        {
+            pc.spawnedDrone.GetComponent<DroneController>().bCanMove = true;
+        }
     }
 
     public void CloseWaypointEditor()

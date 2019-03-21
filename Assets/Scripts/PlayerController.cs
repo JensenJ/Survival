@@ -76,6 +76,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform droneSpawnLocation;
     [SerializeField] public bool bHasDeployedDrone = false;
     [SerializeField] public GameObject spawnedDrone = null;
+    [SerializeField] private DroneController dc = null;
     // Setup
     void Start()
     {
@@ -190,12 +191,20 @@ public class PlayerController : MonoBehaviour
                 waypointManager.waypointEditorPanel.SetActive(false);
                 Cursor.lockState = CursorLockMode.Locked;
                 bCanMove = true;
+                if (bHasDeployedDrone)
+                {
+                    dc.bCanMove = true;
+                }
             }
             else
             {
                 waypointManager.waypointManagerPanel.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
                 bCanMove = false;
+                if (bHasDeployedDrone)
+                {
+                    dc.bCanMove = false;
+                }
             }
         }
         //Movement
@@ -394,6 +403,7 @@ public class PlayerController : MonoBehaviour
                     bCanMove = false;
                     bHasDeployedDrone = true;
                     motor.Freeze(RigidbodyConstraints.FreezeAll);
+                    dc = spawnedDrone.GetComponent<DroneController>();
                 }
                 else
                 {
