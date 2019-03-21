@@ -26,13 +26,19 @@ public class WaypointUI : MonoBehaviour
     private PlayerController pc = null;
     private float distanceFromPlayer = 10.0f;
 
+    WaypointManager wp;
+
     [SerializeField] private GameObject markerManagerPrefab = null;
     [SerializeField] public int MarkerID = 0;
 
     void deleteButtonPressed()
     {
-        WaypointManager wp = transform.parent.GetComponent<WaypointManager>();
         wp.RemoveWaypoint(MarkerID);
+    }
+
+    void EditButtonPressed()
+    {
+        wp.EditWaypoint(MarkerID);
     }
 
     //Setup
@@ -51,6 +57,7 @@ public class WaypointUI : MonoBehaviour
 
         managerContentPanel = transform.root.GetChild(1).GetChild(1).GetChild(0).GetChild(0).GetChild(0).gameObject;
 
+        wp = transform.parent.GetComponent<WaypointManager>();
     }
 
     //Function that is called when other functions, e.g. player controller changes waypoint settings.
@@ -78,8 +85,11 @@ public class WaypointUI : MonoBehaviour
         managerLocationMesh.text = Mathf.Round(m_location.x).ToString() + ", " + Mathf.Round(m_location.y).ToString() + ", " + Mathf.Round(m_location.z).ToString();
 
         //Listeners for buttons.
-        Button btn = markerManager.transform.GetChild(4).GetComponent<Button>();
-        btn.onClick.AddListener(deleteButtonPressed);
+        Button editBtn = markerManager.transform.GetChild(3).GetComponent<Button>();
+        editBtn.onClick.AddListener(EditButtonPressed);
+
+        Button delBtn = markerManager.transform.GetChild(4).GetComponent<Button>();
+        delBtn.onClick.AddListener(deleteButtonPressed);
     }
 
     //Removes waypoint by destroying it.

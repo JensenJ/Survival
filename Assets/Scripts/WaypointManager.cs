@@ -27,6 +27,9 @@ public class WaypointManager : MonoBehaviour
     [SerializeField] private Image waypointEditColour;
     [SerializeField] private Color waypointColour;
 
+    int waypointToRemove = 0;
+    bool bIsEditingWaypoint = false;
+
     private GameObject spawnedDrone = null;
 
     [SerializeField] private Waypoint[] waypoints;
@@ -150,10 +153,42 @@ public class WaypointManager : MonoBehaviour
         waypointManagerPanel.SetActive(false);
     }
 
+    public void EditWaypoint(int index)
+    {
+        print(index);
+        bIsEditingWaypoint = true;
+        Transform markerList = transform.root.GetChild(2);
+        for (int i = 0; i < markerList.childCount; i++)
+        {
+            WaypointUI marker = markerList.GetChild(i).GetComponent<WaypointUI>();
+            if (marker.MarkerID == index)
+            {
+                //Load data into editor
+                waypointEditR.value = waypoints[index].color.r;
+                waypointEditG.value = waypoints[index].color.g;
+                waypointEditB.value = waypoints[index].color.b;
+                waypointEditName.text = waypoints[index].name;
+                waypointEditX.text = waypoints[index].location.x.ToString();
+                waypointEditY.text = waypoints[index].location.y.ToString();
+                waypointEditZ.text = waypoints[index].location.z.ToString();
+                waypointToRemove = index;
+                break;
+            }
+        }
+
+        waypointEditorPanel.SetActive(true);
+        waypointManagerPanel.SetActive(false);
+    }
+
     public void SaveWaypoint()
     {
         // TODO make sure user enters valid data.
         Vector3 location = new Vector3(int.Parse(waypointEditX.text), int.Parse(waypointEditY.text), int.Parse(waypointEditZ.text));
+        if (bIsEditingWaypoint)
+        {
+            RemoveWaypoint(waypointToRemove);
+            bIsEditingWaypoint = false;
+        }
         AddWaypoint(waypointEditName.text, location, waypointColour);
         waypointEditorPanel.SetActive(false);
         waypointManagerPanel.SetActive(true);
