@@ -25,10 +25,12 @@ public class WaypointManager : MonoBehaviour
     [SerializeField] private Slider waypointEditG;
     [SerializeField] private Slider waypointEditB;
     [SerializeField] private Image waypointEditColour;
+    [SerializeField] private Toggle waypointEditEnabled;
     [SerializeField] private Color waypointColour;
 
     int waypointToRemove = 0;
     bool bIsEditingWaypoint = false;
+    bool bIsWaypointEnabled = true;
 
     private GameObject spawnedDrone = null;
 
@@ -53,6 +55,8 @@ public class WaypointManager : MonoBehaviour
         waypointEditG = waypointEditorPanel.transform.GetChild(3).GetChild(2).GetComponent<Slider>();
         waypointEditB = waypointEditorPanel.transform.GetChild(3).GetChild(3).GetComponent<Slider>();
         waypointEditColour = waypointEditorPanel.transform.GetChild(3).GetChild(4).GetComponent<Image>();
+
+        waypointEditEnabled = waypointEditorPanel.transform.GetChild(4).GetComponent<Toggle>();
 
         waypointEditR.value = 1.0f;
         waypointEditG.value = 1.0f;
@@ -81,7 +85,7 @@ public class WaypointManager : MonoBehaviour
     }
 
     //Adds waypoint with specified parameters
-    void AddWaypoint(string m_name, Vector3 m_location, Color m_color)
+    void AddWaypoint(string m_name, Vector3 m_location, Color m_color, bool bIsEnabled)
     {
         //Keeps track of current iteration in for each loop
         int iteration = 0;
@@ -95,13 +99,13 @@ public class WaypointManager : MonoBehaviour
                 bHasFilled = true;
                 //Sets variables for waypoint
                 waypoints[iteration].index = iteration;
-                waypoints[iteration].bIsEnabled = true;
+                waypoints[iteration].bIsEnabled = bIsEnabled;
                 waypoints[iteration].color = m_color;
                 waypoints[iteration].location = m_location;
                 waypoints[iteration].name = m_name;
                 GameObject go_waypoint = Instantiate(waypointPrefab, pc.transform.position, transform.rotation, transform.root.GetChild(2));
                 WaypointUI waypoint = go_waypoint.GetComponent<WaypointUI>();
-                waypoint.SetWaypointSettings(iteration, true, m_name, m_location, m_color);
+                waypoint.SetWaypointSettings(iteration, bIsEnabled, m_name, m_location, m_color);
 
                 //Breaks out of loop
                 break;
@@ -155,7 +159,6 @@ public class WaypointManager : MonoBehaviour
 
     public void EditWaypoint(int index)
     {
-        print(index);
         bIsEditingWaypoint = true;
         Transform markerList = transform.root.GetChild(2);
         for (int i = 0; i < markerList.childCount; i++)
@@ -171,6 +174,7 @@ public class WaypointManager : MonoBehaviour
                 waypointEditX.text = waypoints[index].location.x.ToString();
                 waypointEditY.text = waypoints[index].location.y.ToString();
                 waypointEditZ.text = waypoints[index].location.z.ToString();
+                waypointEditEnabled.isOn = waypoints[index].bIsEnabled;
                 waypointToRemove = index;
                 break;
             }
@@ -189,7 +193,8 @@ public class WaypointManager : MonoBehaviour
             RemoveWaypoint(waypointToRemove);
             bIsEditingWaypoint = false;
         }
-        AddWaypoint(waypointEditName.text, location, waypointColour);
+        AddWaypoint(waypointEditName.text, location, waypointColour, waypointEditEnabled.isOn);
+        
         waypointEditorPanel.SetActive(false);
         waypointManagerPanel.SetActive(true);
     }

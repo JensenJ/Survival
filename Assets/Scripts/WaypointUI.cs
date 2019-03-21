@@ -78,7 +78,15 @@ public class WaypointUI : MonoBehaviour
 
         //Name
         managerNameMesh = markerManager.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-        managerNameMesh.text = m_name + "(enabled=" + m_bIsEnabled.ToString() + ")";
+
+        if (m_bIsEnabled)
+        {
+            managerNameMesh.text = m_name + "(enabled)";
+        }
+        else
+        {
+            managerNameMesh.text = m_name + "(disabled)";
+        }
 
         //Location
         managerLocationMesh = markerManager.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
@@ -114,8 +122,9 @@ public class WaypointUI : MonoBehaviour
             objectToFace = playerPos;
         }
         
-        distanceFromPlayer = Mathf.Round(Vector3.Distance(objectToFace.position, transform.position));
-        widgetDistanceMesh.text = distanceFromPlayer.ToString() + "m";
+        distanceFromPlayer = Vector3.Distance(objectToFace.position, transform.position);
+        widgetDistanceMesh.text = Mathf.Round(distanceFromPlayer).ToString() + "m";
+        transform.localScale = new Vector3(distanceFromPlayer / 2, distanceFromPlayer / 2, 1);
 
         if(objectToFace != null)
         {
