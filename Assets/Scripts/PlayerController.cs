@@ -3,6 +3,7 @@
 // PURPOSE: Controls for player character (getting input)
 
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Compass))]
 [RequireComponent(typeof(PlayerMotor))]
@@ -16,7 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool bCanSpawnDrone = true;
 
     [Header("Movement Settings:")]
-    [SerializeField] private bool bCanMove = true;
+    [SerializeField] public bool bCanMove = true;
     [SerializeField] private float speed = 5.0f;
     [SerializeField] private float sprintSpeed = 7.0f;
     [SerializeField] private float sensitivity = 3.0f;
@@ -30,7 +31,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float healthMeter;
     [SerializeField] private float healthMeterDrainSpeed = 1.0f;
     [SerializeField] private float healthMeterRegenSpeed = 0.5f;
-    [SerializeField] private float healthPercentage = 100.0f;
+    [SerializeField] private float healthPercentage = 1.0f;
+    [SerializeField] private Image healthBar = null;
 
     [Space(15)]
     //Stamina
@@ -40,7 +42,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float staminaMeter;
     [SerializeField] private float staminaMeterDrainSpeed = 10.0f;
     [SerializeField] private float staminaMeterRegenSpeed = 3.0f;
-    [SerializeField] private float staminaPercentage = 100.0f;
+    [SerializeField] private float staminaPercentage = 1.0f;
+    [SerializeField] private Image staminaBar = null;
 
     [Space(15)]
     //Hunger
@@ -50,7 +53,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float hungerMeter;
     [SerializeField] private float hungerMeterDrainSpeed = 0.25f;
     [SerializeField] private float hungerMeterRegenSpeed = 10.0f;
-    [SerializeField] private float hungerPercentage = 100.0f;
+    [SerializeField] private float hungerPercentage = 1.0f;
+    [SerializeField] private Image hungerBar = null;
 
     [Space(15)]
     //Thirst
@@ -60,14 +64,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float thirstMeter;
     [SerializeField] private float thirstMeterDrainSpeed = 0.125f;
     [SerializeField] private float thirstMeterRegenSpeed = 10.0f;
-    [SerializeField] private float thirstPercentage = 100.0f;
+    [SerializeField] private float thirstPercentage = 1.0f;
+    [SerializeField] private Image thirstBar = null;
+
+    [Header("Waypoints:")]
+    [SerializeField] private WaypointManager waypointManager = null;
+    [SerializeField] private bool bCanUseWaypointManager = true;
 
     [Header("Debug:")]
     [SerializeField] private PlayerMotor motor;
     [SerializeField] private Transform droneSpawnLocation;
-    [SerializeField] private bool bHasDeployedDrone = false;
-    [SerializeField] private GameObject spawnedDrone = null;
-
+    [SerializeField] public bool bHasDeployedDrone = false;
+    [SerializeField] public GameObject spawnedDrone = null;
+    [SerializeField] private DroneController dc = null;
+    [SerializeField] public Image Crosshair = null;
     // Setup
     void Start()
     {
@@ -75,12 +85,28 @@ public class PlayerController : MonoBehaviour
         motor = GetComponent<PlayerMotor>();
         droneSpawnLocation = transform.GetChild(2);
         droneSpawnLocation.position = droneSpawnPos + transform.position;
+        waypointManager = transform.root.GetChild(2).GetComponent<WaypointManager>();
+        Crosshair = transform.root.GetChild(1).GetChild(3).GetComponent<Image>();
 
         AttributesSetup();
+        Cursor.lockState = CursorLockMode.Locked;
+        Crosshair.gameObject.SetActive(true);
     }
 
     void AttributesSetup()
     {
+        //UI setup
+        Transform panelTransform = transform.root.GetChild(1).GetChild(0).GetChild(0);
+        healthBar  = panelTransform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
+        staminaBar = panelTransform.GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>();
+        thirstBar  = panelTransform.GetChild(2).GetChild(0).GetChild(0).GetComponent<Image>();
+        hungerBar  = panelTransform.GetChild(3).GetChild(0).GetChild(0).GetComponent<Image>();
+
+        healthBar.fillAmount = healthPercentage;
+        staminaBar.fillAmount = staminaPercentage;
+        thirstBar.fillAmount = thirstPercentage;
+        hungerBar.fillAmount = hungerPercentage;
+        
         //Makes sure max variables are not negative
         
         //Health
@@ -159,6 +185,33 @@ public class PlayerController : MonoBehaviour
     // Update every frame
     void Update()
     {
+        //Waypoint Manager
+        if (Input.GetKeyDown(KeyCode.B) && bCanUseWaypointManager)
+        {
+            if(waypointManager.waypointManagerPanel.activeSelf == true)
+            {
+                waypointManager.waypointManagerPanel.SetActive(false);
+                waypointManager.waypointEditorPanel.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
+                Crosshair.gameObject.SetActive(true);
+                bCanMove = true;
+                if (bHasDeployedDrone)
+                {
+                    dc.bCanMove = true;
+                }
+            }
+            else
+            {
+                waypointManager.waypointManagerPanel.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                Crosshair.gameObject.SetActive(false);
+                bCanMove = false;
+                if (bHasDeployedDrone)
+                {
+                    dc.bCanMove = false;
+                }
+            }
+        }
         //Movement
         Move();
         Rotate();
@@ -167,22 +220,27 @@ public class PlayerController : MonoBehaviour
         SpawnDrone();
 
         HealthMeter();
-        healthPercentage = (healthMeter / maxHealthMeter) * 100.0f;
+        healthPercentage = healthMeter / maxHealthMeter;
 
         StaminaMeter();
-        staminaPercentage = (staminaMeter / maxStaminaMeter) * 100.0f;
+        staminaPercentage = staminaMeter / maxStaminaMeter;
 
         HungerMeter();
-        hungerPercentage = (hungerMeter / maxHungerMeter) * 100.0f;
+        hungerPercentage = hungerMeter / maxHungerMeter;
 
         ThirstMeter();
-        thirstPercentage = (thirstMeter / maxThirstMeter) * 100.0f;
+        thirstPercentage = thirstMeter / maxThirstMeter;
+    }
+
+    public void ChangeThirstAmount(float m_amount)
+    {
+        thirstMeter += m_amount;
     }
 
     void ThirstMeter()
     {
         thirstMeter -= Time.deltaTime * thirstMeterDrainSpeed;
-
+        thirstBar.fillAmount = thirstPercentage;
 
         if (bCanRegenThirst)
         {
@@ -218,6 +276,7 @@ public class PlayerController : MonoBehaviour
     void HungerMeter()
     {
         hungerMeter -= Time.deltaTime * hungerMeterDrainSpeed;
+        hungerBar.fillAmount = hungerPercentage;
 
         if (bCanRegenHunger)
         {
@@ -252,13 +311,20 @@ public class PlayerController : MonoBehaviour
 
     void StaminaMeter()
     {
+        staminaBar.fillAmount = staminaPercentage;
+
+        //Stamina drains if starving or dehydrated.
+        if(bIsStarving || bIsDehydrated)
+        {
+            staminaMeter -= Time.deltaTime * staminaMeterDrainSpeed;
+        }
 
         if (bCanRegenStamina)
         {
             staminaMeter += Time.deltaTime * staminaMeterRegenSpeed;
         }
         //Makes sure stamina does not go negative.
-        if (staminaMeter <= 0.0f || bIsDehydrated || bIsStarving)
+        if (staminaMeter <= 0.0f)
         {
             bIsExhausted = true;
             staminaMeter = 0.0f;
@@ -285,6 +351,8 @@ public class PlayerController : MonoBehaviour
 
     void HealthMeter()
     {
+        healthBar.fillAmount = healthPercentage;
+
         if (bCanRegenHealth)
         {
             healthMeter += Time.deltaTime * healthMeterRegenSpeed;
@@ -316,7 +384,6 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            bCanMove = true;
             bCanRegenHealth = true;
         }
 
@@ -341,6 +408,7 @@ public class PlayerController : MonoBehaviour
                     bCanMove = false;
                     bHasDeployedDrone = true;
                     motor.Freeze(RigidbodyConstraints.FreezeAll);
+                    dc = spawnedDrone.GetComponent<DroneController>();
                 }
                 else
                 {
@@ -384,7 +452,7 @@ public class PlayerController : MonoBehaviour
             Vector3 moveVertical = transform.forward * zMove;
 
             //Sprinting
-            if (Input.GetButton("Run") && (xMove != 0.0f || zMove != 0.0f))
+            if (Input.GetButton("Run") && (xMove != 0.0f || zMove != 0.0f) && !bHasDeployedDrone)
             {
                 //Disables stamina regen while running
                 bCanRegenStamina = false;
