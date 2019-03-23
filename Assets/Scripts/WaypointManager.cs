@@ -213,6 +213,7 @@ public class WaypointManager : MonoBehaviour
     {
         waypointManagerPanel.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
+        pc.Crosshair.gameObject.SetActive(true);
         pc.bCanMove = true;
         if (pc.bHasDeployedDrone)
         {

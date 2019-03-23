@@ -77,6 +77,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public bool bHasDeployedDrone = false;
     [SerializeField] public GameObject spawnedDrone = null;
     [SerializeField] private DroneController dc = null;
+    [SerializeField] public Image Crosshair = null;
     // Setup
     void Start()
     {
@@ -85,9 +86,11 @@ public class PlayerController : MonoBehaviour
         droneSpawnLocation = transform.GetChild(2);
         droneSpawnLocation.position = droneSpawnPos + transform.position;
         waypointManager = transform.root.GetChild(2).GetComponent<WaypointManager>();
+        Crosshair = transform.root.GetChild(1).GetChild(3).GetComponent<Image>();
 
         AttributesSetup();
         Cursor.lockState = CursorLockMode.Locked;
+        Crosshair.gameObject.SetActive(true);
     }
 
     void AttributesSetup()
@@ -190,6 +193,7 @@ public class PlayerController : MonoBehaviour
                 waypointManager.waypointManagerPanel.SetActive(false);
                 waypointManager.waypointEditorPanel.SetActive(false);
                 Cursor.lockState = CursorLockMode.Locked;
+                Crosshair.gameObject.SetActive(true);
                 bCanMove = true;
                 if (bHasDeployedDrone)
                 {
@@ -200,6 +204,7 @@ public class PlayerController : MonoBehaviour
             {
                 waypointManager.waypointManagerPanel.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
+                Crosshair.gameObject.SetActive(false);
                 bCanMove = false;
                 if (bHasDeployedDrone)
                 {
