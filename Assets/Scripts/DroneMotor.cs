@@ -16,13 +16,12 @@ public class DroneMotor : MonoBehaviour
     private float thrust = 0.0f;
 
     //Camera settings and reference
-    [SerializeField] private float cameraRotationLimit = 85.0f;
-    [SerializeField] private Camera cam;
+    [SerializeField] [Range(0, 90)] private float cameraRotationLimit = 85.0f;
+    private Camera cam;
     private DroneController dc;
     private Rigidbody rb;
     private float minimumDistFromGround = 0.8f;
     private float emergencyThrusterForce = 500.0f;
-
 
     void Start()
     {

@@ -13,71 +13,73 @@ public class PlayerController : MonoBehaviour
     [Header("Drone Settings:")]
     [SerializeField] private GameObject droneToSpawn = null;
     [SerializeField] private Vector3 droneSpawnPos = Vector3.zero;
-    [SerializeField] private float droneRetrievalDistance = 5.0f;
-    [SerializeField] private bool bCanSpawnDrone = true;
+    [SerializeField] [Range(0, 20)] private float droneRetrievalDistance = 5.0f;
+    private bool bCanSpawnDrone = true;
 
     [Header("Movement Settings:")]
-    [SerializeField] public bool bCanMove = true;
-    [SerializeField] private float speed = 5.0f;
-    [SerializeField] private float sprintSpeed = 7.0f;
-    [SerializeField] private float sensitivity = 3.0f;
-    [SerializeField] private float jumpForce = 2.0f;
+    public bool bCanMove = true;
+    [SerializeField] [Range(0, 10)] private float speed = 5.0f;
+    [SerializeField] [Range(0, 15)] private float sprintSpeed = 7.0f;
+    [SerializeField] [Range(0, 5)] private float sensitivity = 3.0f;
+    [SerializeField] [Range(0, 4)] private float jumpForce = 2.0f;
 
-    [Header("Attributes:")]
     //Health
-    [SerializeField] private bool bIsDead = false;
-    [SerializeField] private bool bCanRegenHealth = true;
-    [SerializeField] private float maxHealthMeter = 100.0f;
-    [SerializeField] private float healthMeter;
-    [SerializeField] private float healthMeterDrainSpeed = 1.0f;
-    [SerializeField] private float healthMeterRegenSpeed = 0.5f;
-    [SerializeField] private float healthPercentage = 1.0f;
-    [SerializeField] private Image healthBar = null;
+    [Header("Attributes (Health):")]
+    [SerializeField] [Range(0, 1000)] private float maxHealthMeter = 100.0f;
+    [SerializeField] [Range(0, 3)] private float healthMeterDrainSpeed = 1.0f;
+    [SerializeField] [Range(0, 3)] private float healthMeterRegenSpeed = 0.5f;
+    [SerializeField] [Range(0, 1)] private float healthPercentage = 1.0f;
+    private bool bIsDead = false;
+    private float healthMeter;
+    private bool bCanRegenHealth = true;
+    private Image healthBar = null;
 
-    [Space(15)]
     //Stamina
-    [SerializeField] private bool bIsExhausted = false;
-    [SerializeField] private bool bCanRegenStamina = true;
-    [SerializeField] private float maxStaminaMeter = 100.0f;
-    [SerializeField] private float staminaMeter;
-    [SerializeField] private float staminaMeterDrainSpeed = 10.0f;
-    [SerializeField] private float staminaMeterRegenSpeed = 3.0f;
-    [SerializeField] private float staminaPercentage = 1.0f;
-    [SerializeField] private Image staminaBar = null;
+    [Header("Attributes (Stamina):")]
+    [SerializeField] [Range(0, 1000)] private float maxStaminaMeter = 100.0f;
+    [SerializeField] [Range(0, 20)] private float staminaMeterDrainSpeed = 10.0f;
+    [SerializeField] [Range(0, 10)] private float staminaMeterRegenSpeed = 3.0f;
+    [SerializeField] [Range(0, 1)] private float staminaPercentage = 1.0f;
+    private bool bIsExhausted = false;
+    private float staminaMeter;
+    private bool bCanRegenStamina = true;
+    private Image staminaBar = null;
 
-    [Space(15)]
     //Hunger
-    [SerializeField] private bool bIsStarving = false;
-    [SerializeField] private bool bCanRegenHunger = false;
-    [SerializeField] private float maxHungerMeter = 100.0f;
-    [SerializeField] private float hungerMeter;
-    [SerializeField] private float hungerMeterDrainSpeed = 0.25f;
-    [SerializeField] private float hungerMeterRegenSpeed = 10.0f;
-    [SerializeField] private float hungerPercentage = 1.0f;
-    [SerializeField] private Image hungerBar = null;
+    [Header("Attributes (Hunger):")]
+    [SerializeField] [Range(0, 1000)] private float maxHungerMeter = 100.0f;
+    [SerializeField] [Range(0, 3)] private float hungerMeterDrainSpeed = 0.25f;
+    [SerializeField] [Range(0, 20)] private float hungerMeterRegenSpeed = 10.0f;
+    [SerializeField] [Range(0, 1)] private float hungerPercentage = 1.0f;
+    private bool bIsStarving = false;
+    private float hungerMeter;
+    private bool bCanRegenHunger = false;
+    private Image hungerBar = null;
 
-    [Space(15)]
+    
     //Thirst
-    [SerializeField] private bool bIsDehydrated = false;
-    [SerializeField] private bool bCanRegenThirst = false;
-    [SerializeField] private float maxThirstMeter = 100.0f;
-    [SerializeField] private float thirstMeter;
-    [SerializeField] private float thirstMeterDrainSpeed = 0.125f;
-    [SerializeField] private float thirstMeterRegenSpeed = 10.0f;
-    [SerializeField] private float thirstPercentage = 1.0f;
-    [SerializeField] private Image thirstBar = null;
+    [Header("Attributes (Thirst):")]
+    [SerializeField] [Range(0, 1000)] private float maxThirstMeter = 100.0f;
+    [SerializeField] [Range(0, 3)] private float thirstMeterDrainSpeed = 0.125f;
+    [SerializeField] [Range(0, 20)] private float thirstMeterRegenSpeed = 10.0f;
+    [SerializeField] [Range(0, 1)] private float thirstPercentage = 1.0f;
+    private bool bIsDehydrated = false;
+    private float thirstMeter;
+    private bool bCanRegenThirst = false;
+    private Image thirstBar = null;
 
-    [Header("Waypoints:")]
-    [SerializeField] private WaypointManager waypointManager = null;
-    [SerializeField] private bool bCanUseWaypointManager = true;
+    //References
+    private WaypointManager waypointManager = null;
+    private bool bCanUseWaypointManager = true;
+    private PlayerMotor motor;
+    private Transform droneSpawnLocation;
+    private DroneController dc = null;
 
     [Header("Debug:")]
-    [SerializeField] private PlayerMotor motor;
-    [SerializeField] private Transform droneSpawnLocation;
-    [SerializeField] public bool bHasDeployedDrone = false;
-    [SerializeField] public GameObject spawnedDrone = null;
-    [SerializeField] private DroneController dc = null;
-    [SerializeField] public Image Crosshair = null;
+    public bool bHasDeployedDrone = false;
+    public GameObject spawnedDrone = null;
+    public Image Crosshair = null;
+
     // Setup
     void Start()
     {

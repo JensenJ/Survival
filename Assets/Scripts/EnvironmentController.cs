@@ -13,21 +13,21 @@ public class EnvironmentController : MonoBehaviour
 
     //Time settings
     [Header("Time:")]
-    [SerializeField] private float timeMultiplier = 1f;
-    [SerializeField] private int daysInMonth = 30;
-    [SerializeField] private int monthsInYear = 12;
+    [SerializeField] [Range(1, 8)] private float timeMultiplier = 1f;
+    [SerializeField] [Range(1, 120)] private int daysInMonth = 30;
+    [SerializeField] [Range(1, 40)] private int monthsInYear = 12;
     //Slider for percentage of full day done
     [Range(0, 1)] [SerializeField] private float currentTimeOfDay = 0;
 
     //Time variables
     [Space(10)]
-    [SerializeField] private int Seconds = 0;
-    [SerializeField] private int Minutes = 0;
-    [SerializeField] private int Hours = 0;
-    [SerializeField] private int Day = 1;
-    [SerializeField] private int Month = 1;
-    [SerializeField] private int Year = 1;
-    [SerializeField] private float Clockwork = 360; // 6 o clock
+    private int Seconds = 0;
+    private int Minutes = 0;
+    private int Hours = 0;
+    private int Day = 1;
+    private int Month = 1;
+    private int Year = 1;
+    [SerializeField] private float Clockwork = 360; // 6 o'clock
 
     //Seasons
     enum ESeasonEnum { ENone, ESpring, ESummer, EAutumn, EWinter };
@@ -41,10 +41,10 @@ public class EnvironmentController : MonoBehaviour
     //Temperature
     [Header("Temperature:")]
     //Temperature settings
-    [SerializeField] float tempMultiplier = 1;
+    [SerializeField] [Range(0, 5)] float tempMultiplier = 1;
     [SerializeField] bool bIsTempFahrenheit = false;
     [SerializeField] float temperature = 0;
-    [Range(0, 4)] [SerializeField] int tempAccuracy = 2;
+    [SerializeField] [Range(0, 4)] int tempAccuracy = 2;
 
     //Temperature variables
     bool bNewGenerationTemp = true;
@@ -59,9 +59,9 @@ public class EnvironmentController : MonoBehaviour
     //Wind
     [Header("Wind:")]
     //Wind settings
-    [SerializeField] float windStrengthMultiplier = 1;
+    [SerializeField] [Range(0, 5)] float windStrengthMultiplier = 1;
     [SerializeField] float windStrength = 0;
-    [Range(0, 4)] [SerializeField] int windStrengthAccuracy = 2;
+    [SerializeField] [Range(0, 4)] int windStrengthAccuracy = 2;
 
     //Wind variable
     bool bNewGenerationWind = true;
@@ -73,7 +73,7 @@ public class EnvironmentController : MonoBehaviour
 
     //Wind angle settings
     [SerializeField] float windAngle = 0;
-    [Range(0, 4)] [SerializeField] int windAngleAccuracy = 2;
+    [SerializeField] [Range(0, 4)] int windAngleAccuracy = 2;
 
     //Wind angle variables
     bool bNewGenerationWindAngle = true;

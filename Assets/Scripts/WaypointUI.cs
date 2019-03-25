@@ -29,7 +29,7 @@ public class WaypointUI : MonoBehaviour
     WaypointManager wp;
 
     [SerializeField] private GameObject markerManagerPrefab = null;
-    [SerializeField] public int MarkerID = 0;
+    public int MarkerID = 0;
 
     void deleteButtonPressed()
     {

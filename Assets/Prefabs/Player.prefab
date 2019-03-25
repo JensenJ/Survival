@@ -214,10 +214,14 @@ MonoBehaviour:
   thirstMeterRegenSpeed: 10
   thirstPercentage: 1
   thirstBar: {fileID: 0}
+  waypointManager: {fileID: 0}
+  bCanUseWaypointManager: 1
   motor: {fileID: 0}
   droneSpawnLocation: {fileID: 1758035812958752548}
   bHasDeployedDrone: 0
   spawnedDrone: {fileID: 0}
+  dc: {fileID: 0}
+  Crosshair: {fileID: 0}
 --- !u!114 &1758035811773659634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,93 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentDirection: 0
-  MaxMarkerAmount: 16
-  markers:
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 1}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - index: 0
-    bIsEnabled: 0
-    name: 
-    location: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-  markerPrefab: {fileID: 507043996550712742, guid: 8c8d37d55ae6ea640a11e7e9405e8721,
-    type: 3}
-  markerManagerPanel: {fileID: 0}
   pc: {fileID: 0}
-  targetTransform: {x: 0, y: 0, z: 0}
   targetRotation: 0
 --- !u!1 &1758035812419762075
 GameObject:

@@ -16,37 +16,36 @@ public class DroneController : MonoBehaviour
     [SerializeField] private bool bCanThrust = true;
 
     //basic movement settings
-    [Space(15)]
-    [SerializeField] private float speed = 5.0f;
-    [SerializeField] private float boostSpeed = 10.0f;
-    [SerializeField] private float sensitivity = 3.0f;
+    private float speed = 5.0f;
+    private float boostSpeed = 10.0f;
+    private float sensitivity = 3.0f;
 
     //Thrusting related
     [Space(15)]
-    [SerializeField] private float thrust = 100.0f;
-    [SerializeField] private float thrustMultiplier = 8f;
-    [SerializeField] private float minimumDistFromGround = 0.8f;
-    [SerializeField] private float emergencyThrusterForce = 500.0f;
+    [SerializeField] [Range(0, 500)] private float thrust = 100.0f;
+    private float thrustMultiplier = 8f;
+    [SerializeField] [Range(0, 2)] private float minimumDistFromGround = 0.8f;
+    [SerializeField] [Range(0, 1000)]private float emergencyThrusterForce = 500.0f;
 
     //Initial setup variables
     [Space(15)]
-    [SerializeField] private float initialSpeed = 5.0f;
-    [SerializeField] private float initialBoostSpeed = 10.0f;
-    [SerializeField] private float initialThrustMultiplier = 8.0f;
+    [SerializeField] [Range(0, 15)] private float initialSpeed = 5.0f;
+    [SerializeField] [Range(0, 30)] private float initialBoostSpeed = 10.0f;
+    [SerializeField] [Range(0, 10)] private float initialThrustMultiplier = 8.0f;
     //Energy Meter
     
     [Header("Attributes:")]
-    [SerializeField] private float maxEnergyMeter = 100.0f;
-    [SerializeField] private float energyMeter;
-    [SerializeField] private float energyMeterDrainSpeed = 20.0f;
-    [SerializeField] private float energyPercentage = 1.0f;
-    [SerializeField] private Image energyBar = null;
+    [SerializeField] [Range(0, 20000)] private float maxEnergyMeter = 100.0f;
+    [SerializeField] [Range(0, 20)] private float energyMeterDrainSpeed = 20.0f;
+    [SerializeField] [Range(0, 1)] private float energyPercentage = 1.0f;
+    private float energyMeter;
+    private Image energyBar = null;
 
     //Energy Depleted Settings
     [Space(15)]
-    [SerializeField] private float energyDrainJumpMultiplier = 2.5f;
-    [SerializeField] private float energyDrainBoostMultiplier = 2.0f;
-    [SerializeField] private float speedWithDrainedEnergy = 1.0f;
+    [SerializeField] [Range(0, 5)] private float energyDrainJumpMultiplier = 2.5f;
+    [SerializeField] [Range(0, 5)] private float energyDrainBoostMultiplier = 2.0f;
+    [SerializeField] [Range(0, 5)] private float speedWithDrainedEnergy = 1.0f;
 
     //Variables for checking whether player is currently doing an action. 
     private bool bIsBoosting = false;

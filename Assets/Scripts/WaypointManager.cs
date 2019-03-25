@@ -9,25 +9,24 @@ using TMPro;
 public class WaypointManager : MonoBehaviour
 {
 
-    [SerializeField] int MaxWaypointAmount = 16;
+    [SerializeField] [Range(0, 32)] int MaxWaypointAmount = 16;
     [SerializeField] private GameObject waypointPrefab = null;
-    [SerializeField] public GameObject waypointManagerPanel = null;
-    [SerializeField] private PlayerController pc = null;
-    //[SerializeField] private DroneController dc = null;
-    [SerializeField] private Vector3 targetTransform = Vector3.zero;
+    public GameObject waypointManagerPanel = null;
+    public GameObject waypointEditorPanel = null;
+    [SerializeField] private Waypoint[] waypoints;
 
-    //Waypoint editor
-    [SerializeField] public GameObject waypointEditorPanel = null;
-    [SerializeField] private TMP_InputField waypointEditName;
-    [SerializeField] private TMP_InputField waypointEditX;
-    [SerializeField] private TMP_InputField waypointEditY;
-    [SerializeField] private TMP_InputField waypointEditZ;
-    [SerializeField] private Slider waypointEditR;
-    [SerializeField] private Slider waypointEditG;
-    [SerializeField] private Slider waypointEditB;
-    [SerializeField] private Image waypointEditColour;
-    [SerializeField] private Toggle waypointEditEnabled;
-    [SerializeField] private Color waypointColour;
+    private Vector3 targetTransform = Vector3.zero;
+    private PlayerController pc = null;
+    private TMP_InputField waypointEditName;
+    private TMP_InputField waypointEditX;
+    private TMP_InputField waypointEditY;
+    private TMP_InputField waypointEditZ;
+    private Slider waypointEditR;
+    private Slider waypointEditG;
+    private Slider waypointEditB;
+    private Image waypointEditColour;
+    private Toggle waypointEditEnabled;
+    private Color waypointColour;
 
     int waypointToRemove = 0;
     bool bIsEditingWaypoint = false;
@@ -35,7 +34,6 @@ public class WaypointManager : MonoBehaviour
 
     private GameObject spawnedDrone = null;
 
-    [SerializeField] private Waypoint[] waypoints;
 
     // Start is called before the first frame update
     void Start()
