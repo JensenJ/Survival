@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 1758035811882576794}
   - component: {fileID: 1758035811882576793}
   - component: {fileID: 1758035811882576792}
+  - component: {fileID: 5123572326359988360}
   - component: {fileID: 1758035811773659634}
   m_Layer: 0
   m_Name: Player
@@ -159,7 +160,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raycastDistance: 1.1
   cameraRotationLimit: 85
-  cam: {fileID: 1758035813235036205}
 --- !u!114 &1758035811882576792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,52 +176,50 @@ MonoBehaviour:
     type: 3}
   droneSpawnPos: {x: 0, y: 1.5, z: 1}
   droneRetrievalDistance: 5
-  bCanSpawnDrone: 1
   bCanMove: 1
   speed: 5
   sprintSpeed: 10
   sensitivity: 3
   jumpForce: 4
-  bIsDead: 0
-  bCanRegenHealth: 1
+  bHasDeployedDrone: 0
+  spawnedDrone: {fileID: 0}
+  Crosshair: {fileID: 0}
+--- !u!114 &5123572326359988360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1758035811882576791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 070690efde7aac94eb94e93d2d184949, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   maxHealthMeter: 100
-  healthMeter: 0
   healthMeterDrainSpeed: 1
   healthMeterRegenSpeed: 0.5
   healthPercentage: 1
-  healthBar: {fileID: 0}
-  bIsExhausted: 0
-  bCanRegenStamina: 1
+  bIsDead: 0
+  bCanRegenHealth: 1
   maxStaminaMeter: 100
-  staminaMeter: 0
   staminaMeterDrainSpeed: 10
   staminaMeterRegenSpeed: 3
   staminaPercentage: 1
-  staminaBar: {fileID: 0}
-  bIsStarving: 0
-  bCanRegenHunger: 0
+  bIsExhausted: 0
+  bCanRegenStamina: 1
   maxHungerMeter: 100
-  hungerMeter: 0
   hungerMeterDrainSpeed: 0.25
   hungerMeterRegenSpeed: 10
   hungerPercentage: 1
-  hungerBar: {fileID: 0}
-  bIsDehydrated: 0
-  bCanRegenThirst: 0
+  bIsStarving: 0
+  bCanRegenHunger: 0
   maxThirstMeter: 100
-  thirstMeter: 0
   thirstMeterDrainSpeed: 0.125
   thirstMeterRegenSpeed: 10
   thirstPercentage: 1
-  thirstBar: {fileID: 0}
-  waypointManager: {fileID: 0}
-  bCanUseWaypointManager: 1
-  motor: {fileID: 0}
-  droneSpawnLocation: {fileID: 1758035812958752548}
-  bHasDeployedDrone: 0
-  spawnedDrone: {fileID: 0}
-  dc: {fileID: 0}
-  Crosshair: {fileID: 0}
+  bIsDehydrated: 0
+  bCanRegenThirst: 0
 --- !u!114 &1758035811773659634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,7 +233,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentDirection: 0
-  pc: {fileID: 0}
   targetRotation: 0
 --- !u!1 &1758035812419762075
 GameObject:

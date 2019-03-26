@@ -2091,12 +2091,6 @@ MonoBehaviour:
   daysInMonth: 30
   monthsInYear: 12
   currentTimeOfDay: 0
-  Seconds: 0
-  Minutes: 0
-  Hours: 0
-  Day: 1
-  Month: 1
-  Year: 1
   Clockwork: 360
   seasonEnum: 0
   tempMultiplier: 1
@@ -4693,6 +4687,48 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 761884441}
   m_CullTransparentMesh: 0
+--- !u!1 &764298863 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1758035811882576791, guid: 3c6b4f4f86b7d9048bce4fe2c11f7f24,
+    type: 3}
+  m_PrefabInstance: {fileID: 1758035812250209936}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &764298869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764298863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 070690efde7aac94eb94e93d2d184949, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealthMeter: 100
+  healthMeterDrainSpeed: 1
+  healthMeterRegenSpeed: 0.5
+  healthPercentage: 1
+  bIsDead: 0
+  bCanRegenHealth: 1
+  maxStaminaMeter: 100
+  staminaMeterDrainSpeed: 10
+  staminaMeterRegenSpeed: 3
+  staminaPercentage: 1
+  bIsExhausted: 0
+  bCanRegenStamina: 1
+  maxHungerMeter: 100
+  hungerMeterDrainSpeed: 0.25
+  hungerMeterRegenSpeed: 10
+  hungerPercentage: 1
+  bIsStarving: 0
+  bCanRegenHunger: 0
+  maxThirstMeter: 100
+  thirstMeterDrainSpeed: 0.125
+  thirstMeterRegenSpeed: 10
+  thirstPercentage: 1
+  bIsDehydrated: 0
+  bCanRegenThirst: 0
 --- !u!1 &769099480
 GameObject:
   m_ObjectHideFlags: 0
