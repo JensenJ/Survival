@@ -143,9 +143,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71106b333208142479dda959c036d4dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  markerManagerPrefab: {fileID: 5582169441487521416, guid: 55a5296927dcf7d408b61210d8a25681,
+  waypointMenuWidgetPrefab: {fileID: 5582169441487521416, guid: 55a5296927dcf7d408b61210d8a25681,
     type: 3}
-  MarkerID: 0
+  gameWidgetScale: 2
+  WaypointID: 0
 --- !u!1 &507043997196612290
 GameObject:
   m_ObjectHideFlags: 0
