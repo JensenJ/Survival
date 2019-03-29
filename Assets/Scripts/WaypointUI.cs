@@ -19,7 +19,7 @@ public class WaypointUI : MonoBehaviour
     private TextMeshProUGUI managerLocationMesh;
     private TextMeshProUGUI managerNameMesh;
     private Image managerWaypointColor;
-    private GameObject markerManager = null;
+    private GameObject waypointMenuWidget = null;
 
     private Transform objectToFace = null;
     private Transform playerPos;
@@ -29,18 +29,28 @@ public class WaypointUI : MonoBehaviour
     WaypointManager wp;
 
     [SerializeField] private GameObject markerManagerPrefab = null;
-    public int MarkerID = 0;
+    public int WaypointID = 0;
 
-    void deleteButtonPressed()
+    void DeleteButtonPressed()
     {
-        wp.RemoveWaypoint(MarkerID);
+        wp.RemoveWaypoint(WaypointID);
     }
 
     void EditButtonPressed()
     {
-        wp.EditWaypoint(MarkerID);
+        wp.EditWaypoint(WaypointID);
     }
 
+    void DownButtonPressed()
+    {
+        wp.Rearrange(true, WaypointID);
+    }
+
+    void UpButtonPressed()
+    {
+        wp.Rearrange(false, WaypointID);
+    }
+    
     //Setup
     void Awake()
     {
@@ -55,8 +65,7 @@ public class WaypointUI : MonoBehaviour
         widgetNameMesh = widgetBackgroundPanel.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         widgetWaypointColor = widgetBackgroundPanel.transform.GetChild(0).GetComponent<Image>();
 
-        managerContentPanel = transform.root.GetChild(1).GetChild(1).GetChild(0).GetChild(0).GetChild(0).gameObject;
-
+        managerContentPanel = transform.root.GetChild(1).GetChild(1).GetChild(1).GetChild(0).GetChild(0).gameObject;
         wp = transform.parent.GetComponent<WaypointManager>();
     }
 
@@ -64,20 +73,20 @@ public class WaypointUI : MonoBehaviour
     public void SetWaypointSettings(int index, bool m_bIsEnabled, string m_name, Vector3 m_location, Color m_color)
     {
         //Waypoint settings
-        MarkerID = index;
+        WaypointID = index;
         widgetBackgroundPanel.SetActive(m_bIsEnabled);
         widgetWaypointColor.color = m_color;
         transform.position = m_location;
         widgetNameMesh.text = m_name;
 
         //Instantiate waypoint widget
-        markerManager = Instantiate(markerManagerPrefab, m_location, Quaternion.identity, managerContentPanel.transform);
+        waypointMenuWidget = Instantiate(markerManagerPrefab, m_location, Quaternion.identity, managerContentPanel.transform);
         //Color
-        managerWaypointColor = markerManager.transform.GetChild(0).GetComponent<Image>();
+        managerWaypointColor = waypointMenuWidget.transform.GetChild(0).GetComponent<Image>();
         managerWaypointColor.color = m_color;
 
         //Name
-        managerNameMesh = markerManager.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        managerNameMesh = waypointMenuWidget.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
 
         if (m_bIsEnabled)
         {
@@ -89,28 +98,34 @@ public class WaypointUI : MonoBehaviour
         }
 
         //Location
-        managerLocationMesh = markerManager.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        managerLocationMesh = waypointMenuWidget.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         managerLocationMesh.text = Mathf.Round(m_location.x).ToString() + ", " + Mathf.Round(m_location.y).ToString() + ", " + Mathf.Round(m_location.z).ToString();
 
         //Listeners for buttons.
-        Button editBtn = markerManager.transform.GetChild(3).GetComponent<Button>();
+        Button editBtn = waypointMenuWidget.transform.GetChild(3).GetComponent<Button>();
         editBtn.onClick.AddListener(EditButtonPressed);
 
-        Button delBtn = markerManager.transform.GetChild(4).GetComponent<Button>();
-        delBtn.onClick.AddListener(deleteButtonPressed);
+        Button delBtn = waypointMenuWidget.transform.GetChild(4).GetComponent<Button>();
+        delBtn.onClick.AddListener(DeleteButtonPressed);
+
+        Button downBtn = waypointMenuWidget.transform.GetChild(5).GetComponent<Button>();
+        downBtn.onClick.AddListener(DownButtonPressed);
+
+        Button upBtn = waypointMenuWidget.transform.GetChild(6).GetComponent<Button>();
+        upBtn.onClick.AddListener(UpButtonPressed);
     }
 
     //Removes waypoint by destroying it.
     public void RemoveWaypoint()
     {
         Destroy(gameObject);
-        if(markerManager != null)
+        if(waypointMenuWidget != null)
         {
-            Destroy(markerManager);
+            Destroy(waypointMenuWidget);
         }
     }
 
-    // Update is called once per frame
+    // Waypoint widget, facing script
     void Update()
     {
         if (pc.bHasDeployedDrone)

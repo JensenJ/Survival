@@ -14,7 +14,7 @@ public class WaypointManager : MonoBehaviour
     public GameObject waypointManagerPanel = null;
     public GameObject waypointEditorPanel = null;
     [SerializeField] private Waypoint[] waypoints;
-
+    private GameObject waypointManagerContent = null;
     private Vector3 targetTransform = Vector3.zero;
     private PlayerController pc = null;
     private TMP_InputField waypointEditName;
@@ -30,22 +30,23 @@ public class WaypointManager : MonoBehaviour
 
     int waypointToRemove = 0;
     bool bIsEditingWaypoint = false;
-    bool bIsWaypointEnabled = true;
 
     private GameObject spawnedDrone = null;
 
 
-    // Start is called before the first frame update
+    // Sets all basic variables and default settings
     void Start()
     {
         //Sets array max length for waypoints
         waypoints = new Waypoint[MaxWaypointAmount];
         pc = transform.root.GetChild(3).GetComponent<PlayerController>();
         waypointManagerPanel = transform.root.GetChild(1).GetChild(1).gameObject;
+        waypointManagerContent = waypointManagerPanel.transform.GetChild(1).GetChild(0).GetChild(0).gameObject;
+        //Waypoint Editor
         waypointEditorPanel = transform.root.GetChild(1).GetChild(2).gameObject;
-
         waypointEditName = waypointEditorPanel.transform.GetChild(1).GetComponent<TMP_InputField>();
 
+        //Input fields
         waypointEditX = waypointEditorPanel.transform.GetChild(2).GetChild(1).GetComponent<TMP_InputField>();
         waypointEditY = waypointEditorPanel.transform.GetChild(2).GetChild(2).GetComponent<TMP_InputField>();
         waypointEditZ = waypointEditorPanel.transform.GetChild(2).GetChild(3).GetComponent<TMP_InputField>();
@@ -65,6 +66,7 @@ public class WaypointManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Checks for drone, used for facing waypoint towards active player/drone
         if (pc.bHasDeployedDrone)
         {
             spawnedDrone = pc.spawnedDrone;
@@ -79,6 +81,7 @@ public class WaypointManager : MonoBehaviour
             targetTransform = pc.transform.position;
         }
 
+        //Updates colour preview in editor
         waypointColour = new Color(waypointEditR.value, waypointEditG.value, waypointEditB.value);
         waypointEditColour.color = waypointColour;
     }
@@ -92,7 +95,7 @@ public class WaypointManager : MonoBehaviour
         //Loops through each waypoint space to check for next available one.
         foreach (Waypoint i in waypoints)
         {
-            //Checks whether the space is free for a waypoint
+            //Checks whether the space is free for a waypoint in menu
             if (i.bIsEnabled == false)
             {
                 bHasFilled = true;
@@ -102,6 +105,7 @@ public class WaypointManager : MonoBehaviour
                 waypoints[iteration].color = m_color;
                 waypoints[iteration].location = m_location;
                 waypoints[iteration].name = m_name;
+                //Spawns new waypoint in menu and in world
                 GameObject go_waypoint = Instantiate(waypointPrefab, pc.transform.position, transform.rotation, transform.root.GetChild(2));
                 WaypointUI waypoint = go_waypoint.GetComponent<WaypointUI>();
                 waypoint.SetWaypointSettings(iteration, bIsEnabled, m_name, m_location, m_color);
@@ -120,6 +124,43 @@ public class WaypointManager : MonoBehaviour
         }
     }
 
+    public void Rearrange(bool m_bIsDown, int m_WaypointID)
+    {
+        int index = transform.GetChild(m_WaypointID).GetSiblingIndex();
+
+        if (m_bIsDown)
+        {
+
+            Transform markerList = transform.root.GetChild(2);
+
+            for (int i = 0; i < markerList.childCount; i++)
+            {
+                WaypointUI marker = markerList.GetChild(i).GetComponent<WaypointUI>();
+                if (marker.WaypointID == m_WaypointID)
+                {                    
+                    waypointManagerContent.transform.GetChild(marker.transform.GetSiblingIndex()).SetSiblingIndex(marker.transform.GetSiblingIndex() + 1);
+                    marker.transform.SetSiblingIndex(marker.transform.GetSiblingIndex() + 1);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            Transform markerList = transform.root.GetChild(2);
+
+            for (int i = 0; i < markerList.childCount; i++)
+            {
+                WaypointUI marker = markerList.GetChild(i).GetComponent<WaypointUI>();
+                if (marker.WaypointID == m_WaypointID)
+                {
+                    waypointManagerContent.transform.GetChild(marker.transform.GetSiblingIndex()).SetSiblingIndex(marker.transform.GetSiblingIndex() - 1);
+                    marker.transform.SetSiblingIndex(marker.transform.GetSiblingIndex() - 1);
+                    break;
+                }
+            }
+        }
+    }
+
     //Clears data of waypoint at specified index.
     public void RemoveWaypoint(int index)
     {
@@ -133,7 +174,7 @@ public class WaypointManager : MonoBehaviour
         for (int i = 0; i < markerList.childCount; i++)
         {
             WaypointUI marker = markerList.GetChild(i).GetComponent<WaypointUI>();
-            if (marker.MarkerID == index)
+            if (marker.WaypointID == index)
             {
                 marker.RemoveWaypoint();
                 break;
@@ -172,7 +213,7 @@ public class WaypointManager : MonoBehaviour
         for (int i = 0; i < markerList.childCount; i++)
         {
             WaypointUI marker = markerList.GetChild(i).GetComponent<WaypointUI>();
-            if (marker.MarkerID == index)
+            if (marker.WaypointID == index)
             {
                 //Load data into editor
                 waypointEditR.value = waypoints[index].color.r;
@@ -207,6 +248,7 @@ public class WaypointManager : MonoBehaviour
         waypointManagerPanel.SetActive(true);
     }
 
+    //Closes waypoint manager and returns to normal game
     public void CloseWaypointManager()
     {
         waypointManagerPanel.SetActive(false);
@@ -219,6 +261,7 @@ public class WaypointManager : MonoBehaviour
         }
     }
 
+    //Closes waypoint editor and reopens manager
     public void CloseWaypointEditor()
     {
         waypointEditorPanel.SetActive(false);
