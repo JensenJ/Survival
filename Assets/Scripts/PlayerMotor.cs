@@ -14,11 +14,11 @@ public class PlayerMotor : MonoBehaviour
     private float cameraRotationX = 0.0f;
     private float currentCameraRotationX = 0.0f;
     private float jumpForce = 2f;
+    private Camera cam;
 
     //Enterable variables
-    [SerializeField] private float raycastDistance = 1.1f;
-    [SerializeField] private float cameraRotationLimit = 85.0f;
-    [SerializeField] private Camera cam;
+    [SerializeField] [Range(0, 2)] private float raycastDistance = 1.1f;
+    [SerializeField] [Range(0, 90)]private float cameraRotationLimit = 85.0f;
 
     // Setup
     void Start()

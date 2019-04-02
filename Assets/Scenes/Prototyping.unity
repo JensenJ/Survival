@@ -2091,12 +2091,6 @@ MonoBehaviour:
   daysInMonth: 30
   monthsInYear: 12
   currentTimeOfDay: 0
-  Seconds: 0
-  Minutes: 0
-  Hours: 0
-  Day: 1
-  Month: 1
-  Year: 1
   Clockwork: 360
   seasonEnum: 0
   tempMultiplier: 1

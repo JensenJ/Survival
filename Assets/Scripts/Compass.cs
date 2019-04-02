@@ -2,8 +2,6 @@
 // NAME: Compass
 // PURPOSE: Keep track of waypoints and direction
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class Compass : MonoBehaviour
 {
@@ -13,9 +11,9 @@ public class Compass : MonoBehaviour
 
     [SerializeField] private Direction currentDirection = Direction.North;
 
-    [SerializeField] PlayerController pc = null;
+    PlayerController pc = null;
 
-    [SerializeField] private float targetRotation = 0.0f;
+    [SerializeField] [Range(0, 360)] private float targetRotation = 0.0f;
 
     private GameObject spawnedDrone = null;
 
