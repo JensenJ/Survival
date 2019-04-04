@@ -200,24 +200,28 @@ MonoBehaviour:
   healthMeterDrainSpeed: 1
   healthMeterRegenSpeed: 0.5
   healthPercentage: 1
+  bIsStaticHealth: 0
   bIsDead: 0
   bCanRegenHealth: 1
   maxStaminaMeter: 100
   staminaMeterDrainSpeed: 10
   staminaMeterRegenSpeed: 3
   staminaPercentage: 1
+  bIsStaticStamina: 0
   bIsExhausted: 0
   bCanRegenStamina: 1
   maxHungerMeter: 100
   hungerMeterDrainSpeed: 0.25
   hungerMeterRegenSpeed: 10
   hungerPercentage: 1
+  bIsStaticHunger: 0
   bIsStarving: 0
   bCanRegenHunger: 0
   maxThirstMeter: 100
   thirstMeterDrainSpeed: 0.125
   thirstMeterRegenSpeed: 10
   thirstPercentage: 1
+  bIsStaticThirst: 0
   bIsDehydrated: 0
   bCanRegenThirst: 0
 --- !u!114 &1758035811773659634
