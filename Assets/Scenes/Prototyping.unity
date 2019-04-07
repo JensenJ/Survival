@@ -2087,7 +2087,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sun: {fileID: 170076734}
-  timeMultiplier: 1
+  timeMultiplier: 8
   daysInMonth: 30
   monthsInYear: 12
   currentTimeOfDay: 0

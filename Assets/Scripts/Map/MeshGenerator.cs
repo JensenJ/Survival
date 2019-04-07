@@ -11,14 +11,12 @@ public class MeshGenerator : MonoBehaviour
     Mesh mesh;
     Vector3[] vertices;
     int[] triangles;
-    Color[] colours;
-
-    public int xSize = 20;
-    public int zSize = 20;
-
-    public Gradient gradient;
-    private float minTerrainHeight;
-    private float maxTerrainHeight;
+    public int xSize = 250;
+    public int zSize = 250;
+    public float frequency = 0.5f;
+    public float amplitude = 10.0f;
+    public float heightDetail = 2.0f;
+    public float layerHeight = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +32,6 @@ public class MeshGenerator : MonoBehaviour
         {
             CreateShape();
         }
-
     }
 
     private void Update()
@@ -44,26 +41,22 @@ public class MeshGenerator : MonoBehaviour
                          
     void CreateShape()
     {
+        //Generating vertices
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+        frequency /= 10;
 
         for (int i = 0, z = 0; z <= zSize; z++)
         {
             for (int x = 0; x <= xSize; x++)
             {
-                float y = Mathf.PerlinNoise(x * 0.1f, z * 0.1f) * 2f;
+                float y = Mathf.Round(Mathf.PerlinNoise(x * frequency, z * frequency) * amplitude * heightDetail) * layerHeight;
                 vertices[i] = new Vector3(x, y, z);
 
-                if(y > maxTerrainHeight)
-                {
-                    maxTerrainHeight = y;
-                }
-                if(y < minTerrainHeight)
-                {
-                    minTerrainHeight = y;
-                }
                 i++;
             }
         }
+
+
         triangles = new int[xSize * zSize * 6];
         int vert = 0;
         int tris = 0;
@@ -84,18 +77,6 @@ public class MeshGenerator : MonoBehaviour
             }
             vert++;
         }
-
-        colours = new Color[vertices.Length];
-        for (int i = 0, z = 0; z <= zSize; z++)
-        {
-            for (int x = 0; x <= xSize; x++)
-            {
-                float height = Mathf.InverseLerp(minTerrainHeight, maxTerrainHeight, vertices[i].y);
-                colours[i] = gradient.Evaluate(height);
-                i++;
-            }
-        }
-
     }
 
     void UpdateMesh()
@@ -103,7 +84,7 @@ public class MeshGenerator : MonoBehaviour
         mesh.Clear();
         mesh.vertices = vertices;
         mesh.triangles = triangles;
-        mesh.colors = colours;
         mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
     }
 }
