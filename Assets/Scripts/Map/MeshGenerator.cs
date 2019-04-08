@@ -11,22 +11,26 @@ public class MeshGenerator : MonoBehaviour
     Mesh mesh;
     Vector3[] vertices;
     int[] triangles;
-    public int xSize = 250;
-    public int zSize = 250;
-    public float octaves = 1.0f;
-    //public float persistence = 1.0f;
-    public float amplitude = 10.0f;
-    public float frequency = 1.0f;
-    public float layerHeight = 0.5f;
+    [SerializeField] [Range(16, 250)] int xSize = 250;
+    [SerializeField] [Range(16, 250)] int zSize = 250;
+    [SerializeField] [Range(1, 8)] int octaves = 1;
+    [SerializeField] [Range(1, 20)] float amplitude = 10.0f;
+    [SerializeField] [Range(0.1f, 20)] float frequency = 1.0f;
+    [SerializeField] [Range(0.01f, 10)] float redistribution = 1.0f;
+    [SerializeField] [Range(0.1f, 3)] float layerHeight = 0.5f;
+    [SerializeField] [Range(0, 10000)] public int seed = 0;
+    [SerializeField] int xOffset = 0;
+    [SerializeField] int yOffset = 0;
 
-    public float maxHeight;
-    public float minHeight;
+    [SerializeField] bool isTerrainSmooth = false;
+    [SerializeField] public bool liveUpdate = true;
+    [SerializeField] public bool changeSeedOnGen = false;
+    float maxHeight;
+    float minHeight;
 
-    public bool isTerrainSmooth = false;
-
-    // Start is called before the first frame update
-    void Start()
+    public void DrawMap(int m_seed)
     {
+        seed = m_seed;
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         mesh.name = "Terrain";
@@ -37,7 +41,14 @@ public class MeshGenerator : MonoBehaviour
         else
         {
             CreateShape();
+            UpdateMesh();
         }
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        DrawMap(seed);
     }
 
     private void Update()
@@ -71,7 +82,7 @@ public class MeshGenerator : MonoBehaviour
     }
     void CreateShape()
     {
-        float lfrequency = frequency / 10.0f;
+        float lfrequency = frequency / 1000.0f;
         //Generating vertices
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
 
@@ -83,15 +94,17 @@ public class MeshGenerator : MonoBehaviour
 
                 for (int j = 1; j < octaves + 1; j++)
                 {
-                    float freq = (j * octaves) / 100;
-                    //float amp = j * octaves;
+                    float freq = j * (float)octaves;
                     float amp = 1 / j;
 
-                    y += Mathf.PerlinNoise(x * freq * lfrequency, z * freq * lfrequency) * amp * amplitude;
+                    y += Mathf.PerlinNoise(((x + xOffset) * freq * lfrequency) + seed, ((z + yOffset) * freq * lfrequency) + seed) * amp * amplitude;
                 }
+
+                y = Mathf.Pow(y, redistribution);
+
                 if (isTerrainSmooth == false)
                 {
-                    y = Mathf.Round(y);
+                    y = Mathf.Round(y) * layerHeight;
                 }
                 vertices[i] = new Vector3(x, y, z);
                 
