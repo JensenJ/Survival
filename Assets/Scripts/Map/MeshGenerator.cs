@@ -13,17 +13,23 @@ public class MeshGenerator : MonoBehaviour
     int[] triangles;
     public int xSize = 250;
     public int zSize = 250;
-    public float frequency = 0.5f;
+    public float octaves = 1.0f;
+    //public float persistence = 1.0f;
     public float amplitude = 10.0f;
-    public float heightDetail = 2.0f;
+    public float frequency = 1.0f;
     public float layerHeight = 0.5f;
+
+    public float maxHeight;
+    public float minHeight;
+
+    public bool isTerrainSmooth = false;
 
     // Start is called before the first frame update
     void Start()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-
+        mesh.name = "Terrain";
         if (xSize * zSize > 62500)
         {
             Debug.LogError("Map size is too large for a single mesh. Cancelling map generation.");
@@ -35,23 +41,69 @@ public class MeshGenerator : MonoBehaviour
     }
 
     private void Update()
-    {                    
-        UpdateMesh();    
-    }                    
-                         
+    {
+        UpdateMesh();
+    }
+
+    void GetBiomeFromHeight(float elevation)
+    {
+        float e = elevation / maxHeight;
+        if(e < 0.1f)
+        {
+            //print("Water");
+        }else if( e < 0.2f)
+        {
+            //print("Beach");
+        }else if(e < 0.3f)
+        {
+            //print("Plains");
+        }else if(e < 0.5f)
+        {
+            //print("Forest");
+        }else if(e < 0.8f)
+        {
+            //print("Hills");
+        }
+        else
+        {
+            //print("Mountains");
+        }
+    }
     void CreateShape()
     {
+        float lfrequency = frequency / 10.0f;
         //Generating vertices
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
-        frequency /= 10;
 
         for (int i = 0, z = 0; z <= zSize; z++)
         {
             for (int x = 0; x <= xSize; x++)
             {
-                float y = Mathf.Round(Mathf.PerlinNoise(x * frequency, z * frequency) * amplitude * heightDetail) * layerHeight;
-                vertices[i] = new Vector3(x, y, z);
+                float y = 0;
 
+                for (int j = 1; j < octaves + 1; j++)
+                {
+                    float freq = (j * octaves) / 100;
+                    //float amp = j * octaves;
+                    float amp = 1 / j;
+
+                    y += Mathf.PerlinNoise(x * freq * lfrequency, z * freq * lfrequency) * amp * amplitude;
+                }
+                if (isTerrainSmooth == false)
+                {
+                    y = Mathf.Round(y);
+                }
+                vertices[i] = new Vector3(x, y, z);
+                
+                if (y > maxHeight)
+                {
+                    maxHeight = y;
+                }
+                if(y < minHeight)
+                {
+                    minHeight = y;
+                }
+                GetBiomeFromHeight(vertices[i].y);
                 i++;
             }
         }

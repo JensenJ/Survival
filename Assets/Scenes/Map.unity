@@ -8337,9 +8337,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1997935822}
+  - component: {fileID: 1997935825}
   - component: {fileID: 1997935824}
   - component: {fileID: 1997935823}
-  - component: {fileID: 1997935825}
   m_Layer: 0
   m_Name: Level
   m_TagString: Untagged
@@ -8361,31 +8361,7 @@ Transform:
   m_Father: {fileID: 800291910}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1997935823
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1997935821}
-  m_Mesh: {fileID: 0}
---- !u!114 &1997935824
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1997935821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e058cc5532ee915428daeeb9f159b056, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  xSize: 250
-  zSize: 250
-  frequency: 0.1
-  amplitude: 10
---- !u!23 &1997935825
+--- !u!23 &1997935823
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8422,6 +8398,35 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!33 &1997935824
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997935821}
+  m_Mesh: {fileID: 0}
+--- !u!114 &1997935825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997935821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e058cc5532ee915428daeeb9f159b056, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  xSize: 250
+  zSize: 250
+  octaves: 6
+  amplitude: 5
+  frequency: 2
+  layerHeight: 1
+  maxHeight: 0
+  minHeight: 0
+  isTerrainSmooth: 0
 --- !u!1 &2008751936
 GameObject:
   m_ObjectHideFlags: 0
