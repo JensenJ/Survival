@@ -18,7 +18,7 @@ public class MapGeneratorEditor : Editor
             {
                 if (meshGen.changeSeedOnGen)
                 {
-                    meshGen.DrawMap(Random.Range(0, 10000));
+                    meshGen.DrawMap(Random.Range(-200000, 200000));
                 }
                 else
                 {
@@ -31,7 +31,7 @@ public class MapGeneratorEditor : Editor
         {
             if (meshGen.changeSeedOnGen)
             {
-                meshGen.DrawMap(Random.Range(0, 10000));
+                meshGen.DrawMap(Random.Range(-200000, 200000));
             }
             else
             {

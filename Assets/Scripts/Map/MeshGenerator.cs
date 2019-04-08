@@ -8,17 +8,17 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class MeshGenerator : MonoBehaviour
 {
+
     Mesh mesh;
     Vector3[] vertices;
     int[] triangles;
+
     [SerializeField] [Range(16, 250)] int xSize = 250;
     [SerializeField] [Range(16, 250)] int zSize = 250;
-    [SerializeField] [Range(1, 8)] int octaves = 1;
     [SerializeField] [Range(1, 20)] float amplitude = 10.0f;
     [SerializeField] [Range(0.1f, 20)] float frequency = 1.0f;
-    [SerializeField] [Range(0.01f, 10)] float redistribution = 1.0f;
     [SerializeField] [Range(0.1f, 3)] float layerHeight = 0.5f;
-    [SerializeField] [Range(0, 10000)] public int seed = 0;
+    [SerializeField] [Range(-200000, 200000)] public int seed = 0;
     [SerializeField] int xOffset = 0;
     [SerializeField] int yOffset = 0;
 
@@ -56,30 +56,6 @@ public class MeshGenerator : MonoBehaviour
         UpdateMesh();
     }
 
-    void GetBiomeFromHeight(float elevation)
-    {
-        float e = elevation / maxHeight;
-        if(e < 0.1f)
-        {
-            //print("Water");
-        }else if( e < 0.2f)
-        {
-            //print("Beach");
-        }else if(e < 0.3f)
-        {
-            //print("Plains");
-        }else if(e < 0.5f)
-        {
-            //print("Forest");
-        }else if(e < 0.8f)
-        {
-            //print("Hills");
-        }
-        else
-        {
-            //print("Mountains");
-        }
-    }
     void CreateShape()
     {
         float lfrequency = frequency / 1000.0f;
@@ -90,17 +66,8 @@ public class MeshGenerator : MonoBehaviour
         {
             for (int x = 0; x <= xSize; x++)
             {
-                float y = 0;
-
-                for (int j = 1; j < octaves + 1; j++)
-                {
-                    float freq = j * (float)octaves;
-                    float amp = 1 / j;
-
-                    y += Mathf.PerlinNoise(((x + xOffset) * freq * lfrequency) + seed, ((z + yOffset) * freq * lfrequency) + seed) * amp * amplitude;
-                }
-
-                y = Mathf.Pow(y, redistribution);
+                
+                float y = Mathf.PerlinNoise(((x + xOffset) * lfrequency) + seed, ((z + yOffset) * lfrequency) + seed) * amplitude;
 
                 if (isTerrainSmooth == false)
                 {
@@ -116,7 +83,6 @@ public class MeshGenerator : MonoBehaviour
                 {
                     minHeight = y;
                 }
-                GetBiomeFromHeight(vertices[i].y);
                 i++;
             }
         }
