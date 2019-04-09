@@ -5,37 +5,37 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(MeshGenerator))]
+[CustomEditor(typeof(MapGenerator))]
 public class MapGeneratorEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        MeshGenerator meshGen = (MeshGenerator)target;
+        MapGenerator mapGen = (MapGenerator)target;
 
         if (DrawDefaultInspector())
         {
-            if (meshGen.liveUpdate)
+            if (mapGen.liveUpdate)
             {
-                if (meshGen.changeSeedOnGen)
+                if (mapGen.changeSeedOnGen)
                 {
-                    meshGen.DrawMap(Random.Range(-200000, 200000));
+                    mapGen.DrawMap(Random.Range(-200000, 200000));
                 }
                 else
                 {
-                    meshGen.DrawMap(meshGen.seed);
+                    mapGen.DrawMap(mapGen.seed);
                 }
             }
         }
 
         if (GUILayout.Button("Generate"))
         {
-            if (meshGen.changeSeedOnGen)
+            if (mapGen.changeSeedOnGen)
             {
-                meshGen.DrawMap(Random.Range(-200000, 200000));
+                mapGen.DrawMap(Random.Range(-200000, 200000));
             }
             else
             {
-                meshGen.DrawMap(meshGen.seed);
+                mapGen.DrawMap(mapGen.seed);
             }
         }
     }
