@@ -19,6 +19,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] [Range(1, 20)] float amplitude = 10.0f;
     [SerializeField] [Range(0.1f, 20)] float frequency = 1.0f;
     [SerializeField] [Range(0.1f, 3)] float layerHeight = 1.0f;
+    [SerializeField] [Range(0.5f, 1.5f)] float redistribution = 1.0f;
     [SerializeField] [Range(-200000, 200000)] public int seed = 0;
     [SerializeField] int xOffset = 0;
     [SerializeField] int yOffset = 0;
@@ -86,6 +87,10 @@ public class MapGenerator : MonoBehaviour
                 float zSample = ((z + yOffset) * lfrequency) + seed;
                 float y = Mathf.PerlinNoise(xSample, zSample) * amplitude;
 
+                //Redistribution, adding 1 and then removing it prevents bug with mesh in low height areas
+                y++;
+                y = Mathf.Pow(y, redistribution);
+                y--;
                 //Round vertices to nearsst integer if terrain is unsmooth.
                 if (isTerrainSmooth == false)
                 {
