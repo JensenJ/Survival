@@ -8376,18 +8376,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc227f42efc76284cbed5fde7379a545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xChunks: 2
-  zChunks: 2
-  xSize: 250
-  zSize: 250
+  xChunks: 8
+  zChunks: 8
+  xSize: 64
+  zSize: 64
   amplitude: 20
   frequency: 5
   layerHeight: 0.5
   redistribution: 1
   seed: -55053
-  isTerrainSmooth: 0
-  liveUpdate: 0
-  changeSeedOnGen: 0
+  isTerrainSmooth: 1
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
 --- !u!1 &2008751936
 GameObject:
