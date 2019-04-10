@@ -18,11 +18,11 @@ public class MapGeneratorEditor : Editor
             {
                 if (mapGen.changeSeedOnGen)
                 {
-                    mapGen.DrawMap(Random.Range(-200000, 200000));
+                    mapGen.GenerateMap(Random.Range(-200000, 200000));
                 }
                 else
                 {
-                    mapGen.DrawMap(mapGen.seed);
+                    mapGen.GenerateMap(mapGen.seed);
                 }
             }
         }
@@ -33,11 +33,11 @@ public class MapGeneratorEditor : Editor
             mapGen.liveUpdate = false;
             if (mapGen.changeSeedOnGen)
             {
-                mapGen.DrawMap(Random.Range(-200000, 200000));
+                mapGen.GenerateMap(Random.Range(-200000, 200000));
             }
             else
             {
-                mapGen.DrawMap(mapGen.seed);
+                mapGen.GenerateMap(mapGen.seed);
             }
             mapGen.liveUpdate = livegen;
         }
