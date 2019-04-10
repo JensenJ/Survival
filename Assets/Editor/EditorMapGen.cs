@@ -29,6 +29,8 @@ public class MapGeneratorEditor : Editor
 
         if (GUILayout.Button("Generate"))
         {
+            bool livegen = mapGen.liveUpdate;
+            mapGen.liveUpdate = false;
             if (mapGen.changeSeedOnGen)
             {
                 mapGen.DrawMap(Random.Range(-200000, 200000));
@@ -37,6 +39,7 @@ public class MapGeneratorEditor : Editor
             {
                 mapGen.DrawMap(mapGen.seed);
             }
+            mapGen.liveUpdate = livegen;
         }
     }
 }

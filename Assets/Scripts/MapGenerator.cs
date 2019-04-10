@@ -10,6 +10,7 @@ public class MapGenerator : MonoBehaviour
 {
     //Data related to mesh
     Mesh mesh;
+    MeshCollider meshCollider;
     Vector3[] vertices;
     int[] triangles;
 
@@ -50,11 +51,24 @@ public class MapGenerator : MonoBehaviour
             CreateMesh();
             UpdateMesh();
         }
+
+        //Collisions, do not generate if live update as performance takes a hit, only generates on actual playing and when generate button is pressed
+        if(liveUpdate == false)
+        {
+            meshCollider = gameObject.GetComponent<MeshCollider>();
+            meshCollider.enabled = true;
+            meshCollider.sharedMesh = mesh;
+        }
+        else
+        {
+            meshCollider.enabled = false;
+        }
     }
 
     void Start()
     {
         DrawMap(seed);
+        liveUpdate = false;
     }
 
     private void Update()
