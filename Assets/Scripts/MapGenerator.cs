@@ -52,10 +52,10 @@ public class MapGenerator : MonoBehaviour
             UpdateMesh();
         }
 
+        meshCollider = gameObject.GetComponent<MeshCollider>();
         //Collisions, do not generate if live update as performance takes a hit, only generates on actual playing and when generate button is pressed
         if(liveUpdate == false)
         {
-            meshCollider = gameObject.GetComponent<MeshCollider>();
             meshCollider.enabled = true;
             meshCollider.sharedMesh = mesh;
         }
@@ -67,8 +67,8 @@ public class MapGenerator : MonoBehaviour
 
     void Start()
     {
-        DrawMap(seed);
         liveUpdate = false;
+        DrawMap(seed);
     }
 
     private void Update()
@@ -86,6 +86,11 @@ public class MapGenerator : MonoBehaviour
     //Generates vertices for a mesh
     void Vertices()
     {
+        float lamplitude = amplitude;
+        if(isTerrainSmooth == false)
+        {
+            lamplitude = amplitude / layerHeight;
+        }
         float lfrequency = frequency / 1000.0f;
         //Generating vertices
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
@@ -96,10 +101,11 @@ public class MapGenerator : MonoBehaviour
             //For each vertex on x axis
             for (int x = 0; x <= xSize; x++)
             {
+
                 //Generation of noise 
                 float xSample = ((x + xOffset) * lfrequency) + seed;
                 float zSample = ((z + yOffset) * lfrequency) + seed;
-                float y = Mathf.PerlinNoise(xSample, zSample) * amplitude;
+                float y = Mathf.PerlinNoise(xSample, zSample) * lamplitude;
 
                 //Redistribution, adding 1 and then removing it prevents bug with mesh in low height areas
                 y++;
