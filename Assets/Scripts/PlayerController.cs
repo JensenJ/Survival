@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Range(0, 5)] private float sensitivity = 3.0f;
     [SerializeField] [Range(0, 4)] private float jumpForce = 2.0f;
 
+    [Header("Other:")]
+    [SerializeField] [Range(1, 6)] private int chunkRenderDistance = 1;
     //References
     private Attributes attributes = null;
     private WaypointManager waypointManager = null;
@@ -54,6 +56,7 @@ public class PlayerController : MonoBehaviour
     // Update every frame
     void Update()
     {
+
         //Waypoint Manager
         if (Input.GetKeyDown(KeyCode.B) && bCanUseWaypointManager)
         {
@@ -87,6 +90,9 @@ public class PlayerController : MonoBehaviour
         Jump();
         
         Drone();
+
+        //Chunk Loading
+        transform.root.GetChild(5).GetComponent<ChunkManager>().LoadChunks(transform.gameObject, chunkRenderDistance);
     }
 
     void Drone()

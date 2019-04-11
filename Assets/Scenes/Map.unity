@@ -3286,8 +3286,9 @@ GameObject:
   m_Component:
   - component: {fileID: 693049470}
   - component: {fileID: 693049471}
+  - component: {fileID: 693049472}
   m_Layer: 0
-  m_Name: EnvironmentController
+  m_Name: Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3336,6 +3337,20 @@ MonoBehaviour:
   windAngle: 0
   windAngleAccuracy: 2
   weatherEnum: 0
+--- !u!114 &693049472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693049469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ea782c5b7a55246b384538318b344e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToRaycast: {fileID: 1060816738}
+  hitObject: {fileID: 0}
 --- !u!1 &711331113
 GameObject:
   m_ObjectHideFlags: 0
@@ -4917,6 +4932,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1009092561}
   m_CullTransparentMesh: 0
+--- !u!1 &1060816738 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1758035811882576791, guid: 3c6b4f4f86b7d9048bce4fe2c11f7f24,
+    type: 3}
+  m_PrefabInstance: {fileID: 656464748}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1080415243
 GameObject:
   m_ObjectHideFlags: 0
@@ -8376,16 +8397,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc227f42efc76284cbed5fde7379a545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xChunks: 8
-  zChunks: 8
-  xSize: 64
-  zSize: 64
+  xChunks: 40
+  zChunks: 40
+  xSize: 16
+  zSize: 16
   amplitude: 20
   frequency: 5
   layerHeight: 0.5
   redistribution: 1
-  seed: -55053
-  isTerrainSmooth: 1
+  seed: 0
+  isTerrainSmooth: 0
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
 --- !u!1 &2008751936
 GameObject:

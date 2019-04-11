@@ -178,7 +178,7 @@ MonoBehaviour:
   droneRetrievalDistance: 5
   bCanMove: 1
   speed: 5
-  sprintSpeed: 10
+  sprintSpeed: 15
   sensitivity: 3
   jumpForce: 4
   bHasDeployedDrone: 0

@@ -7,11 +7,11 @@ using UnityEngine;
 public class MapGenerator : MonoBehaviour
 {
     //Settings for map generation
-    [SerializeField] int xChunks = 2;
-    [SerializeField] int zChunks = 2;
+    [SerializeField] public int xChunks = 2;
+    [SerializeField] public int zChunks = 2;
 
-    [SerializeField] [Range(16, 250)] int xSize = 250;
-    [SerializeField] [Range(16, 250)] int zSize = 250;
+    [SerializeField] [Range(16, 250)] public int xSize = 250;
+    [SerializeField] [Range(16, 250)] public int zSize = 250;
     [SerializeField] [Range(1, 20)] float amplitude = 10.0f;
     [SerializeField] [Range(0.1f, 20)] float frequency = 1.0f;
     [SerializeField] [Range(0.1f, 3)] float layerHeight = 1.0f;
