@@ -3034,6 +3034,16 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 3725372954108015322, guid: 3c6b4f4f86b7d9048bce4fe2c11f7f24,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725372954108015322, guid: 3c6b4f4f86b7d9048bce4fe2c11f7f24,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 128
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c6b4f4f86b7d9048bce4fe2c11f7f24, type: 3}
 --- !u!4 &656464749 stripped
@@ -3349,8 +3359,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79ea782c5b7a55246b384538318b344e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToRaycast: {fileID: 1060816738}
   hitObject: {fileID: 0}
+  chunktest: []
 --- !u!1 &711331113
 GameObject:
   m_ObjectHideFlags: 0
@@ -4932,12 +4942,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1009092561}
   m_CullTransparentMesh: 0
---- !u!1 &1060816738 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1758035811882576791, guid: 3c6b4f4f86b7d9048bce4fe2c11f7f24,
-    type: 3}
-  m_PrefabInstance: {fileID: 656464748}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1080415243
 GameObject:
   m_ObjectHideFlags: 0

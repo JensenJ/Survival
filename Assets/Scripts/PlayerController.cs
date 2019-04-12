@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Range(0, 4)] private float jumpForce = 2.0f;
 
     [Header("Other:")]
-    [SerializeField] [Range(1, 6)] private int chunkRenderDistance = 1;
+    [SerializeField] [Range(4, 16)] private int chunkRenderDistance = 8;
     //References
     private Attributes attributes = null;
     private WaypointManager waypointManager = null;
