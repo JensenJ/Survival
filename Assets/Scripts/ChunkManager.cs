@@ -3,6 +3,7 @@
 // PURPOSE: Manages chunk data, such as which chunks are currently loaded
 
 using UnityEngine;
+using System.Collections;
 
 public class ChunkManager : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class ChunkManager : MonoBehaviour
     MapGenerator mg;
     int xChunkSize;
     int zChunkSize;
+
+    string[] chunknames;
+    int renderDistance = 4;
 
     void Start()
     {
@@ -21,11 +25,14 @@ public class ChunkManager : MonoBehaviour
         zChunkSize = mg.zSize;
     }
 
-    public void LoadChunks(GameObject objectToRaycast, int renderDistance)
+    public void GetChunkBelowObject(GameObject m_objectToRaycast, int m_renderDistance)
     {
+        //Set render distance
+        renderDistance = m_renderDistance;
+
         //Check what is below the object calling the function
         RaycastHit hit;
-        if (Physics.Raycast(objectToRaycast.transform.position, -Vector3.up, out hit, Mathf.Infinity))
+        if (Physics.Raycast(m_objectToRaycast.transform.position, -Vector3.up, out hit, Mathf.Infinity))
         {
             hitObject = hit.transform.gameObject;
         }
@@ -39,12 +46,18 @@ public class ChunkManager : MonoBehaviour
         //Set previous object to hitobject
         previousObject = hitObject;
 
+        GetSurroundingChunks();
+        LoadChunks();
+    }
+
+    void GetSurroundingChunks()
+    {
         //Gets current chunk coordinate
-        int xPos = (int) hitObject.transform.position.x / xChunkSize;
-        int zPos = (int) hitObject.transform.position.z / zChunkSize;
+        int xPos = (int) previousObject.transform.position.x / xChunkSize;
+        int zPos = (int) previousObject.transform.position.z / zChunkSize;
 
         //Names of chunks to be loaded
-        string[] chunknames = new string[renderDistance * renderDistance];
+        chunknames = new string[renderDistance * renderDistance];
 
         //Loop for filling chunknames array based on surrounding chunks
         int k = 0;
@@ -57,7 +70,11 @@ public class ChunkManager : MonoBehaviour
                 k++;
             }
         }
+    }
 
+    //TODO: Turn into coroutine for performance
+    void LoadChunks()
+    {
         //For each chunk
         for (int i = 0; i < mg.transform.childCount; i++)
         {

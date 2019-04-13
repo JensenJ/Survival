@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
         Drone();
 
         //Chunk Loading
-        transform.root.GetChild(5).GetComponent<ChunkManager>().LoadChunks(transform.gameObject, chunkRenderDistance);
+        transform.root.GetChild(5).GetComponent<ChunkManager>().GetChunkBelowObject(transform.gameObject, chunkRenderDistance);
     }
 
     void Drone()
