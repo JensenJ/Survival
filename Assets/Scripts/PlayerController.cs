@@ -56,6 +56,8 @@ public class PlayerController : MonoBehaviour
     // Update every frame
     void Update()
     {
+        //Chunk Loading
+        transform.root.GetChild(5).GetComponent<ChunkManager>().GetChunkBelowObject(transform.gameObject, chunkRenderDistance);
 
         //Waypoint Manager
         if (Input.GetKeyDown(KeyCode.B) && bCanUseWaypointManager)
@@ -91,8 +93,6 @@ public class PlayerController : MonoBehaviour
         
         Drone();
 
-        //Chunk Loading
-        transform.root.GetChild(5).GetComponent<ChunkManager>().GetChunkBelowObject(transform.gameObject, chunkRenderDistance);
     }
 
     void Drone()

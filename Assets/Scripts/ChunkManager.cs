@@ -16,6 +16,10 @@ public class ChunkManager : MonoBehaviour
     string[] chunknames;
     int renderDistance = 4;
 
+    //Coroutine
+    IEnumerator currentLoadCoroutine;
+    bool bIsGenerating = true;
+
     void Start()
     {
         //Get variables
@@ -47,7 +51,14 @@ public class ChunkManager : MonoBehaviour
         previousObject = hitObject;
 
         GetSurroundingChunks();
-        LoadChunks();
+
+        //Run loading coroutine
+        if(currentLoadCoroutine != null)
+        {
+            StopCoroutine(currentLoadCoroutine);
+        }
+        currentLoadCoroutine = LoadChunks();
+        StartCoroutine(currentLoadCoroutine);
     }
 
     void GetSurroundingChunks()
@@ -72,27 +83,31 @@ public class ChunkManager : MonoBehaviour
         }
     }
 
-    //TODO: Turn into coroutine for performance
-    void LoadChunks()
+    IEnumerator LoadChunks()
     {
         //For each chunk
         for (int i = 0; i < mg.transform.childCount; i++)
         {
-            //If the chunk is active, skip it, otherwise deactivate it
-            if(mg.transform.GetChild(i).gameObject.activeSelf == true)
-            {
-                mg.transform.GetChild(i).gameObject.SetActive(false);
-            }
+            //Deactivate all chunks
+            mg.transform.GetChild(i).gameObject.SetActive(false);
+
             //For each element in the chunk array
             for (int j = 0; j < chunknames.Length; j++)
             {
+
                 //If chunk array element is equal to the current child iteration then set active
                 //If the chunk is loaded
                 if (chunknames[j] == mg.transform.GetChild(i).gameObject.name)
                 {
                     mg.transform.GetChild(mg.transform.GetChild(i).GetSiblingIndex()).gameObject.SetActive(true);
+                    //Coroutine pause point
+                    if (!bIsGenerating)
+                    {
+                        yield return null;
+                    }
                 }
             }
         }
+        bIsGenerating = false;
     }
 }

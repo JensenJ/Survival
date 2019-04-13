@@ -181,7 +181,7 @@ MonoBehaviour:
   sprintSpeed: 15
   sensitivity: 3
   jumpForce: 4
-  chunkRenderDistance: 12
+  chunkRenderDistance: 16
   bHasDeployedDrone: 0
   spawnedDrone: {fileID: 0}
   Crosshair: {fileID: 0}

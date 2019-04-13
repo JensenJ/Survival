@@ -3360,7 +3360,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitObject: {fileID: 0}
-  chunktest: []
 --- !u!1 &711331113
 GameObject:
   m_ObjectHideFlags: 0
