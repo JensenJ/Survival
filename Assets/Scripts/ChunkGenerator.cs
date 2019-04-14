@@ -30,7 +30,7 @@ public class ChunkGenerator : MonoBehaviour
     [SerializeField] float maxHeight = float.MinValue;
     [SerializeField] float minHeight = float.MaxValue;
 
-    // TODO: Make use of coroutines for better performance on chunk load
+    // TODO: [R-2] Make use of coroutines for better performance on chunk load
 
     //Draw new map with seed
     public void DrawChunk(int m_xSize, int m_zSize, float m_amplitude, float m_frequency, float m_layerHeight, float m_redistribution, int m_seed, int m_xOffset, int m_yOffset, bool m_bIsTerrainSmooth, Material m_mat)
@@ -107,7 +107,7 @@ public class ChunkGenerator : MonoBehaviour
                 y++;
                 y = Mathf.Pow(y, redistribution);
                 y--;
-                //Round vertices to nearsst integer if terrain is unsmooth.
+                //Round vertices to nearest integer if terrain is not smooth.
                 if (isTerrainSmooth == false)
                 {
                     y = Mathf.Round(y) * layerHeight;

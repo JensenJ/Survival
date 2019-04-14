@@ -4,6 +4,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class ChunkManager : MonoBehaviour
 {
@@ -27,6 +28,11 @@ public class ChunkManager : MonoBehaviour
 
         xChunkSize = mg.xSize;
         zChunkSize = mg.zSize;
+    }
+    void Update()
+    {
+        //Sort chunks into alphabetical order in the hierarchy
+        SortChunks();
     }
 
     public void GetChunkBelowObject(GameObject m_objectToRaycast, int m_renderDistance)
@@ -82,6 +88,8 @@ public class ChunkManager : MonoBehaviour
         }
     }
 
+    // TODO: [R-2] Delete chunks that are inactive, to make looping through children more efficient and remove duplicate chunks upon re-generation
+    
     IEnumerator LoadChunks()
     {
         //For each chunk
@@ -127,8 +135,60 @@ public class ChunkManager : MonoBehaviour
                     }
                 }
             }
+            RemoveDuplicateChunks();
         }
-
         bIsGenerating = false;
+    }
+
+    void SortChunks()
+    {
+        //Create new array of chunks
+        GameObject[] chunks = new GameObject[mg.transform.childCount];
+        //Assign each element in array a chunk
+        for (int i = 0; i < mg.transform.childCount; i++)
+        {
+            chunks[i] = mg.transform.GetChild(i).gameObject;
+        }
+        //Sort the array
+        IComparer comparer = new ChunkSorter();
+        Array.Sort(chunks, comparer);
+
+        //Reorder objects in hierarchy based off sorted chunks
+        for (int i = 0; i < mg.transform.childCount; i++)
+        {
+            mg.transform.GetChild(i).SetSiblingIndex(chunks[i].transform.GetSiblingIndex());
+        }
+    }
+
+    // TODO: [R-2] Remove function as it is temporary to remove duplicate chunks, duplicate chunks should not generate at all.
+    void RemoveDuplicateChunks()
+    {
+        //For each chunk
+        for (int i = 0; i < mg.transform.childCount; i++)
+        {
+            int index = -1;
+
+            //If index isnt 0 (this stops an error)
+            if (i != 0)
+            {
+                //If chunks names are equal between this and the last one in the hierarchy
+                if (mg.transform.GetChild(i).name == mg.transform.GetChild(i + index).name)
+                {
+                    //Delete the duplicate chunk
+                    print("called");
+                    Destroy(mg.transform.GetChild(i).gameObject);
+                }
+            }
+        }
+    }
+}
+
+//Chunk sorting
+public class ChunkSorter : IComparer
+{
+    int IComparer.Compare(System.Object x, System.Object y)
+    {
+        //Sort alphabetically
+        return new CaseInsensitiveComparer().Compare(((GameObject)x).name, ((GameObject)y).name);
     }
 }

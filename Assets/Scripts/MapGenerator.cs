@@ -31,9 +31,9 @@ public class MapGenerator : MonoBehaviour
         if(isRandomGeneration == true)
         {
             amplitude = Random.Range(10.0f, 20.0f);
-            frequency = Random.Range(5.0f, 15.0f);
+            frequency = Random.Range(5.0f, 13.0f);
             seed = Random.Range(-200000, 200000);
-            redistribution = Random.Range(0.5f, 1.0f);
+            //redistribution = Random.Range(0.5f, 1.0f);
         }
 
         //Checks for too many vertices in single mesh.
@@ -62,7 +62,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    public void CreateNewChunk(int x, int z)
+    public GameObject CreateNewChunk(int x, int z)
     {
         //Create new terrain object, set name and parent to this. 
         //Set position and then call function within Chunk Generator
@@ -72,6 +72,7 @@ public class MapGenerator : MonoBehaviour
         terrain.transform.position = new Vector3(x * xSize, 0, z * zSize);
         ChunkGenerator cg = terrain.AddComponent<ChunkGenerator>();
         cg.DrawChunk(xSize, zSize, amplitude, frequency, layerHeight, redistribution, seed, xSize * x, zSize * z, isTerrainSmooth, material);
+        return terrain;
     }
 
     // Start is called before the first frame update
