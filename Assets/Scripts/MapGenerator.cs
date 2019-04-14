@@ -7,17 +7,18 @@ using UnityEngine;
 public class MapGenerator : MonoBehaviour
 {
     //Settings for map generation
-    [SerializeField] public int xChunks = 2;
-    [SerializeField] public int zChunks = 2;
+    [SerializeField] public int xChunks = 20;
+    [SerializeField] public int zChunks = 20;
 
-    [SerializeField] [Range(16, 250)] public int xSize = 250;
-    [SerializeField] [Range(16, 250)] public int zSize = 250;
+    [SerializeField] [Range(16, 250)] public int xSize = 16;
+    [SerializeField] [Range(16, 250)] public int zSize = 16;
     [SerializeField] [Range(1, 20)] float amplitude = 10.0f;
     [SerializeField] [Range(0.1f, 20)] float frequency = 1.0f;
-    [SerializeField] [Range(0.1f, 3)] float layerHeight = 1.0f;
+    [SerializeField] [Range(0.1f, 3)] float layerHeight = 0.5f;
     [SerializeField] [Range(0.5f, 1.5f)] float redistribution = 1.0f;
     [SerializeField] [Range(-200000, 200000)] public int seed = 0;
     [SerializeField] bool isTerrainSmooth = false;
+    [SerializeField] bool isRandomGeneration = false;
     [SerializeField] Material material = null;
 
     //Function for creating the chunk objects and drawing the map
@@ -25,6 +26,14 @@ public class MapGenerator : MonoBehaviour
     {
         //Sets seed
         seed = m_seed;
+
+        if(isRandomGeneration == true)
+        {
+            amplitude = Random.Range(10.0f, 20.0f);
+            frequency = Random.Range(5.0f, 15.0f);
+            seed = Random.Range(-200000, 200000);
+            redistribution = Random.Range(0.5f, 1.0f);
+        }
 
         //Checks for too many vertices in single mesh.
         if (xSize * zSize > 62500)
