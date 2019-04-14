@@ -16,21 +16,21 @@ public class ChunkGenerator : MonoBehaviour
     int[] triangles;
 
     //Settings for chunk generation
-    [SerializeField] int xSize = 250;
-    [SerializeField] int zSize = 250;
-    [SerializeField] float amplitude = 10.0f;
-    [SerializeField] float frequency = 1.0f;
-    [SerializeField] float layerHeight = 1.0f;
-    [SerializeField] float redistribution = 1.0f;
-    [SerializeField] public int seed = 0;
+    int xSize = 250;
+    int zSize = 250;
+    float amplitude = 10.0f;
+    float frequency = 1.0f;
+    float layerHeight = 1.0f;
+    float redistribution = 1.0f;
+    public int seed = 0;
+    bool isTerrainSmooth = false;
+
     [SerializeField] int xOffset = 0;
     [SerializeField] int yOffset = 0;
-
-    //Settings for map generation in editor.
-    [SerializeField] bool isTerrainSmooth = false;
-
     [SerializeField] float maxHeight = float.MinValue;
     [SerializeField] float minHeight = float.MaxValue;
+
+    // TODO: Make use of coroutines for better performance on chunk load
 
     //Draw new map with seed
     public void DrawChunk(int m_xSize, int m_zSize, float m_amplitude, float m_frequency, float m_layerHeight, float m_redistribution, int m_seed, int m_xOffset, int m_yOffset, bool m_bIsTerrainSmooth, Material m_mat)
@@ -82,6 +82,7 @@ public class ChunkGenerator : MonoBehaviour
     void Vertices()
     {
         float lamplitude = amplitude;
+
         if(isTerrainSmooth == false)
         {
             lamplitude = amplitude / layerHeight;

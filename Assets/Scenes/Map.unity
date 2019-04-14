@@ -3037,12 +3037,12 @@ PrefabInstance:
     - target: {fileID: 3725372954108015322, guid: 3c6b4f4f86b7d9048bce4fe2c11f7f24,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 128
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 3725372954108015322, guid: 3c6b4f4f86b7d9048bce4fe2c11f7f24,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 128
+      value: 32
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c6b4f4f86b7d9048bce4fe2c11f7f24, type: 3}
@@ -8400,16 +8400,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc227f42efc76284cbed5fde7379a545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xChunks: 40
-  zChunks: 40
-  xSize: 16
-  zSize: 16
+  xChunks: 5
+  zChunks: 5
+  xSize: 64
+  zSize: 64
   amplitude: 20
   frequency: 5
   layerHeight: 0.5
   redistribution: 1
   seed: 0
   isTerrainSmooth: 0
+  isRandomGeneration: 1
+  isTerrainEndless: 1
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
 --- !u!1 &2008751936
 GameObject:

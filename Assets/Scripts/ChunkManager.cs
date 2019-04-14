@@ -77,7 +77,6 @@ public class ChunkManager : MonoBehaviour
             for (int x = 0; x < renderDistance; x++)
             {
                 chunknames[k] = "Chunk (" + (xPos + x - ((renderDistance + 1) / 2)) + ", " + (zPos + z - ((renderDistance + 1) / 2)) + ")";
-
                 k++;
             }
         }
@@ -106,8 +105,30 @@ public class ChunkManager : MonoBehaviour
                         yield return null;
                     }
                 }
+
+                if (mg.isTerrainEndless == true)
+                {
+                    //If chunk does not exist, create a new one at this position. This allows creation of endless terrain.
+                    GameObject chunk = GameObject.Find(chunknames[j]);
+                    if (chunk == null)
+                    {
+                        string chunkname = chunknames[j];
+
+                        //Get coordinates of chunk from name of chunk
+                        int a = chunkname.IndexOf("(");
+                        int b = chunkname.IndexOf(",");
+                        int x = int.Parse(chunkname.Substring(a + 1, (b - a) - 1));
+
+                        int c = chunkname.IndexOf(")");
+                        int z = int.Parse(chunkname.Substring(b + 2, (c - (b + 1)) - 1));
+                        
+                        //Create new chunk at these coordinates
+                        mg.CreateNewChunk(x, z);
+                    }
+                }
             }
         }
+
         bIsGenerating = false;
     }
 }
