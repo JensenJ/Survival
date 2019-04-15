@@ -19,7 +19,6 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] [Range(-200000, 200000)] public int seed = 0;
     [SerializeField] bool isTerrainSmooth = false;
     [SerializeField] bool isRandomGeneration = false;
-    [SerializeField] public bool isTerrainEndless = false;
     [SerializeField] Material material = null;
 
     //Function for creating the chunk objects and drawing the map
@@ -43,26 +42,11 @@ public class MapGenerator : MonoBehaviour
         }
         else
         {
-            if(isTerrainEndless == true)
-            {
-                CreateNewChunk(0, 0);
-            }
-            else
-            {
-                //For each chunk on z axis
-                for (int z = 0; z < zChunks; z++)
-                {
-                    //For each chunk on x axis
-                    for (int x = 0; x < xChunks; x++)
-                    {
-                        CreateNewChunk(x, z);
-                    }
-                }
-            }
+            CreateNewChunk(0, 0, 0);
         }
     }
 
-    public GameObject CreateNewChunk(int x, int z)
+    public GameObject CreateNewChunk(int x, int z, int loaderID)
     {
         //Create new terrain object, set name and parent to this. 
         //Set position and then call function within Chunk Generator
@@ -71,7 +55,7 @@ public class MapGenerator : MonoBehaviour
         terrain.transform.SetParent(transform);
         terrain.transform.position = new Vector3(x * xSize, 0, z * zSize);
         ChunkGenerator cg = terrain.AddComponent<ChunkGenerator>();
-        cg.DrawChunk(xSize, zSize, amplitude, frequency, layerHeight, redistribution, seed, xSize * x, zSize * z, isTerrainSmooth, material);
+        cg.DrawChunk(xSize, zSize, amplitude, frequency, layerHeight, redistribution, seed, xSize * x, zSize * z, isTerrainSmooth, material, loaderID);
         return terrain;
     }
 

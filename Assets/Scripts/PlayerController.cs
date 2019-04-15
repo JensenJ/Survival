@@ -24,8 +24,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Range(0, 5)] private float sensitivity = 3.0f;
     [SerializeField] [Range(0, 4)] private float jumpForce = 2.0f;
 
-    [Header("Other:")]
-    [SerializeField] [Range(4, 16)] private int chunkRenderDistance = 8;
     //References
     private Attributes attributes = null;
     private WaypointManager waypointManager = null;
@@ -38,6 +36,7 @@ public class PlayerController : MonoBehaviour
     public bool bHasDeployedDrone = false;
     public GameObject spawnedDrone = null;
     public Image Crosshair = null;
+    bool bHasSpawned = false;
 
     // Setup
     void Start()
@@ -56,9 +55,14 @@ public class PlayerController : MonoBehaviour
     // Update every frame
     void Update()
     {
-        //Chunk Loading
-        transform.root.GetChild(5).GetComponent<ChunkManager>().GetChunkBelowObject(transform.gameObject, chunkRenderDistance);
 
+        //Spawn player down on the ground
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, -Vector3.up, out hit, Mathf.Infinity) && bHasSpawned == false)
+        {
+            transform.position = new Vector3(transform.position.x, hit.point.y  + 2, transform.position.z);
+            bHasSpawned = true;
+        }
         //Waypoint Manager
         if (Input.GetKeyDown(KeyCode.B) && bCanUseWaypointManager)
         {

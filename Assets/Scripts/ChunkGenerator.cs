@@ -29,11 +29,12 @@ public class ChunkGenerator : MonoBehaviour
     [SerializeField] int yOffset = 0;
     [SerializeField] float maxHeight = float.MinValue;
     [SerializeField] float minHeight = float.MaxValue;
+    [SerializeField] int LoadedBy = 0;
 
     // TODO: [R-2] Make use of coroutines for better performance on chunk load
 
     //Draw new map with seed
-    public void DrawChunk(int m_xSize, int m_zSize, float m_amplitude, float m_frequency, float m_layerHeight, float m_redistribution, int m_seed, int m_xOffset, int m_yOffset, bool m_bIsTerrainSmooth, Material m_mat)
+    public void DrawChunk(int m_xSize, int m_zSize, float m_amplitude, float m_frequency, float m_layerHeight, float m_redistribution, int m_seed, int m_xOffset, int m_yOffset, bool m_bIsTerrainSmooth, Material m_mat, int m_loaderID)
     {
         //Set variables
         xSize = m_xSize;
@@ -46,6 +47,7 @@ public class ChunkGenerator : MonoBehaviour
         xOffset = m_xOffset;
         yOffset = m_yOffset;
         isTerrainSmooth = m_bIsTerrainSmooth;
+        LoadedBy = m_loaderID;
         GetComponent<MeshRenderer>().sharedMaterial = m_mat;
 
         maxHeight = float.MinValue;

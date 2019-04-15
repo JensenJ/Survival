@@ -17,6 +17,9 @@ public class ChunkManager : MonoBehaviour
     string[] chunknames;
     int renderDistance = 4;
 
+    public int numberOfLoaders = 0;
+    int currentLoaderID = 0;
+
     //Coroutine
     IEnumerator currentLoadCoroutine;
     bool bIsGenerating = true;
@@ -29,20 +32,23 @@ public class ChunkManager : MonoBehaviour
         xChunkSize = mg.xSize;
         zChunkSize = mg.zSize;
     }
-    void Update()
+
+    //Returns a chunk loader ID.
+    public int RegisterChunkLoader()
     {
-        //Sort chunks into alphabetical order in the hierarchy
-        SortChunks();
+        numberOfLoaders++;
+        return numberOfLoaders;
     }
 
-    public void GetChunkBelowObject(GameObject m_objectToRaycast, int m_renderDistance)
+    public void GetChunkBelowObject(GameObject m_ObjectToRaycast, int m_RenderDistance, int m_LoaderID)
     {
         //Set render distance
-        renderDistance = m_renderDistance;
+        renderDistance = m_RenderDistance;
+        currentLoaderID = m_LoaderID;
 
         //Check what is below the object calling the function
         RaycastHit hit;
-        if (Physics.Raycast(m_objectToRaycast.transform.position, -Vector3.up, out hit, Mathf.Infinity))
+        if (Physics.Raycast(m_ObjectToRaycast.transform.position, -Vector3.up, out hit, Mathf.Infinity))
         {
             hitObject = hit.transform.gameObject;
         }
@@ -74,7 +80,7 @@ public class ChunkManager : MonoBehaviour
         int zPos = (int) previousObject.transform.position.z / zChunkSize;
 
         //Names of chunks to be loaded
-        chunknames = new string[renderDistance * renderDistance];
+        chunknames = new string[renderDistance * renderDistance * numberOfLoaders];
 
         //Loop for filling chunknames array based on surrounding chunks
         int k = 0;
@@ -87,108 +93,58 @@ public class ChunkManager : MonoBehaviour
             }
         }
     }
-
-    // TODO: [R-2] Delete chunks that are inactive, to make looping through children more efficient and remove duplicate chunks upon re-generation
     
     IEnumerator LoadChunks()
     {
         //For each chunk
         for (int i = 0; i < mg.transform.childCount; i++)
         {
-            //Deactivate all chunks
-            mg.transform.GetChild(i).gameObject.SetActive(false);
-
             //For each element in the chunk array
             for (int j = 0; j < chunknames.Length; j++)
             {
-
-                //If chunk array element is equal to the current child iteration then set active
-                //If the chunk is loaded
-                if (chunknames[j] == mg.transform.GetChild(i).gameObject.name)
+                //If chunk does not exist, create a new one at this position. This allows creation of endless terrain.
+                GameObject chunk = GameObject.Find(chunknames[j]);
+                if (chunk == null)
                 {
-                    mg.transform.GetChild(mg.transform.GetChild(i).GetSiblingIndex()).gameObject.SetActive(true);
+                    string chunkname = chunknames[j];
+
+                    //Get coordinates of chunk from name of chunk
+                    int a = chunkname.IndexOf("(");
+                    int b = chunkname.IndexOf(",");
+                    int x = int.Parse(chunkname.Substring(a + 1, (b - a) - 1));
+
+                    int c = chunkname.IndexOf(")");
+                    int z = int.Parse(chunkname.Substring(b + 2, (c - (b + 1)) - 1));
+
+                    //Create new chunk at these coordinates
+                    mg.CreateNewChunk(x, z, currentLoaderID);
+
                     //Coroutine pause point
                     if (!bIsGenerating)
                     {
                         yield return null;
                     }
                 }
-
-                if (mg.isTerrainEndless == true)
-                {
-                    //If chunk does not exist, create a new one at this position. This allows creation of endless terrain.
-                    GameObject chunk = GameObject.Find(chunknames[j]);
-                    if (chunk == null)
-                    {
-                        string chunkname = chunknames[j];
-
-                        //Get coordinates of chunk from name of chunk
-                        int a = chunkname.IndexOf("(");
-                        int b = chunkname.IndexOf(",");
-                        int x = int.Parse(chunkname.Substring(a + 1, (b - a) - 1));
-
-                        int c = chunkname.IndexOf(")");
-                        int z = int.Parse(chunkname.Substring(b + 2, (c - (b + 1)) - 1));
-                        
-                        //Create new chunk at these coordinates
-                        mg.CreateNewChunk(x, z);
-                    }
-                }
             }
-            RemoveDuplicateChunks();
+            //Removes chunks that are not loaded
+            RemoveUnloadedChunks(i);
         }
         bIsGenerating = false;
     }
 
-    void SortChunks()
+    //Function to remove unloaded chunks
+    void RemoveUnloadedChunks(int index)
     {
-        //Create new array of chunks
-        GameObject[] chunks = new GameObject[mg.transform.childCount];
-        //Assign each element in array a chunk
-        for (int i = 0; i < mg.transform.childCount; i++)
+        //Get position of current transform in array
+        string value = mg.transform.GetChild(index).name;
+        int pos = Array.IndexOf(chunknames, value);
+
+        //If transform is not in chunknames for loaded chunks
+        if (pos == -1)
         {
-            chunks[i] = mg.transform.GetChild(i).gameObject;
+            //Destroy the current object
+            Destroy(mg.transform.GetChild(index).gameObject);
+
         }
-        //Sort the array
-        IComparer comparer = new ChunkSorter();
-        Array.Sort(chunks, comparer);
-
-        //Reorder objects in hierarchy based off sorted chunks
-        for (int i = 0; i < mg.transform.childCount; i++)
-        {
-            mg.transform.GetChild(i).SetSiblingIndex(chunks[i].transform.GetSiblingIndex());
-        }
-    }
-
-    // TODO: [R-2] Remove function as it is temporary to remove duplicate chunks, duplicate chunks should not generate at all.
-    void RemoveDuplicateChunks()
-    {
-        //For each chunk
-        for (int i = 0; i < mg.transform.childCount; i++)
-        {
-            int index = -1;
-
-            //If index isnt 0 (this stops an error)
-            if (i != 0)
-            {
-                //If chunks names are equal between this and the last one in the hierarchy
-                if (mg.transform.GetChild(i).name == mg.transform.GetChild(i + index).name)
-                {
-                    //Delete the duplicate chunk
-                    print("called");
-                    Destroy(mg.transform.GetChild(i).gameObject);
-                }
-            }
-        }
-    }
-}
-
-//Chunk sorting
-public class ChunkSorter : IComparer
-{
-    int IComparer.Compare(System.Object x, System.Object y)
-    {
-        //Sort alphabetically
-        return new CaseInsensitiveComparer().Compare(((GameObject)x).name, ((GameObject)y).name);
     }
 }

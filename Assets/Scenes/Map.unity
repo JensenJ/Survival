@@ -3345,6 +3345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitObject: {fileID: 0}
+  numberOfLoaders: 0
 --- !u!1 &711331113
 GameObject:
   m_ObjectHideFlags: 0
@@ -8396,7 +8397,6 @@ MonoBehaviour:
   seed: 0
   isTerrainSmooth: 0
   isRandomGeneration: 1
-  isTerrainEndless: 1
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
 --- !u!1 &2008751936
 GameObject:

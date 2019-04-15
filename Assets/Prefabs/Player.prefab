@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 1758035811882576792}
   - component: {fileID: 5123572326359988360}
   - component: {fileID: 1758035811773659634}
+  - component: {fileID: 4694994179229959573}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -107,7 +108,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1758035811882576791}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 32, y: 50, z: 32}
+  m_LocalPosition: {x: 32, y: 200, z: 32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1758035812419762076}
@@ -181,7 +182,6 @@ MonoBehaviour:
   sprintSpeed: 15
   sensitivity: 3
   jumpForce: 4
-  chunkRenderDistance: 6
   bHasDeployedDrone: 0
   spawnedDrone: {fileID: 0}
   Crosshair: {fileID: 0}
@@ -239,6 +239,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentDirection: 0
   targetRotation: 0
+--- !u!114 &4694994179229959573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1758035811882576791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c38a5268036e97c4996710c3b9836718, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chunkRenderDistance: 8
+  chunkLoaderID: 0
 --- !u!1 &1758035812419762075
 GameObject:
   m_ObjectHideFlags: 0
