@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c38a5268036e97c4996710c3b9836718, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunkRenderDistance: 8
+  chunkRenderDistance: 6
   chunkLoaderID: 0
 --- !u!1 &1758035812419762075
 GameObject:
