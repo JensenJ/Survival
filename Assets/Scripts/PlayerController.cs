@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour
     public Image Crosshair = null;
     bool bHasSpawned = false;
 
+    // TODO: [R-2] Fix audio listener issue on camera introduced in Unity 2019.1 by switching between them on player and drone
+
     // Setup
     void Start()
     {

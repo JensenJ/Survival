@@ -29,7 +29,7 @@ public class ChunkGenerator : MonoBehaviour
     [SerializeField] int yOffset = 0;
     [SerializeField] float maxHeight = float.MinValue;
     [SerializeField] float minHeight = float.MaxValue;
-    [SerializeField] int LoadedBy = 0;
+    [SerializeField] public int LoadedBy = 0;
 
     // TODO: [R-2] Make use of coroutines for better performance on chunk load
 

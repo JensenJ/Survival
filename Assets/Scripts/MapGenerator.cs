@@ -42,6 +42,7 @@ public class MapGenerator : MonoBehaviour
         }
         else
         {
+            //loader ID of 0 means this will never be unloaded
             CreateNewChunk(0, 0, 0);
         }
     }
