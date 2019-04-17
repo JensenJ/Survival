@@ -12,7 +12,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] [Range(0.1f, 20)] float frequency = 1.0f;
     [SerializeField] [Range(0.1f, 3)] float layerHeight = 0.5f;
     [SerializeField] [Range(0.5f, 1.5f)] float redistribution = 1.0f;
-    [SerializeField] [Range(-200000, 200000)] public int seed = 0;
+    [SerializeField] [Range(-100000, 100000)] public int seed = 0;
     [SerializeField] bool isTerrainSmooth = false;
     [SerializeField] bool isRandomGeneration = false;
     [SerializeField] Material material = null;
@@ -30,7 +30,7 @@ public class MapGenerator : MonoBehaviour
         {
             amplitude = Random.Range(10.0f, 20.0f);
             frequency = Random.Range(5.0f, 13.0f);
-            seed = Random.Range(-200000, 200000);
+            seed = Random.Range(-100000, 100000);
             //redistribution = Random.Range(0.5f, 1.0f);
         }
 

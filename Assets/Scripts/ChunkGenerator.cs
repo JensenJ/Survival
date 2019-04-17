@@ -25,7 +25,6 @@ public class ChunkGenerator : MonoBehaviour
     float frequency = 1.0f;
     float layerHeight = 1.0f;
     float redistribution = 1.0f;
-    public int seed = 0;
     bool isTerrainSmooth = false;
     bool isGlobalHeight = false;
 
@@ -36,6 +35,7 @@ public class ChunkGenerator : MonoBehaviour
     [SerializeField] public int LoadedBy = 0;
 
     HeightData[] heightData;
+    System.Random mapgen;
 
     // TODO: [R-2] Make use of coroutines for better performance on chunk load
 
@@ -43,13 +43,13 @@ public class ChunkGenerator : MonoBehaviour
     public void DrawChunk(int m_chunkSize, float m_amplitude, float m_frequency, float m_layerHeight, float m_redistribution, 
         int m_seed, int m_xOffset, int m_yOffset, bool m_bIsTerrainSmooth, Material m_mat, int m_loaderID, HeightData[] m_heights, bool m_isGlobalHeight)
     {
+        mapgen = new System.Random(m_seed);
         //Set variables
         chunkSize = m_chunkSize;
         amplitude = m_amplitude;
         frequency = m_frequency;
         layerHeight = m_layerHeight;
         redistribution = m_redistribution;
-        seed = m_seed;
         xOffset = m_xOffset;
         yOffset = m_yOffset;
         isTerrainSmooth = m_bIsTerrainSmooth;
@@ -89,6 +89,9 @@ public class ChunkGenerator : MonoBehaviour
     //Generates vertices for a mesh
     void Vertices()
     {
+        int xSeed = mapgen.Next(-100000, 100000);
+        int zSeed = mapgen.Next(-100000, 100000);
+
         float lamplitude = amplitude;
 
         if(isTerrainSmooth == false)
@@ -107,8 +110,8 @@ public class ChunkGenerator : MonoBehaviour
             {
 
                 //Generation of noise 
-                float xSample = ((x + xOffset) * lfrequency) + seed;
-                float zSample = ((z + yOffset) * lfrequency) + seed;
+                float xSample = ((x + xOffset) * lfrequency) + xSeed;
+                float zSample = ((z + yOffset) * lfrequency) + zSeed;
                 float y = Mathf.PerlinNoise(xSample, zSample) * lamplitude;
 
                 //Redistribution, adding 1 and then removing it prevents bug with mesh in low height areas
