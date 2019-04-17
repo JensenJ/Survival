@@ -59,12 +59,16 @@ public class PlayerController : MonoBehaviour
     {
 
         //Spawn player down on the ground
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, -Vector3.up, out hit, Mathf.Infinity) && bHasSpawned == false)
+        if (bHasSpawned == false)
         {
-            transform.position = new Vector3(transform.position.x, hit.point.y  + 2, transform.position.z);
-            bHasSpawned = true;
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, -Vector3.up, out hit, Mathf.Infinity))
+            {
+                transform.position = new Vector3(transform.position.x, hit.point.y + 2, transform.position.z);
+                bHasSpawned = true;
+            }
         }
+
         //Waypoint Manager
         if (Input.GetKeyDown(KeyCode.B) && bCanUseWaypointManager)
         {

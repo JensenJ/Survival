@@ -7,9 +7,6 @@ using UnityEngine;
 public class MapGenerator : MonoBehaviour
 {
     //Settings for map generation
-    [SerializeField] public int xChunks = 20;
-    [SerializeField] public int zChunks = 20;
-
     [SerializeField] [Range(16, 250)] public int xSize = 16;
     [SerializeField] [Range(16, 250)] public int zSize = 16;
     [SerializeField] [Range(1, 20)] float amplitude = 10.0f;

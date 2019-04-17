@@ -8,68 +8,66 @@ using System;
 
 public class ChunkLoader : MonoBehaviour
 {
-    [SerializeField] [Range(4, 16)] private int chunkRenderDistance = 8;
+    //Variables
+    [SerializeField] [Range(4, 32)] private int chunkRenderDistance = 8;
     [SerializeField] private int chunkLoaderID = 0;
-    ChunkManager cm;
+    [SerializeField] GameObject hitObject;
     bool bIsGenerating = true;
     string[] chunknames;
-    string[] lastchunknames;
-
-    [SerializeField] GameObject hitObject;
     GameObject previousObject = null;
     MapGenerator mg;
-    int xChunkSize;
-    int zChunkSize;
+    ChunkManager cm;
 
-    //Coroutine
+    //Coroutines
     IEnumerator currentLoadCoroutine;
+    IEnumerator currentUnloadCoroutine;
 
     void Start()
     {
+        //Setup
         cm = transform.root.GetChild(5).GetComponent<ChunkManager>();
         mg = transform.root.GetChild(4).GetComponent<MapGenerator>();
         chunkLoaderID = cm.RegisterChunkLoader();
-
-        xChunkSize = mg.xSize;
-        zChunkSize = mg.zSize;
     }
 
     // Update is called once per frame
     void Update()
     {
         //Get chunk below object
-        GameObject chunk = GetChunkBelowObject(transform.gameObject, chunkRenderDistance, chunkLoaderID);
+        GameObject chunk = GetChunkBelowObject(transform.gameObject, chunkRenderDistance);
 
         if (chunk != null)
         {
+            //Get chunknames from the surrounding chunks
             chunknames = GetSurroundingChunks(new Vector2(chunk.transform.position.x, chunk.transform.position.z));
+
 
             //Run loading coroutine
             if (currentLoadCoroutine != null)
             {
                 StopCoroutine(currentLoadCoroutine);
-                lastchunknames = chunknames;
             }
             currentLoadCoroutine = LoadChunks();
             StartCoroutine(currentLoadCoroutine);
+
         }
 
-        if (lastchunknames != chunknames)
+        //Runs the unloading coroutine
+        for (int i = 0; i < mg.transform.childCount; i++)
         {
-            print("different");
+            if (currentUnloadCoroutine != null)
+            {
+                StopCoroutine(currentUnloadCoroutine);
+            }
+            currentUnloadCoroutine = UnloadChunks(i);
+            StartCoroutine(currentUnloadCoroutine);
         }
     }
 
-    int GetChunkLoaderID()
-    {
-        return chunkLoaderID;
-    }
-
-    GameObject GetChunkBelowObject(GameObject m_ObjectToRaycast, int m_RenderDistance, int m_LoaderID)
+    GameObject GetChunkBelowObject(GameObject m_ObjectToRaycast, int m_RenderDistance)
     {
         //Set render distance
         chunkRenderDistance = m_RenderDistance;
-
         //Check what is below the object calling the function
         RaycastHit hit;
         if (Physics.Raycast(m_ObjectToRaycast.transform.position, -Vector3.up, out hit, Mathf.Infinity))
@@ -88,11 +86,12 @@ public class ChunkLoader : MonoBehaviour
         return previousObject;
     }
 
+    //Returns the names of the surrounding chunks
     string[] GetSurroundingChunks(Vector2 chunkPos)
     {
         //Gets current chunk coordinate
-        int xPos = (int)chunkPos.x / xChunkSize;
-        int zPos = (int)chunkPos.y / zChunkSize;
+        int xPos = (int)chunkPos.x / mg.xSize;
+        int zPos = (int)chunkPos.y / mg.zSize;
 
         //Names of chunks to be loaded
         string[] chunknames = new string[chunkRenderDistance * chunkRenderDistance];
@@ -110,9 +109,9 @@ public class ChunkLoader : MonoBehaviour
         return chunknames;
     }
 
+    //Coroutine for loading chunks
     IEnumerator LoadChunks()
     {
-        lastchunknames = chunknames;
         //For each chunk
         for (int i = 0; i < mg.transform.childCount; i++)
         {
@@ -144,34 +143,30 @@ public class ChunkLoader : MonoBehaviour
                     }
                 }
             }
-            //Removes chunks that are not loaded
-            RemoveUnloadedChunks(i);
+            //Coroutine pause point
+            yield return null;
         }
         bIsGenerating = false;
     }
 
-    //Function to remove unloaded chunks
-    void RemoveUnloadedChunks(int index)
+    //Removes chunks that are not loaded
+    IEnumerator UnloadChunks(int i)
     {
         //Get position of current transform in array
-        string value = mg.transform.GetChild(index).name;
+        string value = mg.transform.GetChild(i).name;
         int pos = Array.IndexOf(chunknames, value);
 
         //If transform is not in chunknames for loaded chunks
         if (pos == -1)
         {
             //Destroy the current object only if it is loaded by this chunk
-            UnloadChunks(index);
+            if (mg.transform.GetChild(i).GetComponent<ChunkGenerator>().LoadedBy == chunkLoaderID)
+            {
+                Destroy(mg.transform.GetChild(i).gameObject);
+            }
         }
-    }
-
-    //Unloads chunks at the specified index only for chunks loaded by this object
-    void UnloadChunks(int index)
-    {
-        if (mg.transform.GetChild(index).GetComponent<ChunkGenerator>().LoadedBy == chunkLoaderID)
-        {
-            Destroy(mg.transform.GetChild(index).gameObject);
-        }
+        yield return null;
+        
     }
 
     //Unload all chunks loaded by this object when the object is destroyed
@@ -179,10 +174,12 @@ public class ChunkLoader : MonoBehaviour
     {
         for (int i = 0; i < mg.transform.childCount; i++)
         {
-            UnloadChunks(i);
+            if (mg.transform.GetChild(i).GetComponent<ChunkGenerator>().LoadedBy == chunkLoaderID)
+            {
+                Destroy(mg.transform.GetChild(i).gameObject);
+            }
         }
         //Unregister this chunk loader
         cm.UnregisterChunkLoader();
     }
-
 }

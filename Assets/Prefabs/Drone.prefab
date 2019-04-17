@@ -118,8 +118,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c38a5268036e97c4996710c3b9836718, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunkRenderDistance: 8
+  chunkRenderDistance: 24
   chunkLoaderID: 0
+  hitObject: {fileID: 0}
 --- !u!1 &7700677335479033932
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,9 +243,10 @@ Camera:
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.11120505, g: 0.31186977, b: 0.46226418, a: 0}
   m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_GateFitMode: 2
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
