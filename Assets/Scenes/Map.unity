@@ -8431,13 +8431,13 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
   heights:
   - layerName: Water
-    height: 0.1
+    height: 0
     colour: {r: 0, g: 0.09263991, b: 0.735849, a: 0}
   - layerName: Sand
-    height: 0.5
+    height: 0.6
     colour: {r: 1, g: 0.7609758, b: 0, a: 0}
   - layerName: Grass
-    height: 1
+    height: 0.75
     colour: {r: 0, g: 0.5566038, b: 0.025373932, a: 0}
 --- !u!1 &2008751936
 GameObject:
