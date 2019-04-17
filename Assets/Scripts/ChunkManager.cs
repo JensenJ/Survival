@@ -21,3 +21,11 @@ public class ChunkManager : MonoBehaviour
         numberOfLoaders--;
     }
 }
+
+[System.Serializable]
+public struct HeightData
+{
+    public string layerName;
+    public float height;
+    public Color colour;
+}

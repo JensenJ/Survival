@@ -3048,11 +3048,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4694994179229959573, guid: 3c6b4f4f86b7d9048bce4fe2c11f7f24,
-        type: 3}
-      propertyPath: chunkRenderDistance
-      value: 4
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c6b4f4f86b7d9048bce4fe2c11f7f24, type: 3}
 --- !u!4 &656464749 stripped
@@ -8434,6 +8429,16 @@ MonoBehaviour:
   isTerrainSmooth: 0
   isRandomGeneration: 1
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
+  heights:
+  - layerName: Water
+    height: 0.1
+    colour: {r: 0, g: 0.09263991, b: 0.735849, a: 0}
+  - layerName: Sand
+    height: 0.5
+    colour: {r: 1, g: 0.7609758, b: 0, a: 0}
+  - layerName: Grass
+    height: 1
+    colour: {r: 0, g: 0.5566038, b: 0.025373932, a: 0}
 --- !u!1 &2008751936
 GameObject:
   m_ObjectHideFlags: 0

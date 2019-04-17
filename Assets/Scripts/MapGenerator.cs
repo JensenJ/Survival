@@ -18,6 +18,8 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] bool isRandomGeneration = false;
     [SerializeField] Material material = null;
 
+    [SerializeField] public HeightData[] heights;
+    
     //Function for creating the chunk objects and drawing the map
     public void GenerateMap(int m_seed)
     {
@@ -53,7 +55,7 @@ public class MapGenerator : MonoBehaviour
         terrain.transform.SetParent(transform);
         terrain.transform.position = new Vector3(x * xSize, 0, z * zSize);
         ChunkGenerator cg = terrain.AddComponent<ChunkGenerator>();
-        cg.DrawChunk(xSize, zSize, amplitude, frequency, layerHeight, redistribution, seed, xSize * x, zSize * z, isTerrainSmooth, material, loaderID);
+        cg.DrawChunk(xSize, zSize, amplitude, frequency, layerHeight, redistribution, seed, xSize * x, zSize * z, isTerrainSmooth, material, loaderID, heights);
         return terrain;
     }
 
