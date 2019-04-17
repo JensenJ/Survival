@@ -8419,8 +8419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc227f42efc76284cbed5fde7379a545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xSize: 16
-  zSize: 16
+  chunkSize: 16
   amplitude: 20
   frequency: 5
   layerHeight: 0.5
@@ -8429,16 +8428,32 @@ MonoBehaviour:
   isTerrainSmooth: 0
   isRandomGeneration: 1
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
+  isGlobalHeight: 1
   heights:
-  - layerName: Water
-    height: 0
-    colour: {r: 0, g: 0.09263991, b: 0.735849, a: 0}
+  - layerName: Water 1
+    height: -10
+    colour: {r: 0.25882354, g: 0.43921572, b: 0.6509804, a: 0}
+  - layerName: Water 2
+    height: 1
+    colour: {r: 0.2509804, g: 0.42352945, b: 0.6392157, a: 0}
+  - layerName: Water 3
+    height: 4
+    colour: {r: 0.25490198, g: 0.45882356, b: 0.70980394, a: 0}
   - layerName: Sand
-    height: 0.6
-    colour: {r: 1, g: 0.7609758, b: 0, a: 0}
-  - layerName: Grass
-    height: 0.75
-    colour: {r: 0, g: 0.5566038, b: 0.025373932, a: 0}
+    height: 5
+    colour: {r: 0.9450981, g: 0.9333334, b: 0.6666667, a: 0}
+  - layerName: Grass 1
+    height: 6
+    colour: {r: 0.5803922, g: 0.8196079, b: 0.30588236, a: 0}
+  - layerName: Grass 2
+    height: 7
+    colour: {r: 0.4620851, g: 0.745283, b: 0.13710396, a: 0}
+  - layerName: Grass 3
+    height: 8
+    colour: {r: 0.37647063, g: 0.6117647, b: 0.29411766, a: 0}
+  - layerName: Grass 4
+    height: 9
+    colour: {r: 0.26415092, g: 0.5, b: 0.18160376, a: 0}
 --- !u!1 &2008751936
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,14 +20,14 @@ public class ChunkGenerator : MonoBehaviour
     MapGenerator mg;
 
     //Settings for chunk generation
-    int xSize = 250;
-    int zSize = 250;
+    int chunkSize = 16;
     float amplitude = 10.0f;
     float frequency = 1.0f;
     float layerHeight = 1.0f;
     float redistribution = 1.0f;
     public int seed = 0;
     bool isTerrainSmooth = false;
+    bool isGlobalHeight = false;
 
     [SerializeField] int xOffset = 0;
     [SerializeField] int yOffset = 0;
@@ -39,19 +39,12 @@ public class ChunkGenerator : MonoBehaviour
 
     // TODO: [R-2] Make use of coroutines for better performance on chunk load
 
-    private void Update()
-    {
-        //Update mesh every frame for changes, e.g. changes in landscape
-        UpdateMesh();
-    }
-
     //Draw new map with seed
-    public void DrawChunk(int m_xSize, int m_zSize, float m_amplitude, float m_frequency, float m_layerHeight, float m_redistribution, 
-        int m_seed, int m_xOffset, int m_yOffset, bool m_bIsTerrainSmooth, Material m_mat, int m_loaderID, HeightData[] m_heights)
+    public void DrawChunk(int m_chunkSize, float m_amplitude, float m_frequency, float m_layerHeight, float m_redistribution, 
+        int m_seed, int m_xOffset, int m_yOffset, bool m_bIsTerrainSmooth, Material m_mat, int m_loaderID, HeightData[] m_heights, bool m_isGlobalHeight)
     {
         //Set variables
-        xSize = m_xSize;
-        zSize = m_zSize;
+        chunkSize = m_chunkSize;
         amplitude = m_amplitude;
         frequency = m_frequency;
         layerHeight = m_layerHeight;
@@ -62,6 +55,7 @@ public class ChunkGenerator : MonoBehaviour
         isTerrainSmooth = m_bIsTerrainSmooth;
         LoadedBy = m_loaderID;
         heightData = m_heights;
+        isGlobalHeight = m_isGlobalHeight;
         meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = new Material(m_mat);
         mg = transform.GetComponentInParent<MapGenerator>();
@@ -103,13 +97,13 @@ public class ChunkGenerator : MonoBehaviour
         }
         float lfrequency = frequency / 1000.0f;
         //Generating vertices
-        vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+        vertices = new Vector3[(chunkSize + 1) * (chunkSize + 1)];
 
         //For each vertex on z axis
-        for (int i = 0, z = 0; z <= zSize; z++)
+        for (int i = 0, z = 0; z <= chunkSize; z++)
         {
             //For each vertex on x axis
-            for (int x = 0; x <= xSize; x++)
+            for (int x = 0; x <= chunkSize; x++)
             {
 
                 //Generation of noise 
@@ -148,22 +142,22 @@ public class ChunkGenerator : MonoBehaviour
     void Triangles()
     {
         //Create new triangle array
-        triangles = new int[xSize * zSize * 6];
+        triangles = new int[chunkSize * chunkSize * 6];
         int vert = 0;
         int tris = 0;
         //For each vertex on z axis
-        for (int z = 0; z < zSize; z++)
+        for (int z = 0; z < chunkSize; z++)
         {
             //For each vertex on x axis
-            for (int x = 0; x < xSize; x++)
+            for (int x = 0; x < chunkSize; x++)
             {
                 //Creates 2 triangles to form a square
                 triangles[tris + 0] = vert + 0;
-                triangles[tris + 1] = vert + xSize + 1;
+                triangles[tris + 1] = vert + chunkSize + 1;
                 triangles[tris + 2] = vert + 1;
                 triangles[tris + 3] = vert + 1;
-                triangles[tris + 4] = vert + xSize + 1;
-                triangles[tris + 5] = vert + xSize + 2;
+                triangles[tris + 4] = vert + chunkSize + 1;
+                triangles[tris + 5] = vert + chunkSize + 2;
 
                 vert++;
                 tris += 6;
@@ -179,8 +173,16 @@ public class ChunkGenerator : MonoBehaviour
         //For each vertex
         for (int i = 0; i < colours.Length; i++)
         {
-            //Get the local normalised height
-            float currentHeight = Mathf.InverseLerp(minHeight, maxHeight, vertices[i].y);
+            float currentHeight;
+            if (isGlobalHeight)
+            {
+                currentHeight = vertices[i].y;
+            }
+            else
+            {
+                //Get the local normalised height
+                currentHeight = Mathf.InverseLerp(minHeight, maxHeight, vertices[i].y);
+            }
             //For each height
             for (int j = 0; j < heightData.Length; j++)
             {
@@ -206,7 +208,7 @@ public class ChunkGenerator : MonoBehaviour
         //}
 
         //Create texture from colour data and apply to the mesh
-        Texture2D texture = new Texture2D(xSize, zSize);
+        Texture2D texture = new Texture2D(chunkSize, chunkSize);
         texture.filterMode = FilterMode.Point;
         texture.wrapMode = TextureWrapMode.Clamp;
         texture.SetPixels(colours);

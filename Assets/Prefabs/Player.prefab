@@ -205,7 +205,7 @@ MonoBehaviour:
   bIsDead: 0
   bCanRegenHealth: 1
   maxStaminaMeter: 100
-  staminaMeterDrainSpeed: 10
+  staminaMeterDrainSpeed: 4
   staminaMeterRegenSpeed: 3
   staminaPercentage: 1
   bIsStaticStamina: 0

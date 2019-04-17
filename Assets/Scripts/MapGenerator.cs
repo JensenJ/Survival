@@ -7,8 +7,7 @@ using UnityEngine;
 public class MapGenerator : MonoBehaviour
 {
     //Settings for map generation
-    [SerializeField] [Range(16, 250)] public int xSize = 16;
-    [SerializeField] [Range(16, 250)] public int zSize = 16;
+    [SerializeField] [Range(16, 128)] public int chunkSize = 16;
     [SerializeField] [Range(1, 20)] float amplitude = 10.0f;
     [SerializeField] [Range(0.1f, 20)] float frequency = 1.0f;
     [SerializeField] [Range(0.1f, 3)] float layerHeight = 0.5f;
@@ -18,6 +17,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] bool isRandomGeneration = false;
     [SerializeField] Material material = null;
 
+    [SerializeField] bool isGlobalHeight = false;
     [SerializeField] public HeightData[] heights;
     
     //Function for creating the chunk objects and drawing the map
@@ -34,16 +34,8 @@ public class MapGenerator : MonoBehaviour
             //redistribution = Random.Range(0.5f, 1.0f);
         }
 
-        //Checks for too many vertices in single mesh.
-        if (xSize * zSize > 62500)
-        {
-            Debug.LogError("Map size is too large for a single mesh. Cancelling map generation.");
-        }
-        else
-        {
-            //loader ID of 0 means this will never be unloaded
-            CreateNewChunk(0, 0, 0);
-        }
+        //loader ID of 0 means this will never be unloaded
+        CreateNewChunk(0, 0, 0);
     }
 
     public GameObject CreateNewChunk(int x, int z, int loaderID)
@@ -53,9 +45,9 @@ public class MapGenerator : MonoBehaviour
         GameObject terrain = new GameObject();
         terrain.name = "Chunk (" + x + ", " + z + ")";
         terrain.transform.SetParent(transform);
-        terrain.transform.position = new Vector3(x * xSize, 0, z * zSize);
+        terrain.transform.position = new Vector3(x * chunkSize, 0, z * chunkSize);
         ChunkGenerator cg = terrain.AddComponent<ChunkGenerator>();
-        cg.DrawChunk(xSize, zSize, amplitude, frequency, layerHeight, redistribution, seed, xSize * x, zSize * z, isTerrainSmooth, material, loaderID, heights);
+        cg.DrawChunk(chunkSize, amplitude, frequency, layerHeight, redistribution, seed, chunkSize * x, chunkSize * z, isTerrainSmooth, material, loaderID, heights, isGlobalHeight);
         return terrain;
     }
 

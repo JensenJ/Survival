@@ -90,8 +90,8 @@ public class ChunkLoader : MonoBehaviour
     string[] GetSurroundingChunks(Vector2 chunkPos)
     {
         //Gets current chunk coordinate
-        int xPos = (int)chunkPos.x / mg.xSize;
-        int zPos = (int)chunkPos.y / mg.zSize;
+        int xPos = (int)chunkPos.x / mg.chunkSize;
+        int zPos = (int)chunkPos.y / mg.chunkSize;
 
         //Names of chunks to be loaded
         string[] chunknames = new string[chunkRenderDistance * chunkRenderDistance];
