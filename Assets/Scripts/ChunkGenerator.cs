@@ -193,15 +193,6 @@ public class ChunkGenerator : MonoBehaviour
                 }
             }
         }
-
-        //Create texture from colour data and apply to the mesh
-        Texture2D texture = new Texture2D(chunkSize, chunkSize);
-        texture.filterMode = FilterMode.Point;
-        texture.wrapMode = TextureWrapMode.Clamp;
-        texture.SetPixels(colours);
-        texture.Apply();
-
-        meshRenderer.material.mainTexture = texture;
     }
 
     void UpdateMesh()
