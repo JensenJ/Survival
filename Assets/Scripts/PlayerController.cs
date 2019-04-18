@@ -36,6 +36,9 @@ public class PlayerController : MonoBehaviour
     public bool bHasDeployedDrone = false;
     public GameObject spawnedDrone = null;
     public Image Crosshair = null;
+    bool bHasSpawned = false;
+
+    // TODO: [R-2] Fix audio listener issue on camera introduced in Unity 2019.1 by switching between them on player and drone
 
     // Setup
     void Start()
@@ -54,6 +57,18 @@ public class PlayerController : MonoBehaviour
     // Update every frame
     void Update()
     {
+
+        //Spawn player down on the ground
+        if (bHasSpawned == false)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, -Vector3.up, out hit, Mathf.Infinity))
+            {
+                transform.position = new Vector3(transform.position.x, hit.point.y + 2, transform.position.z);
+                bHasSpawned = true;
+            }
+        }
+
         //Waypoint Manager
         if (Input.GetKeyDown(KeyCode.B) && bCanUseWaypointManager)
         {
@@ -87,6 +102,7 @@ public class PlayerController : MonoBehaviour
         Jump();
         
         Drone();
+
     }
 
     void Drone()

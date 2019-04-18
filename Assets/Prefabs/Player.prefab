@@ -57,7 +57,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7dd2568c871ba7241b7e7ac9e96e4cde, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 1758035811882576792}
   - component: {fileID: 5123572326359988360}
   - component: {fileID: 1758035811773659634}
+  - component: {fileID: 4694994179229959573}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -106,8 +107,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1758035811882576791}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.9900005, y: 1, z: -3.12}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8, y: 200, z: 8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1758035812419762076}
@@ -178,7 +179,7 @@ MonoBehaviour:
   droneRetrievalDistance: 5
   bCanMove: 1
   speed: 5
-  sprintSpeed: 10
+  sprintSpeed: 15
   sensitivity: 3
   jumpForce: 4
   bHasDeployedDrone: 0
@@ -200,24 +201,28 @@ MonoBehaviour:
   healthMeterDrainSpeed: 1
   healthMeterRegenSpeed: 0.5
   healthPercentage: 1
+  bIsStaticHealth: 0
   bIsDead: 0
   bCanRegenHealth: 1
   maxStaminaMeter: 100
-  staminaMeterDrainSpeed: 10
+  staminaMeterDrainSpeed: 4
   staminaMeterRegenSpeed: 3
   staminaPercentage: 1
+  bIsStaticStamina: 0
   bIsExhausted: 0
   bCanRegenStamina: 1
   maxHungerMeter: 100
   hungerMeterDrainSpeed: 0.25
   hungerMeterRegenSpeed: 10
   hungerPercentage: 1
+  bIsStaticHunger: 0
   bIsStarving: 0
   bCanRegenHunger: 0
   maxThirstMeter: 100
   thirstMeterDrainSpeed: 0.125
   thirstMeterRegenSpeed: 10
   thirstPercentage: 1
+  bIsStaticThirst: 0
   bIsDehydrated: 0
   bCanRegenThirst: 0
 --- !u!114 &1758035811773659634
@@ -234,6 +239,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentDirection: 0
   targetRotation: 0
+--- !u!114 &4694994179229959573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1758035811882576791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c38a5268036e97c4996710c3b9836718, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chunkRenderDistance: 18
+  chunkLoaderID: 0
+  hitObject: {fileID: 0}
 --- !u!1 &1758035812419762075
 GameObject:
   m_ObjectHideFlags: 0
@@ -340,9 +360,10 @@ Camera:
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.11120505, g: 0.31186977, b: 0.46226418, a: 0}
   m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_GateFitMode: 2
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
