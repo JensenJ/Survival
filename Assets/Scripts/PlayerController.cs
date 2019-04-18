@@ -10,12 +10,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Attributes))]
 public class PlayerController : MonoBehaviour
 {
-    //Variables
-    [Header("Drone Settings:")]
-    [SerializeField] private GameObject droneToSpawn = null;
-    [SerializeField] private Vector3 droneSpawnPos = Vector3.zero;
-    [SerializeField] [Range(0, 20)] private float droneRetrievalDistance = 5.0f;
-    private bool bCanSpawnDrone = true;
 
     [Header("Movement Settings:")]
     public bool bCanMove = true;
@@ -29,25 +23,17 @@ public class PlayerController : MonoBehaviour
     private WaypointManager waypointManager = null;
     private bool bCanUseWaypointManager = true;
     private PlayerMotor motor;
-    private Transform droneSpawnLocation;
-    private DroneController dc = null;
 
     [Header("Debug:")]
-    public bool bHasDeployedDrone = false;
-    public GameObject spawnedDrone = null;
     public Image Crosshair = null;
     bool bHasSpawned = false;
-
-    // TODO: [R-2] Fix audio listener issue on camera introduced in Unity 2019.1 by switching between them on player and drone
 
     // Setup
     void Start()
     {
-        //Drone and movement setup
+        //Movement setup
         motor = GetComponent<PlayerMotor>();
         attributes = GetComponent<Attributes>();
-        droneSpawnLocation = transform.GetChild(2);
-        droneSpawnLocation.position = droneSpawnPos + transform.position;
         waypointManager = transform.root.GetChild(2).GetComponent<WaypointManager>();
         Crosshair = transform.root.GetChild(1).GetChild(3).GetComponent<Image>();
         Cursor.lockState = CursorLockMode.Locked;
@@ -79,10 +65,6 @@ public class PlayerController : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
                 Crosshair.gameObject.SetActive(true);
                 bCanMove = true;
-                if (bHasDeployedDrone)
-                {
-                    dc.bCanMove = true;
-                }
             }
             else
             {
@@ -90,74 +72,12 @@ public class PlayerController : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
                 Crosshair.gameObject.SetActive(false);
                 bCanMove = false;
-                if (bHasDeployedDrone)
-                {
-                    dc.bCanMove = false;
-                }
             }
         }
         //Movement
         Move();
         Rotate();
         Jump();
-        
-        Drone();
-
-    }
-
-    void Drone()
-    {
-        if (!attributes.bIsDead)
-        {
-            //Check for drone key
-            if (motor.IsGrounded() && bCanSpawnDrone)
-            {
-                if (Input.GetKeyDown(KeyCode.Z))
-                {
-                    //Check whether a drone has already been deployed.
-                    if (!bHasDeployedDrone)
-                    {
-                        //Spawns new drone and disable player controller movement
-                        spawnedDrone = Instantiate(droneToSpawn, droneSpawnLocation.position, transform.rotation, transform);
-                        bCanMove = false;
-                        bHasDeployedDrone = true;
-                        motor.Freeze(RigidbodyConstraints.FreezeAll);
-                        dc = spawnedDrone.GetComponent<DroneController>();
-                    }
-                    else
-                    {
-                        //Checks whether drone actually exists
-                        if (spawnedDrone != null)
-                        {
-                            //Makes sure drone is within distance to be able to be picked up by player
-                            if (spawnedDrone.transform.position.x - transform.position.x <= droneRetrievalDistance &&
-                                spawnedDrone.transform.position.y - transform.position.y <= droneRetrievalDistance &&
-                                spawnedDrone.transform.position.z - transform.position.z <= droneRetrievalDistance)
-                            {
-                                //Destroys currently spawned drone and enables movement
-                                Destroy(spawnedDrone);
-                                bCanMove = true;
-                                bHasDeployedDrone = false;
-                                motor.Freeze(RigidbodyConstraints.FreezeRotation);
-                            }
-                            else
-                            {
-                                Debug.Log("Drone needs to be closer to player in order to retrieve.");
-                                bHasDeployedDrone = true;
-                                motor.Freeze(RigidbodyConstraints.FreezeAll);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (bHasDeployedDrone)
-            {
-                dc.bCanMove = false;
-            }
-        }
     }
 
     //Movement
@@ -174,7 +94,7 @@ public class PlayerController : MonoBehaviour
             Vector3 moveVertical = transform.forward * zMove;
 
             //Sprinting
-            if (Input.GetButton("Run") && (xMove != 0.0f || zMove != 0.0f) && !bHasDeployedDrone)
+            if (Input.GetButton("Run") && (xMove != 0.0f || zMove != 0.0f))
             {
                 //Disables stamina regen while running
                 attributes.bCanRegenStamina = false;

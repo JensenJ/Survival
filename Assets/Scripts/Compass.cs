@@ -11,33 +11,13 @@ public class Compass : MonoBehaviour
 
     [SerializeField] private Direction currentDirection = Direction.North;
 
-    PlayerController pc = null;
-
     [SerializeField] [Range(0, 360)] private float targetRotation = 0.0f;
-
-    private GameObject spawnedDrone = null;
-
-    void Start()
-    {
-        pc = GetComponent<PlayerController>();
-    }
 
     // Update every frame
     void Update()
     {
-        if (pc.bHasDeployedDrone)
-        {
-            spawnedDrone = pc.spawnedDrone;
-            if (!(spawnedDrone == null))
-            {
-                targetRotation = spawnedDrone.transform.rotation.eulerAngles.y;
-            }
-        }
-        else
-        {
-            spawnedDrone = null;
-            targetRotation = transform.rotation.eulerAngles.y;
-        }
+        targetRotation = transform.rotation.eulerAngles.y;
+        
 
 
         //Cycle through if statements until angle is within a bracket then set direction based on angle.

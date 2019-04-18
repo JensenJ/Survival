@@ -129,15 +129,7 @@ public class WaypointUI : MonoBehaviour
     // Waypoint game widget, facing objects and scaling based on distance
     void Update()
     {
-        //Get object to face
-        if (pc.bHasDeployedDrone)
-        {
-            objectToFace = playerPos.GetChild(3);
-        }
-        else
-        {
-            objectToFace = playerPos;
-        }
+        objectToFace = playerPos;
         
         //Calculate distance and use this to scale ui objects as they get further away.
         distanceFromPlayer = Vector3.Distance(objectToFace.position, transform.position);
