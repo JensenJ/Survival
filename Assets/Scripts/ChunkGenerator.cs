@@ -24,12 +24,9 @@ public class ChunkGenerator : MonoBehaviour
     float amplitude = 10.0f;
     float frequency = 1.0f;
     float layerHeight = 1.0f;
-    float redistribution = 1.0f;
     bool isTerrainSmooth = false;
-    bool isGlobalHeight = false;
 
-    [SerializeField] int xOffset = 0;
-    [SerializeField] int yOffset = 0;
+    [SerializeField] Vector2 offset;
     [SerializeField] float maxHeight = float.MinValue;
     [SerializeField] float minHeight = float.MaxValue;
     [SerializeField] public int LoadedBy = 0;
@@ -40,8 +37,8 @@ public class ChunkGenerator : MonoBehaviour
     // TODO: [R-2] Make use of coroutines for better performance on chunk load
 
     //Draw new map with seed
-    public void DrawChunk(int m_chunkSize, float m_amplitude, float m_frequency, float m_layerHeight, float m_redistribution, 
-        int m_seed, int m_xOffset, int m_yOffset, bool m_bIsTerrainSmooth, Material m_mat, int m_loaderID, HeightData[] m_heights, bool m_isGlobalHeight)
+    public void DrawChunk(int m_chunkSize, float m_amplitude, float m_frequency, float m_layerHeight, int m_seed, 
+        Vector2 m_offset, bool m_bIsTerrainSmooth, Material m_mat, int m_loaderID, HeightData[] m_heights)
     {
         mapgen = new System.Random(m_seed);
         //Set variables
@@ -49,13 +46,10 @@ public class ChunkGenerator : MonoBehaviour
         amplitude = m_amplitude;
         frequency = m_frequency;
         layerHeight = m_layerHeight;
-        redistribution = m_redistribution;
-        xOffset = m_xOffset;
-        yOffset = m_yOffset;
+        offset = m_offset;
         isTerrainSmooth = m_bIsTerrainSmooth;
         LoadedBy = m_loaderID;
         heightData = m_heights;
-        isGlobalHeight = m_isGlobalHeight;
         meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = new Material(m_mat);
         mg = transform.GetComponentInParent<MapGenerator>();
@@ -110,14 +104,10 @@ public class ChunkGenerator : MonoBehaviour
             {
 
                 //Generation of noise 
-                float xSample = ((x + xOffset) * lfrequency) + xSeed;
-                float zSample = ((z + yOffset) * lfrequency) + zSeed;
+                float xSample = ((x + offset.x) * lfrequency) + xSeed;
+                float zSample = ((z + offset.y) * lfrequency) + zSeed;
                 float y = Mathf.PerlinNoise(xSample, zSample) * lamplitude;
 
-                //Redistribution, adding 1 and then removing it prevents bug with mesh in low height areas
-                y++;
-                y = Mathf.Pow(y, redistribution);
-                y--;
                 //Round vertices to nearest integer if terrain is not smooth.
                 if (isTerrainSmooth == false)
                 {
@@ -176,16 +166,16 @@ public class ChunkGenerator : MonoBehaviour
         //For each vertex
         for (int i = 0; i < colours.Length; i++)
         {
-            float currentHeight;
-            if (isGlobalHeight)
-            {
-                currentHeight = vertices[i].y;
-            }
-            else
-            {
-                //Get the local normalised height
-                currentHeight = Mathf.InverseLerp(minHeight, maxHeight, vertices[i].y);
-            }
+            //Use global height values
+            float currentHeight = vertices[i].y;
+
+            //Better method, but needs to be global normalisation instead of local, 
+            //global could be retrieved by generating max possible values at current gen settings and storing it in manager
+            //to be retrieved here and used in this normalisation
+
+            // TODO: Make global normalisation instead of local
+            //currentHeight = Mathf.InverseLerp(minHeight, maxHeight, vertices[i].y);
+            
             //For each height
             for (int j = 0; j < heightData.Length; j++)
             {
@@ -203,12 +193,6 @@ public class ChunkGenerator : MonoBehaviour
                 }
             }
         }
-
-        //Prints the colour of every vertex
-        //for (int i = 0; i < colours.Length; i++)
-        //{
-        //    print("R: " + colours[i].r + ", G: " + colours[i].g + ", B: " + colours[i].b);
-        //}
 
         //Create texture from colour data and apply to the mesh
         Texture2D texture = new Texture2D(chunkSize, chunkSize);
