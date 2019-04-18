@@ -34,7 +34,7 @@ public class Attributes : MonoBehaviour
     //Hunger
     [Header("Hunger:")]
     [SerializeField] [Range(1, 1000)] private float maxHungerMeter = 100.0f;
-    [SerializeField] [Range(0.01f, 3)] private float hungerMeterDrainSpeed = 0.25f;
+    [SerializeField] [Range(0.01f, 3)] private float hungerMeterDrainSpeed = 0.125f;
     [SerializeField] [Range(0.01f, 20)] private float hungerMeterRegenSpeed = 10.0f;
     [SerializeField] [Range(0, 1)] private float hungerPercentage = 1.0f;
     [SerializeField] public bool bIsStaticHunger = false;
@@ -46,7 +46,7 @@ public class Attributes : MonoBehaviour
     //Thirst
     [Header("Thirst:")]
     [SerializeField] [Range(1, 1000)] private float maxThirstMeter = 100.0f;
-    [SerializeField] [Range(0.01f, 3)] private float thirstMeterDrainSpeed = 0.125f;
+    [SerializeField] [Range(0.01f, 3)] private float thirstMeterDrainSpeed = 0.25f;
     [SerializeField] [Range(0.01f, 20)] private float thirstMeterRegenSpeed = 10.0f;
     [SerializeField] [Range(0, 1)] private float thirstPercentage = 1.0f;
     [SerializeField] public bool bIsStaticThirst = false;
@@ -69,6 +69,9 @@ public class Attributes : MonoBehaviour
         staminaMeter = maxStaminaMeter;
         hungerMeter = maxHungerMeter;
         thirstMeter = maxThirstMeter;
+
+        thirstMeterDrainSpeed /= 10;
+        hungerMeterDrainSpeed /= 10;
     }
 
     void Update()
