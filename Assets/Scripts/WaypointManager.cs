@@ -34,7 +34,6 @@ public class WaypointManager : MonoBehaviour
     private GameObject waypointManagerContent = null;
     private Vector3 targetTransform = Vector3.zero;
     private PlayerController pc = null;
-    private GameObject spawnedDrone = null;
     private Transform waypointList = null;
 
     // Sets all basic variables and default settings
@@ -70,21 +69,7 @@ public class WaypointManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Checks for drone, used for facing waypoint towards active player/drone
-        if (pc.bHasDeployedDrone)
-        {
-            spawnedDrone = pc.spawnedDrone;
-            if (spawnedDrone != null)
-            {
-                targetTransform = spawnedDrone.transform.position;
-            }
-        }
-        else
-        {
-            spawnedDrone = null;
-            targetTransform = pc.transform.position;
-        }
-
+        targetTransform = pc.transform.position;
         //Updates colour preview in editor
         waypointColour = new Color(waypointEditR.value, waypointEditG.value, waypointEditB.value);
         waypointEditColour.color = waypointColour;
@@ -196,18 +181,10 @@ public class WaypointManager : MonoBehaviour
         waypointEditB.value = Random.Range(0.0f, 1.0f);
         waypointEditName.text = "New Waypoint";
         //Use coordinates of current position
-        if (pc.bHasDeployedDrone)
-        {
-            waypointEditX.text = Mathf.Round(pc.transform.GetChild(3).position.x).ToString();
-            waypointEditY.text = Mathf.Round(pc.transform.GetChild(3).position.y).ToString();
-            waypointEditZ.text = Mathf.Round(pc.transform.GetChild(3).position.z).ToString();
-        }
-        else
-        {
-            waypointEditX.text = Mathf.Round(pc.transform.position.x).ToString();
-            waypointEditY.text = Mathf.Round(pc.transform.position.y).ToString();
-            waypointEditZ.text = Mathf.Round(pc.transform.position.z).ToString();
-        }
+        
+        waypointEditX.text = Mathf.Round(pc.transform.position.x).ToString();
+        waypointEditY.text = Mathf.Round(pc.transform.position.y).ToString();
+        waypointEditZ.text = Mathf.Round(pc.transform.position.z).ToString();
 
         //Enables editor, disables manager
         waypointEditorPanel.SetActive(true);
@@ -262,10 +239,6 @@ public class WaypointManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         pc.Crosshair.gameObject.SetActive(true);
         pc.bCanMove = true;
-        if (pc.bHasDeployedDrone)
-        {
-            pc.spawnedDrone.GetComponent<DroneController>().bCanMove = true;
-        }
     }
 
     //Closes waypoint editor and reopens manager

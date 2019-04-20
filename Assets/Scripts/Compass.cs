@@ -2,42 +2,27 @@
 // NAME: Compass
 // PURPOSE: Keep track of waypoints and direction
 using UnityEngine;
+using TMPro;
 
 public class Compass : MonoBehaviour
 {
 
     //Variables
     enum Direction { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
-
     [SerializeField] private Direction currentDirection = Direction.North;
-
-    PlayerController pc = null;
-
     [SerializeField] [Range(0, 360)] private float targetRotation = 0.0f;
-
-    private GameObject spawnedDrone = null;
+    [SerializeField] TextMeshProUGUI directionText;
 
     void Start()
     {
-        pc = GetComponent<PlayerController>();
+        directionText = transform.root.GetChild(1).GetChild(4).GetComponent<TextMeshProUGUI>();
     }
 
     // Update every frame
     void Update()
     {
-        if (pc.bHasDeployedDrone)
-        {
-            spawnedDrone = pc.spawnedDrone;
-            if (!(spawnedDrone == null))
-            {
-                targetRotation = spawnedDrone.transform.rotation.eulerAngles.y;
-            }
-        }
-        else
-        {
-            spawnedDrone = null;
-            targetRotation = transform.rotation.eulerAngles.y;
-        }
+        targetRotation = transform.rotation.eulerAngles.y;
+        
 
 
         //Cycle through if statements until angle is within a bracket then set direction based on angle.
@@ -77,5 +62,16 @@ public class Compass : MonoBehaviour
         {
             currentDirection = Direction.North;
         }
+
+        //Converts direction enum to string
+        string direction = currentDirection.ToString();
+        //Adds space inbetween when direction is longer such as South West
+        if(direction.Length == 9)
+        {
+            direction = direction.Substring(0, 5) + " " + direction.Substring(5);
+        }
+        //Sets the direction text in UI equal to the current facing direction.
+
+        directionText.text = direction;
     }
 }

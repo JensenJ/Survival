@@ -9,7 +9,7 @@ using System;
 public class ChunkLoader : MonoBehaviour
 {
     //Variables
-    [SerializeField] [Range(1, 32)] private int chunkRenderDistance = 8;
+    [SerializeField] [Range(5, 32)] private int chunkRenderDistance = 8;
     [SerializeField] private int chunkLoaderID = 0;
     [SerializeField] GameObject hitObject;
     bool bIsGenerating = true;
@@ -52,7 +52,7 @@ public class ChunkLoader : MonoBehaviour
 
         }
 
-        //Runs the unloading coroutine
+        //Run unloading coroutine
         for (int i = 0; i < mg.transform.childCount; i++)
         {
             if (currentUnloadCoroutine != null)
