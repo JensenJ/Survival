@@ -23,22 +23,19 @@ public class ChunkGenerator : MonoBehaviour
     float amplitude = 10.0f;
     float frequency = 1.0f;
 
+    //Variables only relevant to this chunk
     [SerializeField] Vector2 offset;
-    [SerializeField] float maxHeight = float.MinValue;
-    [SerializeField] float minHeight = float.MaxValue;
     [SerializeField] public int LoadedBy = 0;
 
     HeightData[] heightData;
     System.Random mapgen;
 
-    // TODO: [R-2] Make use of coroutines for better performance on chunk load
-
-    //Draw new map with seed
+    //Draw new chunk with info from map generator.
     public void DrawChunk(int m_chunkSize, float m_amplitude, float m_frequency, int m_seed, 
         Vector2 m_offset, Material m_mat, int m_loaderID, HeightData[] m_heights)
     {
+        //Variable assigning
         mapgen = new System.Random(m_seed);
-        //Set variables
         chunkSize = m_chunkSize;
         amplitude = m_amplitude;
         frequency = m_frequency;
@@ -47,9 +44,6 @@ public class ChunkGenerator : MonoBehaviour
         heightData = m_heights;
         meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = new Material(m_mat);
-        
-        maxHeight = float.MinValue;
-        minHeight = float.MaxValue;
 
         //Create new mesh
         mesh = new Mesh();
@@ -68,6 +62,7 @@ public class ChunkGenerator : MonoBehaviour
 
     void CreateMesh()
     {
+        //Functions for generating parts of a mesh
         Vertices();
         Triangles();
         Colours();
@@ -76,13 +71,13 @@ public class ChunkGenerator : MonoBehaviour
     //Generates vertices for a mesh
     void Vertices()
     {
+        //Seed generation from new seed generator
         int xSeed = mapgen.Next(-100000, 100000);
         int zSeed = mapgen.Next(-100000, 100000);
 
-        float lamplitude = amplitude;
+        frequency /= 1000.0f;
 
-        float lfrequency = frequency / 1000.0f;
-        //Generating vertices
+        //Create vertices array
         vertices = new Vector3[(chunkSize + 1) * (chunkSize + 1)];
 
         //For each vertex on z axis
@@ -92,19 +87,9 @@ public class ChunkGenerator : MonoBehaviour
             for (int x = 0; x <= chunkSize; x++)
             {
                 //Generation of noise 
-                float xSample = ((x + offset.x) * lfrequency) + xSeed;
-                float zSample = ((z + offset.y) * lfrequency) + zSeed;
-                float y = Mathf.PerlinNoise(xSample, zSample) * lamplitude;
-
-                //Set new max and min height.
-                if (y > maxHeight)
-                {
-                    maxHeight = y;
-                }
-                if (y < minHeight)
-                {
-                    minHeight = y;
-                }
+                float xSample = ((x + offset.x) * frequency) + xSeed;
+                float zSample = ((z + offset.y) * frequency) + zSeed;
+                float y = Mathf.PerlinNoise(xSample, zSample) * amplitude;
 
                 //Set vertex position
                 vertices[i] = new Vector3(x, y, z);
@@ -148,23 +133,12 @@ public class ChunkGenerator : MonoBehaviour
         //For each vertex
         for (int i = 0; i < colours.Length; i++)
         {
-            //Use global height values
-            float currentHeight = vertices[i].y;
-
-            //Better method, but needs to be global normalisation instead of local, 
-            //global could be retrieved by generating max possible values at current gen settings and storing it in manager
-            //to be retrieved here and used in this normalisation
-
-            // TODO: Make global normalisation instead of local
-            //currentHeight = Mathf.InverseLerp(minHeight, maxHeight, vertices[i].y);
-            
             //For each height
             for (int j = 0; j < heightData.Length; j++)
             {
                 //If the normalised height is less than the height data region's height
-                if (currentHeight >= heightData[j].height)
+                if (vertices[i].y >= heightData[j].height)
                 {
-                    //print("I: " + i + ", " + heightData[j].layerName);
                     //Set the colour to the height data region's colour
                     colours[i] = heightData[j].colour;
                 }
@@ -177,9 +151,9 @@ public class ChunkGenerator : MonoBehaviour
         }
     }
 
+    //Updates mesh data
     void UpdateMesh()
     {
-        //Refreshes mesh data
         mesh.Clear();
         mesh.vertices = vertices;
         mesh.triangles = triangles;

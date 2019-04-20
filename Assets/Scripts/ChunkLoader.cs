@@ -52,7 +52,7 @@ public class ChunkLoader : MonoBehaviour
 
         }
 
-        //Runs the unloading coroutine
+        //Run unloading coroutine
         for (int i = 0; i < mg.transform.childCount; i++)
         {
             if (currentUnloadCoroutine != null)
