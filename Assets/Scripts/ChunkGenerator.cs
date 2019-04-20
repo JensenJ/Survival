@@ -16,15 +16,12 @@ public class ChunkGenerator : MonoBehaviour
     Vector3[] vertices;
     int[] triangles;
     Color[] colours;
-
-    MapGenerator mg;
+    bool[] edgeData;
 
     //Settings for chunk generation
     int chunkSize = 16;
     float amplitude = 10.0f;
     float frequency = 1.0f;
-    float layerHeight = 1.0f;
-    bool isTerrainSmooth = false;
 
     [SerializeField] Vector2 offset;
     [SerializeField] float maxHeight = float.MinValue;
@@ -37,22 +34,19 @@ public class ChunkGenerator : MonoBehaviour
     // TODO: [R-2] Make use of coroutines for better performance on chunk load
 
     //Draw new map with seed
-    public void DrawChunk(int m_chunkSize, float m_amplitude, float m_frequency, float m_layerHeight, int m_seed, 
-        Vector2 m_offset, bool m_bIsTerrainSmooth, Material m_mat, int m_loaderID, HeightData[] m_heights)
+    public void DrawChunk(int m_chunkSize, float m_amplitude, float m_frequency, int m_seed, 
+        Vector2 m_offset, Material m_mat, int m_loaderID, HeightData[] m_heights)
     {
         mapgen = new System.Random(m_seed);
         //Set variables
         chunkSize = m_chunkSize;
         amplitude = m_amplitude;
         frequency = m_frequency;
-        layerHeight = m_layerHeight;
         offset = m_offset;
-        isTerrainSmooth = m_bIsTerrainSmooth;
         LoadedBy = m_loaderID;
         heightData = m_heights;
         meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = new Material(m_mat);
-        mg = transform.GetComponentInParent<MapGenerator>();
         
         maxHeight = float.MinValue;
         minHeight = float.MaxValue;
@@ -72,7 +66,6 @@ public class ChunkGenerator : MonoBehaviour
         meshCollider.sharedMesh = mesh;
     }
 
-
     void CreateMesh()
     {
         Vertices();
@@ -88,10 +81,6 @@ public class ChunkGenerator : MonoBehaviour
 
         float lamplitude = amplitude;
 
-        if(isTerrainSmooth == false)
-        {
-            lamplitude = amplitude / layerHeight;
-        }
         float lfrequency = frequency / 1000.0f;
         //Generating vertices
         vertices = new Vector3[(chunkSize + 1) * (chunkSize + 1)];
@@ -102,17 +91,10 @@ public class ChunkGenerator : MonoBehaviour
             //For each vertex on x axis
             for (int x = 0; x <= chunkSize; x++)
             {
-
                 //Generation of noise 
                 float xSample = ((x + offset.x) * lfrequency) + xSeed;
                 float zSample = ((z + offset.y) * lfrequency) + zSeed;
                 float y = Mathf.PerlinNoise(xSample, zSample) * lamplitude;
-
-                //Round vertices to nearest integer if terrain is not smooth.
-                if (isTerrainSmooth == false)
-                {
-                    y = Mathf.Round(y) * layerHeight;
-                }
 
                 //Set new max and min height.
                 if (y > maxHeight)
