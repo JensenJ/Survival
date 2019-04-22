@@ -2865,7 +2865,7 @@ MonoBehaviour:
   daysInMonth: 30
   monthsInYear: 12
   currentTimeOfDay: 0
-  Clockwork: 600
+  Clockwork: 420
   seasonEnum: 0
   tempMultiplier: 1
   bIsTempFahrenheit: 0
@@ -7965,6 +7965,7 @@ MonoBehaviour:
   frequency: 5
   seed: 0
   isRandomGeneration: 1
+  offset: {x: 0, y: 0}
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
   heights:
   - layerName: Water 1
