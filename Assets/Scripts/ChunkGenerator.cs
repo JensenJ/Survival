@@ -151,11 +151,6 @@ public class ChunkGenerator : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        UpdateMesh();
-    }
-
     //Updates mesh data
     void UpdateMesh()
     {

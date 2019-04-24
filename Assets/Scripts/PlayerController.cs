@@ -10,7 +10,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Attributes))]
 public class PlayerController : MonoBehaviour
 {
-
     [Header("Movement Settings:")]
     public bool bCanMove = true;
     [SerializeField] [Range(0, 10)] private float speed = 5.0f;
@@ -26,7 +25,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("Debug:")]
     public Image Crosshair = null;
+    GameObject pausePanel = null;
     bool bHasSpawned = false;
+    bool isInMenu = false;
 
     // Setup
     void Start()
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
         attributes = GetComponent<Attributes>();
         waypointManager = transform.root.GetChild(2).GetComponent<WaypointManager>();
         Crosshair = transform.root.GetChild(1).GetChild(3).GetComponent<Image>();
+        pausePanel = transform.root.GetChild(1).GetChild(5).gameObject;
         Cursor.lockState = CursorLockMode.Locked;
         Crosshair.gameObject.SetActive(true);
     }
@@ -65,6 +67,7 @@ public class PlayerController : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
                 Crosshair.gameObject.SetActive(true);
                 bCanMove = true;
+                isInMenu = false;
             }
             else
             {
@@ -72,12 +75,44 @@ public class PlayerController : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
                 Crosshair.gameObject.SetActive(false);
                 bCanMove = false;
+                isInMenu = true;
+            }
+        }
+
+        //Escape closes current windows
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isInMenu)
+            {
+                CloseMenus();   
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Crosshair.gameObject.SetActive(false);
+                bCanMove = false;
+                pausePanel.SetActive(true);
+                print("test");
+                isInMenu = true;
             }
         }
         //Movement
         Move();
         Rotate();
         Jump();
+    }
+
+    public void CloseMenus()
+    {
+        //Menus to close
+        waypointManager.waypointManagerPanel.SetActive(false);
+        waypointManager.waypointEditorPanel.SetActive(false);
+        pausePanel.SetActive(false);
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Crosshair.gameObject.SetActive(true);
+        bCanMove = true;
+        isInMenu = false;
     }
 
     //Movement
