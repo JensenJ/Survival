@@ -12,10 +12,10 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] [Range(0.1f, 20)] float frequency = 1.0f;
     [SerializeField] [Range(-100000, 100000)] public int seed = 0;
     [SerializeField] bool isRandomGeneration = false;
+    [SerializeField] public Vector2 offset;
     [SerializeField] Material material = null;
 
     [SerializeField] public HeightData[] heights;
-    
     //Function for creating the chunk objects and drawing the map
     public void GenerateMap(int m_seed)
     {
@@ -42,7 +42,7 @@ public class MapGenerator : MonoBehaviour
         terrain.transform.SetParent(transform);
         terrain.transform.position = new Vector3(x * chunkSize, 0, z * chunkSize);
         ChunkGenerator cg = terrain.AddComponent<ChunkGenerator>();
-        cg.DrawChunk(chunkSize, amplitude, frequency, seed, new Vector2(chunkSize * x, chunkSize * z), material, loaderID, heights);
+        cg.DrawChunk(chunkSize, amplitude, frequency, seed, new Vector2((chunkSize * x) + offset.x, (chunkSize * z) + offset.y), material, loaderID, heights);
         return terrain;
     }
 
