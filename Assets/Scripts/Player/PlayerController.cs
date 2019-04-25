@@ -79,6 +79,22 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        //Save and Load test code
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            SaveSystem.SavePlayer(this, "1");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            PlayerData data = SaveSystem.LoadPlayer("1");
+            speed = data.speed;
+            sprintSpeed = data.sprintSpeed;
+            transform.position = new Vector3(data.position[0], data.position[1], data.position[2]);
+            transform.rotation = Quaternion.Euler(0, data.rotation[1], data.rotation[2]);
+            transform.GetChild(1).rotation = Quaternion.Euler(data.rotation[0], 0, 0);
+            jumpForce = data.jumpForce;
+        }
+
         //Escape closes current windows
         if (Input.GetKeyDown(KeyCode.Escape))
         {

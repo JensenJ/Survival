@@ -20,7 +20,7 @@ public class PlayerData
         position[2] = player.transform.position.z;
 
         rotation = new float[3];
-        rotation[0] = player.transform.rotation.eulerAngles.x;
+        rotation[0] = player.transform.GetChild(1).rotation.eulerAngles.x;
         rotation[1] = player.transform.rotation.eulerAngles.y;
         rotation[2] = player.transform.rotation.eulerAngles.z;
 
