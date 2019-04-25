@@ -116,7 +116,6 @@ public class WaypointManager : MonoBehaviour
     public void Rearrange(bool m_bIsDown, int m_WaypointID)
     {
         //Get index at waypoint id
-        int index = transform.GetChild(m_WaypointID).GetSiblingIndex();
         WaypointUI waypoint = FindWaypointByIndex(m_WaypointID);
         //Null pointer exception check
         if (waypoint != null)

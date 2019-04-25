@@ -1369,6 +1369,7 @@ GameObject:
   - component: {fileID: 693049471}
   - component: {fileID: 693049472}
   - component: {fileID: 693049473}
+  - component: {fileID: 693049474}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -1444,6 +1445,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2ec3c1740ac8d94e8bc5a09938ea019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &693049474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693049469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 184a3995b3c8ddf4282102aa425b67a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WorldMenuWidgetPrefab: {fileID: 1868607589844435278, guid: fdf9f7c4645182842a53ac87ac227842,
+    type: 3}
 --- !u!1 &744687253
 GameObject:
   m_ObjectHideFlags: 0
@@ -1481,7 +1496,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0000019073486}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: -80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &744687255
@@ -2813,7 +2828,7 @@ GameObject:
   - component: {fileID: 2102429005}
   - component: {fileID: 2102429004}
   m_Layer: 0
-  m_Name: Button
+  m_Name: Create World Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2881,7 +2896,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2102429005}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 693049474}
+        m_MethodName: NewWorld
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &2102429005
