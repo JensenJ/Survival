@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private WaypointManager waypointManager = null;
     private bool bCanUseWaypointManager = true;
     private PlayerMotor motor;
+    MapGenerator mapgen;
 
     [Header("Debug:")]
     public Image Crosshair = null;
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
         motor = GetComponent<PlayerMotor>();
         attributes = GetComponent<Attributes>();
         waypointManager = transform.root.GetChild(2).GetComponent<WaypointManager>();
+        mapgen = transform.root.GetChild(4).GetComponent<MapGenerator>();
         Crosshair = transform.root.GetChild(1).GetChild(3).GetComponent<Image>();
         pausePanel = transform.root.GetChild(1).GetChild(5).gameObject;
         Cursor.lockState = CursorLockMode.Locked;
@@ -82,10 +84,17 @@ public class PlayerController : MonoBehaviour
         //Save and Load test code
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
+            SaveSystem.SaveMap(mapgen, "1");
             SaveSystem.SavePlayer(this, "1");
         }
+
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
+            MapData mapdata = SaveSystem.LoadMap("1");
+            mapgen.amplitude = mapdata.amplitude;
+            mapgen.frequency = mapdata.frequency;
+            //mapgen.GenerateMap(mapdata.seed, false);
+
             PlayerData data = SaveSystem.LoadPlayer("1");
             speed = data.speed;
             sprintSpeed = data.sprintSpeed;

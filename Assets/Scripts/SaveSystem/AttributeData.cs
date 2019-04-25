@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿// Copyright (c) 2019 JensenJ
+// NAME: AttributeData
+// PURPOSE: Holds data for attributes for saving and loading
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
