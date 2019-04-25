@@ -12,10 +12,10 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movement Settings:")]
     public bool bCanMove = true;
-    [SerializeField] [Range(0, 10)] private float speed = 5.0f;
-    [SerializeField] [Range(0, 15)] private float sprintSpeed = 7.0f;
-    [SerializeField] [Range(0, 5)] private float sensitivity = 3.0f;
-    [SerializeField] [Range(0, 4)] private float jumpForce = 2.0f;
+    [SerializeField] [Range(0, 10)] public float speed = 5.0f;
+    [SerializeField] [Range(0, 15)] public float sprintSpeed = 7.0f;
+    [SerializeField] [Range(0, 5)] public float sensitivity = 3.0f;
+    [SerializeField] [Range(0, 4)] public float jumpForce = 2.0f;
 
     //References
     private Attributes attributes = null;

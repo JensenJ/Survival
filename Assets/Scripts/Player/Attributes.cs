@@ -9,9 +9,9 @@ public class Attributes : MonoBehaviour
 {
     //Health
     [Header("Health:")]
-    [SerializeField] [Range(1, 1000)] private float maxHealthMeter = 100.0f;
-    [SerializeField] [Range(0.01f, 3)] private float healthMeterDrainSpeed = 1.0f;
-    [SerializeField] [Range(0.01f, 3)] private float healthMeterRegenSpeed = 0.5f;
+    [SerializeField] [Range(1, 1000)] public float maxHealthMeter = 100.0f;
+    [SerializeField] [Range(0.01f, 3)] public float healthMeterDrainSpeed = 1.0f;
+    [SerializeField] [Range(0.01f, 3)] public float healthMeterRegenSpeed = 0.5f;
     [SerializeField] [Range(0, 1)] private float healthPercentage = 1.0f;
     [SerializeField] public bool bIsStaticHealth = false;
     [SerializeField] public bool bIsDead = false;
@@ -21,9 +21,9 @@ public class Attributes : MonoBehaviour
 
     //Stamina
     [Header("Stamina:")]
-    [SerializeField] [Range(1, 1000)] private float maxStaminaMeter = 100.0f;
-    [SerializeField] [Range(0.01f, 20)] private float staminaMeterDrainSpeed = 10.0f;
-    [SerializeField] [Range(0.01f, 10)] private float staminaMeterRegenSpeed = 3.0f;
+    [SerializeField] [Range(1, 1000)] public float maxStaminaMeter = 100.0f;
+    [SerializeField] [Range(0.01f, 20)] public float staminaMeterDrainSpeed = 10.0f;
+    [SerializeField] [Range(0.01f, 10)] public float staminaMeterRegenSpeed = 3.0f;
     [SerializeField] [Range(0, 1)] private float staminaPercentage = 1.0f;
     [SerializeField] public bool bIsStaticStamina = false;
     [SerializeField] public bool bIsExhausted = false;
@@ -33,9 +33,9 @@ public class Attributes : MonoBehaviour
 
     //Hunger
     [Header("Hunger:")]
-    [SerializeField] [Range(1, 1000)] private float maxHungerMeter = 100.0f;
-    [SerializeField] [Range(0.01f, 3)] private float hungerMeterDrainSpeed = 0.125f;
-    [SerializeField] [Range(0.01f, 20)] private float hungerMeterRegenSpeed = 10.0f;
+    [SerializeField] [Range(1, 1000)] public float maxHungerMeter = 100.0f;
+    [SerializeField] [Range(0.01f, 3)] public float hungerMeterDrainSpeed = 0.125f;
+    [SerializeField] [Range(0.01f, 20)] public float hungerMeterRegenSpeed = 10.0f;
     [SerializeField] [Range(0, 1)] private float hungerPercentage = 1.0f;
     [SerializeField] public bool bIsStaticHunger = false;
     [SerializeField] public bool bIsStarving = false;
@@ -45,9 +45,9 @@ public class Attributes : MonoBehaviour
 
     //Thirst
     [Header("Thirst:")]
-    [SerializeField] [Range(1, 1000)] private float maxThirstMeter = 100.0f;
-    [SerializeField] [Range(0.01f, 3)] private float thirstMeterDrainSpeed = 0.25f;
-    [SerializeField] [Range(0.01f, 20)] private float thirstMeterRegenSpeed = 10.0f;
+    [SerializeField] [Range(1, 1000)] public float maxThirstMeter = 100.0f;
+    [SerializeField] [Range(0.01f, 3)] public float thirstMeterDrainSpeed = 0.25f;
+    [SerializeField] [Range(0.01f, 20)] public float thirstMeterRegenSpeed = 10.0f;
     [SerializeField] [Range(0, 1)] private float thirstPercentage = 1.0f;
     [SerializeField] public bool bIsStaticThirst = false;
     [SerializeField] public bool bIsDehydrated = false;
