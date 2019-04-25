@@ -11,7 +11,8 @@ public static class SaveSystem
     public static void SavePlayer(PlayerController player, string worldName)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/player.SGSAVE";
+        Directory.CreateDirectory(Application.dataPath + "/Saves/" + worldName);
+        string path = Application.dataPath + "/Saves/" + worldName + "/Player.SGSAVE";
         FileStream stream = new FileStream(path, FileMode.Create);
 
         PlayerData data = new PlayerData(player);
@@ -21,7 +22,7 @@ public static class SaveSystem
 
     public static PlayerData LoadPlayer(string worldName)
     {
-        string path = Application.persistentDataPath + "/player.SGSAVE";
+        string path = Application.dataPath + "/Saves/" + worldName + "/Player.SGSAVE";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -41,7 +42,8 @@ public static class SaveSystem
     public static void SaveMap(MapGenerator mapgen, string worldName)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/map.SGSAVE";
+        Directory.CreateDirectory(Application.dataPath + "/Saves/" + worldName);
+        string path = Application.dataPath + "/Saves/" + worldName + "/Map.SGSAVE";
         FileStream stream = new FileStream(path, FileMode.Create);
 
         MapData data = new MapData(mapgen);
@@ -51,7 +53,7 @@ public static class SaveSystem
 
     public static MapData LoadMap(string worldName)
     {
-        string path = Application.persistentDataPath + "/map.SGSAVE";
+        string path = Application.dataPath + "/Saves/" + worldName + "/Map.SGSAVE";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

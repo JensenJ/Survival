@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class WorldMenuUI : MonoBehaviour
 {
-    WorldManager wm;
+    MenuManager mm;
 
     void Start()
     { 
-        wm = transform.root.GetChild(5).GetComponent<WorldManager>();
+        mm = transform.root.GetChild(5).GetComponent<MenuManager>();
 
         //Listeners for buttons.
         Button playBtn = transform.GetChild(2).GetComponent<Button>();
@@ -27,6 +27,6 @@ public class WorldMenuUI : MonoBehaviour
 
     void PlayButtonPressed()
     {
-        
+        mm.Singleplayer(gameObject.name);
     }
 }

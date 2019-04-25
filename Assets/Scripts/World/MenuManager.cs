@@ -3,8 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
-    public void Singleplayer()
+    public void Singleplayer(string worldName)
     {
+        WorldData.currentlyLoadedName = worldName;
         SceneManager.LoadScene("Game");
     }
     public void Multiplayer()

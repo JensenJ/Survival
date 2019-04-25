@@ -44,6 +44,28 @@ public class PlayerController : MonoBehaviour
         Crosshair.gameObject.SetActive(true);
     }
 
+    void SaveGame()
+    {
+        SaveSystem.SaveMap(mapgen, WorldData.currentlyLoadedName);
+        SaveSystem.SavePlayer(this, WorldData.currentlyLoadedName);
+    }
+
+    void LoadGame()
+    {
+        MapData mapdata = SaveSystem.LoadMap(WorldData.currentlyLoadedName);
+        mapgen.amplitude = mapdata.amplitude;
+        mapgen.frequency = mapdata.frequency;
+        //mapgen.GenerateMap(mapdata.seed, false);
+
+        PlayerData data = SaveSystem.LoadPlayer(WorldData.currentlyLoadedName);
+        speed = data.speed;
+        sprintSpeed = data.sprintSpeed;
+        transform.position = new Vector3(data.position[0], data.position[1], data.position[2]);
+        transform.rotation = Quaternion.Euler(0, data.rotation[1], data.rotation[2]);
+        transform.GetChild(1).rotation = Quaternion.Euler(data.rotation[0], 0, 0);
+        jumpForce = data.jumpForce;
+    }
+
     // Update every frame
     void Update()
     {
@@ -55,6 +77,7 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(transform.position, -Vector3.up, out hit, Mathf.Infinity))
             {
                 transform.position = new Vector3(transform.position.x, hit.point.y + 2, transform.position.z);
+                SaveGame();
                 bHasSpawned = true;
             }
         }
@@ -80,28 +103,15 @@ public class PlayerController : MonoBehaviour
                 isInMenu = true;
             }
         }
-
         //Save and Load test code
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SaveSystem.SaveMap(mapgen, "1");
-            SaveSystem.SavePlayer(this, "1");
+            SaveGame();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            MapData mapdata = SaveSystem.LoadMap("1");
-            mapgen.amplitude = mapdata.amplitude;
-            mapgen.frequency = mapdata.frequency;
-            //mapgen.GenerateMap(mapdata.seed, false);
-
-            PlayerData data = SaveSystem.LoadPlayer("1");
-            speed = data.speed;
-            sprintSpeed = data.sprintSpeed;
-            transform.position = new Vector3(data.position[0], data.position[1], data.position[2]);
-            transform.rotation = Quaternion.Euler(0, data.rotation[1], data.rotation[2]);
-            transform.GetChild(1).rotation = Quaternion.Euler(data.rotation[0], 0, 0);
-            jumpForce = data.jumpForce;
+            LoadGame();
         }
 
         //Escape closes current windows
@@ -117,7 +127,6 @@ public class PlayerController : MonoBehaviour
                 Crosshair.gameObject.SetActive(false);
                 bCanMove = false;
                 pausePanel.SetActive(true);
-                print("test");
                 isInMenu = true;
             }
         }

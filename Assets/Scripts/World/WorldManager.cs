@@ -6,7 +6,6 @@ using TMPro;
 
 public class WorldManager : MonoBehaviour
 {
-    int currentWorldCounter = 0;
     GameObject saveSelectionContent = null;
     [SerializeField] private GameObject WorldMenuWidgetPrefab = null;
 
@@ -19,7 +18,8 @@ public class WorldManager : MonoBehaviour
     public void NewWorld()
     {
         GameObject widget = Instantiate(WorldMenuWidgetPrefab, transform.position, Quaternion.identity, saveSelectionContent.transform);
-        string name = "World " + UnityEngine.Random.Range(0, 1000).ToString();
+        // TODO: Warn user if name chosen could overwite an existing world.
+        string name = "World " + UnityEngine.Random.Range(0, 1).ToString();
         widget.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = name;
         widget.gameObject.name = name;
         SortWorlds();
