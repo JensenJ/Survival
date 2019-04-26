@@ -30,6 +30,6 @@ public class PlayerData
 
         speed = player.speed;
         sprintSpeed = player.sprintSpeed;
-        
+        jumpForce = player.jumpForce;
     }
 }

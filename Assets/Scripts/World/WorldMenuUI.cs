@@ -6,10 +6,12 @@ using UnityEngine.UI;
 public class WorldMenuUI : MonoBehaviour
 {
     MenuManager mm;
+    WorldManager wm;
 
     void Start()
     { 
         mm = transform.root.GetChild(5).GetComponent<MenuManager>();
+        wm = transform.root.GetChild(5).GetComponent<WorldManager>();
 
         //Listeners for buttons.
         Button playBtn = transform.GetChild(2).GetComponent<Button>();
@@ -23,10 +25,12 @@ public class WorldMenuUI : MonoBehaviour
     void DeleteButtonPressed()
     {
         Destroy(gameObject);
+        wm.SaveWorlds();
     }
 
     void PlayButtonPressed()
     {
+        wm.SaveWorlds();
         mm.Singleplayer(gameObject.name);
     }
 }

@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private bool bCanUseWaypointManager = true;
     private PlayerMotor motor;
     MapGenerator mapgen;
+    MenuManager mm;
 
     [Header("Debug:")]
     public Image Crosshair = null;
@@ -39,31 +40,51 @@ public class PlayerController : MonoBehaviour
         waypointManager = transform.root.GetChild(2).GetComponent<WaypointManager>();
         mapgen = transform.root.GetChild(4).GetComponent<MapGenerator>();
         Crosshair = transform.root.GetChild(1).GetChild(3).GetComponent<Image>();
+        mm = transform.root.GetChild(5).GetComponent<MenuManager>();
         pausePanel = transform.root.GetChild(1).GetChild(5).gameObject;
         Cursor.lockState = CursorLockMode.Locked;
         Crosshair.gameObject.SetActive(true);
+
+        if(WorldData.isNewMap == true)
+        {
+            mapgen.GenerateMap(mapgen.seed);
+        }
+        else
+        {
+            LoadGame();
+        }
+
+        SaveGame();
     }
 
-    void SaveGame()
+    public void SaveGame()
     {
         SaveSystem.SaveMap(mapgen, WorldData.currentlyLoadedName);
         SaveSystem.SavePlayer(this, WorldData.currentlyLoadedName);
     }
 
-    void LoadGame()
+    public void Exit()
     {
+        SaveGame();
+        mm.MainMenu();
+    }
+
+    public void LoadGame()
+    {
+        
         MapData mapdata = SaveSystem.LoadMap(WorldData.currentlyLoadedName);
         mapgen.amplitude = mapdata.amplitude;
         mapgen.frequency = mapdata.frequency;
-        //mapgen.GenerateMap(mapdata.seed, false);
+        mapgen.GenerateMap(mapdata.seed);
 
         PlayerData data = SaveSystem.LoadPlayer(WorldData.currentlyLoadedName);
         speed = data.speed;
         sprintSpeed = data.sprintSpeed;
-        transform.position = new Vector3(data.position[0], data.position[1], data.position[2]);
-        transform.rotation = Quaternion.Euler(0, data.rotation[1], data.rotation[2]);
-        transform.GetChild(1).rotation = Quaternion.Euler(data.rotation[0], 0, 0);
         jumpForce = data.jumpForce;
+        //These cause problems
+        //transform.position = new Vector3(data.position[0], data.position[1], data.position[2]);
+        //transform.rotation = Quaternion.Euler(0, data.rotation[1], data.rotation[2]);
+        //transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 0);
     }
 
     // Update every frame

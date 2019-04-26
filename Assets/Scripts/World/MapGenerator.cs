@@ -11,18 +11,16 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] [Range(1, 20)] public float amplitude = 10.0f;
     [SerializeField] [Range(0.1f, 20)] public float frequency = 1.0f;
     [SerializeField] [Range(-100000, 100000)] public int seed = 0;
-    [SerializeField] bool isRandomGen = true;
     [SerializeField] public Vector2 offset;
     [SerializeField] Material material = null;
     [SerializeField] public HeightData[] heights;
     //Function for creating the chunk objects and drawing the map
-    public void GenerateMap(int m_seed, bool randomGen)
+    public void GenerateMap(int m_seed)
     {
         //Sets seed
         seed = m_seed;
-        isRandomGen = randomGen;
 
-        if(isRandomGen == true)
+        if(WorldData.isNewMap == true)
         {
             amplitude = Random.Range(10.0f, 15.0f);
             frequency = Random.Range(8.0f, 13.0f);
@@ -30,14 +28,8 @@ public class MapGenerator : MonoBehaviour
         }
         //loader ID of 0 means this will never be unloaded
         CreateNewChunk(0, 0, 0);
-
-    }
-
-    void Start()
-    {
-        GenerateMap(seed, isRandomGen);
-    }
-
+    } 
+    
     public GameObject CreateNewChunk(int x, int z, int loaderID)
     {
         //Create new terrain object, set name and parent to this. 

@@ -5,4 +5,5 @@ using UnityEngine;
 public static class WorldData
 {
     public static string currentlyLoadedName;
+    public static bool isNewMap;
 }
