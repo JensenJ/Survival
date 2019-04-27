@@ -6,12 +6,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class AttributeData
 {
     //Attribute data
     public float[] maxValues;
     public float[] drainSpeeds;
     public float[] regenSpeeds;
+    public float[] currentValues;
     public bool[] canRegen;
 
     public AttributeData(Attributes attributes)
@@ -37,11 +39,18 @@ public class AttributeData
         regenSpeeds[2] = attributes.thirstMeterRegenSpeed;
         regenSpeeds[3] = attributes.hungerMeterRegenSpeed;
 
+        currentValues = new float[4];
+        currentValues[0] = attributes.GetHealthLevel();
+        currentValues[1] = attributes.GetStaminaLevel();
+        currentValues[2] = attributes.GetThirstLevel();
+        currentValues[3] = attributes.GetHungerLevel();
+
         //Whether regeneration can happen for the attributes
         canRegen = new bool[4];
         canRegen[0] = attributes.bCanRegenHealth;
         canRegen[1] = attributes.bCanRegenStamina;
         canRegen[2] = attributes.bCanRegenThirst;
         canRegen[3] = attributes.bCanRegenHunger;
+
     }
 }

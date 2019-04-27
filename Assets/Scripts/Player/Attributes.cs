@@ -65,10 +65,13 @@ public class Attributes : MonoBehaviour
         hungerBar = panelTransform.GetChild(3).GetChild(0).GetChild(0).GetComponent<Image>();
 
         //Set initial health meter values
-        healthMeter = maxHealthMeter;
-        staminaMeter = maxStaminaMeter;
-        hungerMeter = maxHungerMeter;
-        thirstMeter = maxThirstMeter;
+        if (WorldData.isNewMap)
+        {
+            healthMeter = maxHealthMeter;
+            staminaMeter = maxStaminaMeter;
+            hungerMeter = maxHungerMeter;
+            thirstMeter = maxThirstMeter;
+        }
 
         thirstMeterDrainSpeed /= 10;
         hungerMeterDrainSpeed /= 10;

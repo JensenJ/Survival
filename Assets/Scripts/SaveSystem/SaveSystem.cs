@@ -34,7 +34,38 @@ public static class SaveSystem
         }
         else
         {
-            Debug.LogError("Path does not exist" + path);
+            Debug.LogError("Path does not exist: " + path);
+            return null;
+        }
+    }
+
+    public static void SaveAttributes(Attributes attributes, string worldName)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        Directory.CreateDirectory(Application.dataPath + "/Saves/" + worldName);
+        string path = Application.dataPath + "/Saves/" + worldName + "/PlayerAttributes.SGSAVE";
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        AttributeData data = new AttributeData(attributes);
+        formatter.Serialize(stream, data);
+        stream.Close();
+    }
+
+    public static AttributeData LoadAttributes(string worldName)
+    {
+        string path = Application.dataPath + "/Saves/" + worldName + "/PlayerAttributes.SGSAVE";
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            AttributeData data = formatter.Deserialize(stream) as AttributeData;
+            stream.Close();
+            return data;
+        }
+        else
+        {
+            Debug.LogError("Path does not exist: " + path);
             return null;
         }
     }
@@ -65,7 +96,7 @@ public static class SaveSystem
         }
         else
         {
-            Debug.LogError("Path does not exist" + path);
+            Debug.LogError("Path does not exist: " + path);
             return null;
         }
     }
@@ -96,7 +127,7 @@ public static class SaveSystem
         }
         else
         {
-            Debug.LogError("Path does not exist" + path);
+            Debug.LogError("Path does not exist: " + path);
             return null;
         }
     }

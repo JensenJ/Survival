@@ -4,12 +4,12 @@ using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
 {
     WorldManager wm;
-    PlayerController pc;
+    SaveManager sm;
 
     void Start()
     {
         wm = GetComponent<WorldManager>();
-        pc = transform.root.GetChild(3).GetComponent<PlayerController>();
+        sm = GetComponent<SaveManager>();
     }
 
     public void Singleplayer(string worldName)
@@ -32,9 +32,9 @@ public class MenuManager : MonoBehaviour
 
     public void MainMenu()
     {
-        if(pc != null)
+        if(sm != null)
         {
-            pc.SaveGame();
+            sm.SaveGame();
         }
         SceneManager.LoadScene("MainMenu");
     }
@@ -51,9 +51,9 @@ public class MenuManager : MonoBehaviour
             wm.SaveWorlds();
         }
 
-        if(pc != null)
+        if(sm != null)
         {
-            pc.SaveGame();
+            sm.SaveGame();
         }
     }
 }
