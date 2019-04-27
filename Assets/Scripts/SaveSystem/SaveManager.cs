@@ -23,7 +23,8 @@ public class SaveManager : MonoBehaviour
     {
         SaveSystem.SaveMap(mg, WorldData.currentlyLoadedName);
         SaveSystem.SavePlayer(pc, WorldData.currentlyLoadedName);
-        SaveSystem.SaveAttributes(pa, WorldData.currentlyLoadedName); 
+        SaveSystem.SaveAttributes(pa, WorldData.currentlyLoadedName);
+        SaveSystem.SaveLoadedChunks(pcl, WorldData.currentlyLoadedName);
     }
 
     public void Exit()
@@ -75,5 +76,10 @@ public class SaveManager : MonoBehaviour
         pa.ChangeStaminaLevel(attributeData.currentValues[1], false);
         pa.ChangeThirstLevel(attributeData.currentValues[2], false);
         pa.ChangeHungerLevel(attributeData.currentValues[3], false);
+
+        //Currently loaded chunks
+        ChunkData chunkData = SaveSystem.LoadLoadedChunks(WorldData.currentlyLoadedName);
+        pcl.chunknames = chunkData.loadedChunks;
+        pcl.LoadMap();
     }
 }

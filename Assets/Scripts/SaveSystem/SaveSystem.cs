@@ -101,6 +101,37 @@ public static class SaveSystem
         }
     }
 
+    public static void SaveLoadedChunks(ChunkLoader loader, string worldName)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        Directory.CreateDirectory(Application.dataPath + "/Saves/" + worldName);
+        string path = Application.dataPath + "/Saves/" + worldName + "/Chunks.SGSAVE";
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        ChunkData data = new ChunkData(loader);
+        formatter.Serialize(stream, data);
+        stream.Close();
+    }
+
+    public static ChunkData LoadLoadedChunks(string worldName)
+    {
+        string path = Application.dataPath + "/Saves/" + worldName + "/Chunks.SGSAVE";
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            ChunkData data = formatter.Deserialize(stream) as ChunkData;
+            stream.Close();
+            return data;
+        }
+        else
+        {
+            Debug.LogError("Path does not exist: " + path);
+            return null;
+        }
+    }
+
     public static void SaveSaves(WorldManager worldman)
     {
         BinaryFormatter formatter = new BinaryFormatter();
