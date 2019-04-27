@@ -39,6 +39,7 @@ public class AttributeData
         regenSpeeds[2] = attributes.thirstMeterRegenSpeed;
         regenSpeeds[3] = attributes.hungerMeterRegenSpeed;
 
+        //Current values for attributes
         currentValues = new float[4];
         currentValues[0] = attributes.GetHealthLevel();
         currentValues[1] = attributes.GetStaminaLevel();

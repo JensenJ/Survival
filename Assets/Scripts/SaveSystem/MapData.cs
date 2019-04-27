@@ -7,10 +7,12 @@ using UnityEngine;
 [System.Serializable]
 public class MapData
 {
+    //Map data
     public int seed;
     public float frequency;
     public float amplitude;
 
+    //Map data
     public MapData(MapGenerator mapgen)
     {
         amplitude = mapgen.amplitude;

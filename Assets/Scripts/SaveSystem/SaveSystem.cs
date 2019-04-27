@@ -6,8 +6,10 @@ using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+//Save System
 public static class SaveSystem
 {
+    //Saves player data
     public static void SavePlayer(PlayerController player, string worldName)
     {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -20,6 +22,7 @@ public static class SaveSystem
         stream.Close();
     }
 
+    //Loads player date
     public static PlayerData LoadPlayer(string worldName)
     {
         string path = Application.dataPath + "/Saves/" + worldName + "/Player.SGSAVE";
@@ -39,6 +42,7 @@ public static class SaveSystem
         }
     }
 
+    //Saves attributes
     public static void SaveAttributes(Attributes attributes, string worldName)
     {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -51,6 +55,7 @@ public static class SaveSystem
         stream.Close();
     }
 
+    //Loads attributes
     public static AttributeData LoadAttributes(string worldName)
     {
         string path = Application.dataPath + "/Saves/" + worldName + "/PlayerAttributes.SGSAVE";
@@ -70,6 +75,7 @@ public static class SaveSystem
         }
     }
 
+    //Saves map
     public static void SaveMap(MapGenerator mapgen, string worldName)
     {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -82,6 +88,7 @@ public static class SaveSystem
         stream.Close();
     }
 
+    //Loads map
     public static MapData LoadMap(string worldName)
     {
         string path = Application.dataPath + "/Saves/" + worldName + "/Map.SGSAVE";
@@ -101,6 +108,7 @@ public static class SaveSystem
         }
     }
 
+    //Save loaded chunks
     public static void SaveLoadedChunks(ChunkLoader loader, string worldName)
     {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -113,6 +121,7 @@ public static class SaveSystem
         stream.Close();
     }
 
+    //Load loaded chunks
     public static ChunkData LoadLoadedChunks(string worldName)
     {
         string path = Application.dataPath + "/Saves/" + worldName + "/Chunks.SGSAVE";
@@ -132,6 +141,7 @@ public static class SaveSystem
         }
     }
 
+    //Save all save games
     public static void SaveSaves(WorldManager worldman)
     {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -144,6 +154,7 @@ public static class SaveSystem
         stream.Close();
     }
 
+    //Load all save games
     public static SaveData LoadSaves()
     {
         string path = Application.dataPath + "/Saves/SaveList.SGSAVE";

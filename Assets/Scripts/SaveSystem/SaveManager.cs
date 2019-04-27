@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class SaveManager : MonoBehaviour
 {
+    //Classes of things to save
     MenuManager mm;
     MapGenerator mg;
     PlayerController pc;
     ChunkLoader pcl;
     Attributes pa;
 
+    //Get references
     public void Start()
     {
         mm = transform.root.GetChild(5).GetComponent<MenuManager>();
@@ -19,6 +21,7 @@ public class SaveManager : MonoBehaviour
         pcl = transform.root.GetChild(3).GetComponent<ChunkLoader>();
     }
 
+    //Function for saving all data in game
     public void SaveGame()
     {
         SaveSystem.SaveMap(mg, WorldData.currentlyLoadedName);
@@ -27,12 +30,14 @@ public class SaveManager : MonoBehaviour
         SaveSystem.SaveLoadedChunks(pcl, WorldData.currentlyLoadedName);
     }
 
+    //Exits to main menu with saving
     public void Exit()
     {
         SaveGame();
         mm.MainMenu();
     }
 
+    //loads game data
     public void LoadGame()
     {
         //Map Data

@@ -47,22 +47,24 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Crosshair.gameObject.SetActive(true);
 
+        //Generate map if new game
         if(WorldData.isNewMap == true)
         {
             mapgen.GenerateMap(mapgen.seed);
         }
         else
         {
+            //Otherwise, load the game
             sm.LoadGame();
         }
 
+        //Save the game upon world generation
         sm.SaveGame();
     }
 
     // Update every frame
     void Update()
     {
-
         //Spawn player down on the ground
         if (bHasSpawned == false)
         {
@@ -95,16 +97,6 @@ public class PlayerController : MonoBehaviour
                 bCanMove = false;
                 isInMenu = true;
             }
-        }
-        //Save and Load test code
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            sm.SaveGame();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            sm.LoadGame();
         }
 
         //Escape closes current windows

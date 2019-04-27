@@ -7,6 +7,7 @@ public class SaveData
 {
     public string[] saveNames;
 
+    //World list
     public SaveData(WorldManager manager)
     {
         saveNames = new string[manager.worlds.Length];

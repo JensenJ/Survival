@@ -18,16 +18,19 @@ public class PlayerData
 
     public PlayerData(PlayerController player)
     {
+        //Position
         position = new float[3];
         position[0] = player.transform.position.x;
         position[1] = player.transform.position.y;
         position[2] = player.transform.position.z;
 
+        //Rotation
         rotation = new float[3];
         rotation[0] = player.transform.GetChild(1).rotation.eulerAngles.x;
         rotation[1] = player.transform.rotation.eulerAngles.y;
         rotation[2] = player.transform.rotation.eulerAngles.z;
 
+        //Other attributes
         speed = player.speed;
         sprintSpeed = player.sprintSpeed;
         jumpForce = player.jumpForce;

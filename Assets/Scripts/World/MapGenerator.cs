@@ -21,6 +21,7 @@ public class MapGenerator : MonoBehaviour
         //Sets seed
         seed = m_seed;
 
+        //If map is new, randomly generate values
         if (WorldData.isNewMap == true)
         {
             amplitude = Random.Range(10.0f, 15.0f);

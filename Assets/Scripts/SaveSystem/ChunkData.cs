@@ -9,6 +9,7 @@ public class ChunkData
 
     public ChunkData(ChunkLoader loader)
     {
+        //Currently loaded chunks
         loadedChunks = loader.chunknames;
     }
 
