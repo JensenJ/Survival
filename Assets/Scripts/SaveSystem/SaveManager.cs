@@ -1,5 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿// Copyright (c) 2019 JensenJ
+// NAME: SaveManager
+// PURPOSE: Manages the save system
+
 using UnityEngine;
 
 public class SaveManager : MonoBehaviour

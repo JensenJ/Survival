@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿// Copyright (c) 2019 JensenJ
+// NAME: WorldData
+// PURPOSE: Manages the world data.
 
 public static class WorldData
 {

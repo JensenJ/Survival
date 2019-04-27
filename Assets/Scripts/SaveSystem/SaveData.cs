@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿// Copyright (c) 2019 JensenJ
+// NAME: SaveData
+// PURPOSE: Manages the save data
 
 [System.Serializable]
 public class SaveData

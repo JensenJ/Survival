@@ -1,6 +1,6 @@
 ﻿// Copyright (c) 2019 JensenJ
 // NAME: SaveSystem
-// PURPOSE: Manages the save system
+// PURPOSE: Saves and Loads from files.
 
 using UnityEngine;
 using System.IO;

@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿// Copyright (c) 2019 JensenJ
+// NAME: WorldManager
+// PURPOSE: Manages the world data
+
+using System.Collections;
 using System;
 using UnityEngine;
 using TMPro;
@@ -14,6 +18,7 @@ public class WorldManager : MonoBehaviour
     {
         saveSelectionContent = transform.root.GetChild(1).GetChild(5).GetChild(1).GetChild(0).GetChild(0).gameObject;
 
+        //Loads world list
         SaveData loadData = SaveSystem.LoadSaves();
         if (loadData != null)
         {
@@ -26,8 +31,10 @@ public class WorldManager : MonoBehaviour
         }
     }
 
+    //Button reference
     public void NewWorld()
     {
+        //Create new widget and set settings
         GameObject widget = Instantiate(WorldMenuWidgetPrefab, transform.position, Quaternion.identity, saveSelectionContent.transform);
         // TODO: Warn user if name chosen could overwite an existing world.
         string name = "World " + UnityEngine.Random.Range(0, 10).ToString();
@@ -38,10 +45,12 @@ public class WorldManager : MonoBehaviour
 
     public void SaveWorlds()
     {
+        //Saves worlds
         SortWorlds();
         SaveSystem.SaveSaves(this);
     }
 
+    //Loads worlds and creates them
     public void LoadWorlds(string[] worldNames)
     {
         for (int i = 0; i < worldNames.Length; i++)

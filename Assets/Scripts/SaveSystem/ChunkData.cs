@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿// Copyright (c) 2019 JensenJ
+// NAME: ChunkData
+// PURPOSE: Holds chunk data, such as which are currently loaded
 
 [System.Serializable]
 public class ChunkData
