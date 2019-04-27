@@ -12,6 +12,7 @@ public class SaveManager : MonoBehaviour
     PlayerController pc;
     ChunkLoader pcl;
     Attributes pa;
+    WaypointManager wm;
 
     //Get references
     public void Start()
@@ -20,6 +21,7 @@ public class SaveManager : MonoBehaviour
         mg = transform.root.GetChild(4).GetComponent<MapGenerator>();
         pc = transform.root.GetChild(3).GetComponent<PlayerController>();
         pa = transform.root.GetChild(3).GetComponent<Attributes>();
+        wm = transform.root.GetChild(2).GetComponent<WaypointManager>();
         pcl = transform.root.GetChild(3).GetComponent<ChunkLoader>();
     }
 
@@ -30,6 +32,7 @@ public class SaveManager : MonoBehaviour
         SaveSystem.SavePlayer(pc, WorldData.currentlyLoadedName);
         SaveSystem.SaveAttributes(pa, WorldData.currentlyLoadedName);
         SaveSystem.SaveLoadedChunks(pcl, WorldData.currentlyLoadedName);
+        SaveSystem.SaveWaypoints(wm, WorldData.currentlyLoadedName);
     }
 
     //Exits to main menu with saving
@@ -88,5 +91,27 @@ public class SaveManager : MonoBehaviour
         ChunkData chunkData = SaveSystem.LoadLoadedChunks(WorldData.currentlyLoadedName);
         pcl.chunknames = chunkData.loadedChunks;
         pcl.LoadMap();
+
+        //Waypoint data
+        WaypointData waypointData = SaveSystem.LoadWaypoints(WorldData.currentlyLoadedName);
+        wm.waypoints = new Waypoint[waypointData.waypointIDs.Length];
+        for (int i = 0; i < wm.waypoints.Length; i++)
+        {
+            if (waypointData.waypointInUse[i] == true) // if waypoint is in use
+            {
+                string name = waypointData.waypointNames[i];
+                bool enabled = waypointData.waypointEnabled[i];
+
+                float r = waypointData.waypointColors[i, 0];
+                float g = waypointData.waypointColors[i, 1];
+                float b = waypointData.waypointColors[i, 2];
+
+                float x = waypointData.waypointLocations[i, 0];
+                float y = waypointData.waypointLocations[i, 1];
+                float z = waypointData.waypointLocations[i, 2];
+
+                wm.AddWaypoint(name, new Vector3(x, y, z), new Color(r, g, b), enabled);
+            }
+        }
     }
 }

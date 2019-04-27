@@ -75,6 +75,41 @@ public static class SaveSystem
         }
     }
 
+    //Saves waypoint data
+    public static void SaveWaypoints(WaypointManager manager, string worldName)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        Directory.CreateDirectory(Application.dataPath + "/Saves/" + worldName);
+        string path = Application.dataPath + "/Saves/" + worldName + "/Waypoints.SGSAVE";
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        WaypointData data = new WaypointData(manager);
+        formatter.Serialize(stream, data);
+        stream.Close();
+    }
+
+    //Loads waypoint data
+    public static WaypointData LoadWaypoints(string worldName)
+    {
+        string path = Application.dataPath + "/Saves/" + worldName + "/Waypoints.SGSAVE";
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            WaypointData data = formatter.Deserialize(stream) as WaypointData;
+            stream.Close();
+            return data;
+
+        }
+        else
+        {
+            Debug.LogError("Path does not exist: " + path);
+            return null;
+        }
+
+    }
+
     //Saves map
     public static void SaveMap(MapGenerator mapgen, string worldName)
     {
