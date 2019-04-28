@@ -24,8 +24,8 @@ public class MapGenerator : MonoBehaviour
         //If map is new, randomly generate values
         if (WorldData.isNewMap == true)
         {
-            amplitude = Random.Range(10.0f, 15.0f);
-            frequency = Random.Range(8.0f, 13.0f);
+            amplitude = 11;
+            frequency = 8.75f;
             seed = WorldData.currentSeed;
         }
         CreateNewChunk(0, 0, 0);
