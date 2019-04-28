@@ -14,6 +14,12 @@ public class WorldMenuUI : MonoBehaviour
         wm = transform.root.GetChild(5).GetComponent<WorldManager>();
 
         //Listeners for buttons.
+        Button dupBtn = transform.GetChild(4).GetComponent<Button>();
+        dupBtn.onClick.AddListener(DuplicateButtonPressed);
+
+        Button renameBtn = transform.GetChild(3).GetComponent<Button>();
+        renameBtn.onClick.AddListener(RenameButtonPressed);
+
         Button playBtn = transform.GetChild(2).GetComponent<Button>();
         playBtn.onClick.AddListener(PlayButtonPressed);
 
@@ -31,6 +37,16 @@ public class WorldMenuUI : MonoBehaviour
     void PlayButtonPressed()
     {
         wm.SaveWorlds();
-        mm.Singleplayer(gameObject.name);
+        mm.LoadWorld(gameObject.name, WorldData.currentSeed);
+    }
+
+    void DuplicateButtonPressed()
+    {
+
+    }
+
+    void RenameButtonPressed()
+    {
+
     }
 }

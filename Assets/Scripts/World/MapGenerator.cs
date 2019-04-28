@@ -26,7 +26,7 @@ public class MapGenerator : MonoBehaviour
         {
             amplitude = Random.Range(10.0f, 15.0f);
             frequency = Random.Range(8.0f, 13.0f);
-            seed = Random.Range(-100000, 100000);
+            seed = WorldData.currentSeed;
         }
         CreateNewChunk(0, 0, 0);
     } 

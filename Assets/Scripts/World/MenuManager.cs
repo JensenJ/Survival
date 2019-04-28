@@ -12,10 +12,16 @@ public class MenuManager : MonoBehaviour
         sm = GetComponent<SaveManager>();
     }
 
-    public void Singleplayer(string worldName)
+    public void Singleplayer()
     {
-        WorldData.currentlyLoadedName = worldName;
-        if(SaveSystem.LoadMap(worldName) == null)
+        wm.OpenWorldSelection();
+    }
+
+    public void LoadWorld(string name, int seed)
+    {
+        WorldData.currentlyLoadedName = name;
+        WorldData.currentSeed = seed;
+        if(SaveSystem.LoadMap(name) == null)
         {
             WorldData.isNewMap = true;
         }
@@ -25,6 +31,7 @@ public class MenuManager : MonoBehaviour
         }
         SceneManager.LoadScene("Game");
     }
+
     public void Multiplayer()
     {
 

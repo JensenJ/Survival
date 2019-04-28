@@ -10,13 +10,29 @@ using TMPro;
 public class WorldManager : MonoBehaviour
 {
     GameObject saveSelectionContent = null;
+    GameObject worldManagerPanel = null;
+    GameObject worldCreatorPanel = null;
+
+    TMP_InputField worldNameInput;
+    TMP_InputField worldSeedInput;
+
+    MenuManager mm;
+
     [SerializeField] private GameObject WorldMenuWidgetPrefab = null;
     public string[] worlds;
+    bool isEditing;
 
     // Start is called before the first frame update
     void Start()
     {
+
+        mm = GetComponent<MenuManager>();
         saveSelectionContent = transform.root.GetChild(1).GetChild(5).GetChild(1).GetChild(0).GetChild(0).gameObject;
+        worldManagerPanel = transform.root.GetChild(1).GetChild(5).gameObject;
+        worldCreatorPanel = transform.root.GetChild(1).GetChild(6).gameObject;
+
+        worldNameInput = worldCreatorPanel.transform.GetChild(2).GetComponent<TMP_InputField>();
+        worldSeedInput = worldCreatorPanel.transform.GetChild(4).GetComponent<TMP_InputField>();
 
         //Loads world list
         SaveData loadData = SaveSystem.LoadSaves();
@@ -34,13 +50,58 @@ public class WorldManager : MonoBehaviour
     //Button reference
     public void NewWorld()
     {
+        worldManagerPanel.SetActive(false);
+        worldCreatorPanel.SetActive(true);
+        worldNameInput.text = "";
+        worldSeedInput.text = "";
+        isEditing = true;
+    }
+
+    public void CancelWorldCreation()
+    {
+        worldCreatorPanel.SetActive(false);
+        worldManagerPanel.SetActive(true);
+        isEditing = false;
+    }
+
+    public void AddWorld()
+    {
+        worldCreatorPanel.SetActive(false);
+        worldManagerPanel.SetActive(true);
         //Create new widget and set settings
         GameObject widget = Instantiate(WorldMenuWidgetPrefab, transform.position, Quaternion.identity, saveSelectionContent.transform);
-        // TODO: Warn user if name chosen could overwite an existing world.
-        string name = "World " + UnityEngine.Random.Range(0, 10).ToString();
+        string name = worldNameInput.text;
+
+        if(name == "")
+        {
+            name = "New World";
+        }
+
+        int seed;
+        if(worldSeedInput.text != "")
+        {
+            seed = int.Parse(worldSeedInput.text);
+        }
+        else
+        {
+            seed = UnityEngine.Random.Range(-100000, 100000);
+        }
+        
+        //Open world creator and assign name. Also assign world seed
         widget.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = name;
         widget.gameObject.name = name;
         SaveWorlds();
+        isEditing = false;
+        mm.LoadWorld(name, seed);
+        
+    }
+
+    public void OpenWorldSelection()
+    {
+        if (!isEditing)
+        {
+            worldManagerPanel.SetActive(!worldManagerPanel.activeSelf);
+        }
     }
 
     public void SaveWorlds()
