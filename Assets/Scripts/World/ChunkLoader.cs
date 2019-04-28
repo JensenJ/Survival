@@ -10,10 +10,10 @@ public class ChunkLoader : MonoBehaviour
 {
     //Variables
     [SerializeField] [Range(5, 32)] private int chunkRenderDistance = 8;
-    [SerializeField] private int chunkLoaderID = 0;
+    [SerializeField] public int chunkLoaderID = 0;
     [SerializeField] GameObject hitObject;
+    [SerializeField] public string[] chunknames;
     bool bIsGenerating = true;
-    string[] chunknames;
     GameObject previousObject = null;
     MapGenerator mg;
     ChunkManager cm;
@@ -62,6 +62,17 @@ public class ChunkLoader : MonoBehaviour
             currentUnloadCoroutine = UnloadChunks(i);
             StartCoroutine(currentUnloadCoroutine);
         }
+    }
+
+    public void LoadMap()
+    {
+        //Run loading coroutine
+        if (currentLoadCoroutine != null)
+        {
+            StopCoroutine(currentLoadCoroutine);
+        }
+        currentLoadCoroutine = LoadChunks();
+        StartCoroutine(currentLoadCoroutine);
     }
 
     GameObject GetChunkBelowObject(GameObject m_ObjectToRaycast, int m_RenderDistance)

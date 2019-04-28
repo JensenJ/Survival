@@ -12,16 +12,19 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movement Settings:")]
     public bool bCanMove = true;
-    [SerializeField] [Range(0, 10)] private float speed = 5.0f;
-    [SerializeField] [Range(0, 15)] private float sprintSpeed = 7.0f;
-    [SerializeField] [Range(0, 5)] private float sensitivity = 3.0f;
-    [SerializeField] [Range(0, 4)] private float jumpForce = 2.0f;
+    [SerializeField] [Range(0, 10)] public float speed = 5.0f;
+    [SerializeField] [Range(0, 15)] public float sprintSpeed = 7.0f;
+    [SerializeField] [Range(0, 5)] public float sensitivity = 3.0f;
+    [SerializeField] [Range(0, 4)] public float jumpForce = 2.0f;
 
     //References
     private Attributes attributes = null;
     private WaypointManager waypointManager = null;
     private bool bCanUseWaypointManager = true;
     private PlayerMotor motor;
+    MapGenerator mapgen;
+    MenuManager mm;
+    SaveManager sm;
 
     [Header("Debug:")]
     public Image Crosshair = null;
@@ -36,16 +39,32 @@ public class PlayerController : MonoBehaviour
         motor = GetComponent<PlayerMotor>();
         attributes = GetComponent<Attributes>();
         waypointManager = transform.root.GetChild(2).GetComponent<WaypointManager>();
+        mapgen = transform.root.GetChild(4).GetComponent<MapGenerator>();
         Crosshair = transform.root.GetChild(1).GetChild(3).GetComponent<Image>();
+        mm = transform.root.GetChild(5).GetComponent<MenuManager>();
+        sm = transform.root.GetChild(5).GetComponent<SaveManager>();
         pausePanel = transform.root.GetChild(1).GetChild(5).gameObject;
         Cursor.lockState = CursorLockMode.Locked;
         Crosshair.gameObject.SetActive(true);
+
+        //Generate map if new game
+        if(WorldData.isNewMap == true)
+        {
+            mapgen.GenerateMap(mapgen.seed);
+        }
+        else
+        {
+            //Otherwise, load the game
+            sm.LoadGame();
+        }
+
+        //Save the game upon world generation
+        sm.SaveGame();
     }
 
     // Update every frame
     void Update()
     {
-
         //Spawn player down on the ground
         if (bHasSpawned == false)
         {
@@ -53,6 +72,7 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(transform.position, -Vector3.up, out hit, Mathf.Infinity))
             {
                 transform.position = new Vector3(transform.position.x, hit.point.y + 2, transform.position.z);
+                sm.SaveGame();
                 bHasSpawned = true;
             }
         }
@@ -92,7 +112,6 @@ public class PlayerController : MonoBehaviour
                 Crosshair.gameObject.SetActive(false);
                 bCanMove = false;
                 pausePanel.SetActive(true);
-                print("test");
                 isInMenu = true;
             }
         }

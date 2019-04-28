@@ -14,7 +14,7 @@ public class WaypointManager : MonoBehaviour
     [SerializeField] private GameObject waypointPrefab = null;
     public GameObject waypointManagerPanel = null;
     public GameObject waypointEditorPanel = null;
-    [SerializeField] private Waypoint[] waypoints;
+    [SerializeField] public Waypoint[] waypoints;
 
     //Editor variables/references
     private TMP_InputField waypointEditName;
@@ -32,7 +32,6 @@ public class WaypointManager : MonoBehaviour
 
     //Other defaults used throughout class
     private GameObject waypointManagerContent = null;
-    private Vector3 targetTransform = Vector3.zero;
     private PlayerController pc = null;
     private Transform waypointList = null;
 
@@ -69,14 +68,13 @@ public class WaypointManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        targetTransform = pc.transform.position;
         //Updates colour preview in editor
         waypointColour = new Color(waypointEditR.value, waypointEditG.value, waypointEditB.value);
         waypointEditColour.color = waypointColour;
     }
 
     //Adds waypoint with specified parameters
-    void AddWaypoint(string m_name, Vector3 m_location, Color m_color, bool bIsEnabled)
+    public void AddWaypoint(string m_name, Vector3 m_location, Color m_color, bool bIsEnabled)
     {
         //Keeps track of current iteration in foreach loop
         int iteration = 0;
@@ -94,6 +92,7 @@ public class WaypointManager : MonoBehaviour
                 waypoints[iteration].color = m_color;
                 waypoints[iteration].location = m_location;
                 waypoints[iteration].name = m_name;
+                waypoints[iteration].bIsInUse = true;
                 //Spawns new waypoint in menu and in world
                 GameObject go_waypoint = Instantiate(waypointPrefab, pc.transform.position, transform.rotation, transform.root.GetChild(2));
                 WaypointUI waypoint = go_waypoint.GetComponent<WaypointUI>();
@@ -116,7 +115,6 @@ public class WaypointManager : MonoBehaviour
     public void Rearrange(bool m_bIsDown, int m_WaypointID)
     {
         //Get index at waypoint id
-        int index = transform.GetChild(m_WaypointID).GetSiblingIndex();
         WaypointUI waypoint = FindWaypointByIndex(m_WaypointID);
         //Null pointer exception check
         if (waypoint != null)
@@ -163,6 +161,7 @@ public class WaypointManager : MonoBehaviour
         waypoints[m_index].name = "";
         waypoints[m_index].location = Vector3.zero;
         waypoints[m_index].color = Color.black;
+        waypoints[m_index].bIsInUse = false;
 
         WaypointUI waypoint = FindWaypointByIndex(m_index);
         //Null pointer exception check
@@ -254,6 +253,7 @@ public class WaypointManager : MonoBehaviour
 public struct Waypoint
 {
     public int index;
+    public bool bIsInUse;
     public bool bIsEnabled;
     public string name;
     public Vector3 location;
