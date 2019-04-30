@@ -13,6 +13,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] [Range(-100000, 100000)] public int seed = 0;
     [SerializeField] public Vector2 offset;
     [SerializeField] Material material = null;
+    [SerializeField] private bool generateOnStart = false;
     [SerializeField] public HeightData[] heights;
 
     //Function for creating the chunk objects and drawing the map
@@ -29,7 +30,15 @@ public class MapGenerator : MonoBehaviour
             seed = WorldData.currentSeed;
         }
         CreateNewChunk(0, 0, 0);
-    } 
+    }
+
+    void Start()
+    {
+        if(generateOnStart == true)
+        {
+            GenerateMap(seed);
+        }
+    }
 
     public GameObject CreateNewChunk(int x, int z, int loaderID)
     {

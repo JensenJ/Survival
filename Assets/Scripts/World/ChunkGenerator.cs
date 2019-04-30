@@ -3,6 +3,8 @@
 // PURPOSE: Generates a chunk of the map
 
 using UnityEngine;
+using System;
+using System.Collections;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -66,6 +68,7 @@ public class ChunkGenerator : MonoBehaviour
         Vertices();
         Triangles();
         Colours();
+        StartCoroutine(Resources());
     }
 
     //Generates vertices for a mesh
@@ -149,6 +152,52 @@ public class ChunkGenerator : MonoBehaviour
                 }
             }
         }
+    }
+
+    IEnumerator Resources()
+    {
+        //For each layer
+        for (int i = 0; i < heightData.Length; i++)
+        {
+            //For each resource in layer
+            for (int j = 0; j < heightData[i].resourceData.Length; j++)
+            {
+                //Check if there is resource data in the layer
+                if (heightData[i].resourceData.Length != 0) {
+                    //Get the resource density
+                    float density = heightData[i].resourceData[j].density;
+
+                    //Get the resource to spawn
+                    GameObject resourceToSpawn = heightData[i].resourceData[j].resourceModel;
+
+                    //For each vertex
+                    for (int k = 0; k < vertices.Length; k++)
+                    {
+                        //Check whether height for resource is correct
+                        if (vertices[k].y >= heightData[i].height && vertices[k].y < heightData[i + 1].height) // TODO: Check for i + 1 error in height checking
+                        {
+
+                            //Generate random value
+                            float randomValue = UnityEngine.Random.Range(0.0001f, 1); // TODO: Make use of Random.Next() for random gen and consistent seed
+                            //Compare random value to density
+                            if (randomValue < density)
+                            {
+                                //Spawn new resource object
+                                Vector3 position = new Vector3(vertices[k].x + transform.position.x, vertices[k].y, vertices[k].z + transform.position.z);
+                                Instantiate(resourceToSpawn, position, Quaternion.identity, transform);
+                            }
+                        }
+
+                        //Performance for coroutine, every 100 vertices in loop, return to main method
+                        if(k % 100 == 0)
+                        {
+                            yield return null;
+                        }
+                    }
+                }
+            }
+        }
+        print("done");
     }
 
     //Updates mesh data
