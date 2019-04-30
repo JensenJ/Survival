@@ -197,7 +197,6 @@ public class ChunkGenerator : MonoBehaviour
                 }
             }
         }
-        print("done");
     }
 
     //Updates mesh data
