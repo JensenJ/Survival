@@ -178,8 +178,16 @@ public class ChunkGenerator : MonoBehaviour
                         {
 
                             //Generate random value
-                            float randomValue = UnityEngine.Random.Range(0.0001f, 1); // TODO: Make use of Random.Next() for random gen and consistent seed
-                            //Compare random value to density
+                            System.Random rand = new System.Random(k + (int)offset.x + (int)offset.y + mapgen.Next());
+                            float randomValue = rand.Next(1, 10000);
+
+                            float xSample = (k + offset.x) * frequency;
+                            float zSample = (k + offset.y) * frequency;
+
+                            randomValue /= (xSample * zSample) / chunkSize + 10000.0f;
+
+                            //If random value is less than density
+                            //Cut off value for whether resources spawn or not
                             if (randomValue < density)
                             {
                                 //Spawn new resource object
@@ -189,7 +197,7 @@ public class ChunkGenerator : MonoBehaviour
                         }
 
                         //Performance for coroutine, every 100 vertices in loop, return to main method
-                        if(k % 100 == 0)
+                        if (k % 100 == 0)
                         {
                             yield return null;
                         }
