@@ -9331,10 +9331,10 @@ MonoBehaviour:
     height: 5
     colour: {r: 0.9450981, g: 0.9333334, b: 0.6666667, a: 0}
     resourceData:
-    - resourceName: Rock 1
-      resourceModel: {fileID: 8722419406216966896, guid: d1e97b19405e6bb4ab17fd8b05037702,
+    - resourceName: Palm Tree
+      resourceModel: {fileID: 4750914479033986393, guid: 4e38aa7f0671dd74b889b13448041f2e,
         type: 3}
-      density: 0.0005
+      density: 0.005
   - layerName: Sand 2
     height: 6
     colour: {r: 0.8024337, g: 0.81960785, b: 0.30588233, a: 0}
