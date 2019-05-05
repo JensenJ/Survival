@@ -4771,7 +4771,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chunkSize: 64
-  amplitude: 8
+  amplitude: 15
   frequency: 2
   seed: 0
   offset: {x: 655, y: 400}
@@ -4813,15 +4813,27 @@ MonoBehaviour:
   - layerName: Grass 2
     height: 9
     colour: {r: 0.37647063, g: 0.6117647, b: 0.29411766, a: 0}
-    resourceData: []
+    resourceData:
+    - resourceName: Pine Trees
+      resourceModel: {fileID: 8352412142901936543, guid: ceec7a40774e2bb4aadab29e5d516a4c,
+        type: 3}
+      density: 0.008
   - layerName: Grass 3
     height: 10
     colour: {r: 0.26415092, g: 0.5, b: 0.18160376, a: 0}
-    resourceData: []
+    resourceData:
+    - resourceName: Pine Trees
+      resourceModel: {fileID: 8352412142901936543, guid: ceec7a40774e2bb4aadab29e5d516a4c,
+        type: 3}
+      density: 0.015
   - layerName: Grass 4
     height: 11
     colour: {r: 0.20019057, g: 0.33962262, b: 0.15218937, a: 0}
-    resourceData: []
+    resourceData:
+    - resourceName: Pine Trees
+      resourceModel: {fileID: 8352412142901936543, guid: ceec7a40774e2bb4aadab29e5d516a4c,
+        type: 3}
+      density: 0.0225
   - layerName: Grass 5
     height: 12
     colour: {r: 0.14549217, g: 0.24528301, b: 0.11222855, a: 0}

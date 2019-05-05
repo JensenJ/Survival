@@ -174,8 +174,9 @@ public class ChunkGenerator : MonoBehaviour
                     for (int k = 0; k < vertices.Length; k++)
                     {
 
-                        if (i + 1 != heightData.Length) { // Prevents index out of range error
-
+                        //Prevents index out of range error
+                        if (i + 1 != heightData.Length)
+                        { 
                             //Check whether height for resource is correct
                             if (vertices[k].y >= heightData[i].height && vertices[k].y < heightData[i + 1].height)
                             {
@@ -218,7 +219,7 @@ public class ChunkGenerator : MonoBehaviour
         if (randomValue < density)
         {
             //Spawn new resource object
-            Vector3 position = new Vector3(vertices[iteration].x + transform.position.x, vertices[iteration].y, vertices[iteration].z + transform.position.z);
+            Vector3 position = new Vector3(vertices[iteration].x + transform.position.x, vertices[iteration].y + transform.position.y, vertices[iteration].z + transform.position.z);
             Instantiate(toSpawn, position, Quaternion.identity, transform);
         }
     }

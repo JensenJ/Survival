@@ -9331,10 +9331,10 @@ MonoBehaviour:
     height: 5
     colour: {r: 0.9450981, g: 0.9333334, b: 0.6666667, a: 0}
     resourceData:
-    - resourceName: Palm Tree
+    - resourceName: Palm Trees
       resourceModel: {fileID: 4750914479033986393, guid: 4e38aa7f0671dd74b889b13448041f2e,
         type: 3}
-      density: 0.02
+      density: 0.005
   - layerName: Sand 2
     height: 6
     colour: {r: 0.8024337, g: 0.81960785, b: 0.30588233, a: 0}
@@ -9350,15 +9350,27 @@ MonoBehaviour:
   - layerName: Grass 2
     height: 9
     colour: {r: 0.37647063, g: 0.6117647, b: 0.29411766, a: 0}
-    resourceData: []
+    resourceData:
+    - resourceName: Pine Trees
+      resourceModel: {fileID: 8352412142901936543, guid: ceec7a40774e2bb4aadab29e5d516a4c,
+        type: 3}
+      density: 0.008
   - layerName: Grass 3
     height: 10
     colour: {r: 0.26415092, g: 0.5, b: 0.18160376, a: 0}
-    resourceData: []
+    resourceData:
+    - resourceName: Pine Trees
+      resourceModel: {fileID: 8352412142901936543, guid: ceec7a40774e2bb4aadab29e5d516a4c,
+        type: 3}
+      density: 0.015
   - layerName: Grass 4
     height: 11
     colour: {r: 0.20019057, g: 0.33962262, b: 0.15218937, a: 0}
-    resourceData: []
+    resourceData:
+    - resourceName: Pine Trees
+      resourceModel: {fileID: 8352412142901936543, guid: ceec7a40774e2bb4aadab29e5d516a4c,
+        type: 3}
+      density: 0.0225
   - layerName: Grass 5
     height: 12
     colour: {r: 0.14549217, g: 0.24528301, b: 0.11222855, a: 0}
