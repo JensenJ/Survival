@@ -98,7 +98,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
   m_LightingDataAsset: {fileID: 112000000, guid: f47d4a14101103446b725887d13aa447,
     type: 2}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -4809,7 +4809,11 @@ MonoBehaviour:
   - layerName: Grass 1
     height: 8
     colour: {r: 0.46274513, g: 0.74509805, b: 0.13725491, a: 0}
-    resourceData: []
+    resourceData:
+    - resourceName: Trees
+      resourceModel: {fileID: 5152800986487761582, guid: b57cd407015aa8745ba92844d0236064,
+        type: 3}
+      density: 0.008
   - layerName: Grass 2
     height: 9
     colour: {r: 0.37647063, g: 0.6117647, b: 0.29411766, a: 0}
@@ -4817,7 +4821,11 @@ MonoBehaviour:
     - resourceName: Pine Trees
       resourceModel: {fileID: 8352412142901936543, guid: ceec7a40774e2bb4aadab29e5d516a4c,
         type: 3}
-      density: 0.008
+      density: 0.004
+    - resourceName: Trees
+      resourceModel: {fileID: 5152800986487761582, guid: b57cd407015aa8745ba92844d0236064,
+        type: 3}
+      density: 0.006
   - layerName: Grass 3
     height: 10
     colour: {r: 0.26415092, g: 0.5, b: 0.18160376, a: 0}
