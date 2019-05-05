@@ -173,26 +173,21 @@ public class ChunkGenerator : MonoBehaviour
                     //For each vertex
                     for (int k = 0; k < vertices.Length; k++)
                     {
-                        //Check whether height for resource is correct
-                        if (vertices[k].y >= heightData[i].height && vertices[k].y < heightData[i + 1].height) // TODO: Check for i + 1 error in height checking
-                        {
 
-                            //Generate random value
-                            System.Random rand = new System.Random(k + (int)offset.x + (int)offset.y + mapgen.Next());
-                            float randomValue = rand.Next(1, 10000);
+                        if (i + 1 != heightData.Length) { // Prevents index out of range error
 
-                            float xSample = (k + offset.x) * frequency;
-                            float zSample = (k + offset.y) * frequency;
-
-                            randomValue /= (xSample * zSample) / chunkSize + 10000.0f;
-
-                            //If random value is less than density
-                            //Cut off value for whether resources spawn or not
-                            if (randomValue < density)
+                            //Check whether height for resource is correct
+                            if (vertices[k].y >= heightData[i].height && vertices[k].y < heightData[i + 1].height)
                             {
-                                //Spawn new resource object
-                                Vector3 position = new Vector3(vertices[k].x + transform.position.x, vertices[k].y, vertices[k].z + transform.position.z);
-                                Instantiate(resourceToSpawn, position, Quaternion.identity, transform);
+                                GenerateResources(density, k, resourceToSpawn);
+                            }
+                        }
+                        else
+                        {
+                            //Check whether height for resource is correct
+                            if (vertices[k].y >= heightData[i].height)
+                            {
+                                GenerateResources(density, k, resourceToSpawn);
                             }
                         }
 
@@ -204,6 +199,27 @@ public class ChunkGenerator : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    void GenerateResources(float density, int iteration, GameObject toSpawn)
+    {
+        //Generate random value
+        System.Random rand = new System.Random(iteration + (int)offset.x + (int)offset.y + mapgen.Next());
+        float randomValue = rand.Next(1, 10000);
+
+        float xSample = (iteration + offset.x) * frequency;
+        float zSample = (iteration + offset.y) * frequency;
+
+        randomValue /= (xSample * zSample) / chunkSize + 10000.0f;
+
+        //If random value is less than density
+        //Cut off value for whether resources spawn or not
+        if (randomValue < density)
+        {
+            //Spawn new resource object
+            Vector3 position = new Vector3(vertices[iteration].x + transform.position.x, vertices[iteration].y, vertices[iteration].z + transform.position.z);
+            Instantiate(toSpawn, position, Quaternion.identity, transform);
         }
     }
 
