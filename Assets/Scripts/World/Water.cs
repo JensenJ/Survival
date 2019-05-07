@@ -28,7 +28,6 @@ public class Water : MonoBehaviour
         chunkSize = m_chunkSize;
         waterHeight = m_waterHeight;
         octaves = m_waveOctaves;
-        print(octaves.Length);
         //Create new mesh
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
