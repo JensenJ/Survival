@@ -26,6 +26,7 @@ public class ChunkGenerator : MonoBehaviour
     float frequency = 1.0f;
     float waterHeight = 4.0f;
     Material waterMaterial;
+    WaveOctave[] waveOctaves;
 
     //Variables only relevant to this chunk
     [SerializeField] Vector2 offset;
@@ -37,7 +38,7 @@ public class ChunkGenerator : MonoBehaviour
     //Draw new chunk with info from map generator.
     public void DrawChunk(int m_chunkSize, float m_amplitude, float m_frequency, int m_seed, 
         Vector2 m_offset, Material m_mat, int m_loaderID, HeightData[] m_heights, float m_waterHeight,
-        Material m_waterMaterial)
+        Material m_waterMaterial, WaveOctave[] m_WaveOctaves)
     {
         //Variable assigning
         mapgen = new System.Random(m_seed);
@@ -52,6 +53,7 @@ public class ChunkGenerator : MonoBehaviour
 
         waterHeight = m_waterHeight;
         waterMaterial = m_waterMaterial;
+        waveOctaves = m_WaveOctaves;
 
         //Create new mesh
         mesh = new Mesh();
@@ -233,13 +235,25 @@ public class ChunkGenerator : MonoBehaviour
 
     void Water()
     {
-        GameObject water = new GameObject();
-        water.name = "Water";
-        water.transform.SetParent(transform);
-        water.transform.position = transform.position;
-        Water wg = water.AddComponent<Water>();
-        wg.AddWater(chunkSize, waterHeight);
-        water.GetComponent<MeshRenderer>().sharedMaterial = waterMaterial;
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            //If the normalised height is less than the height data region's height
+            if (vertices[i].y <= waterHeight)
+            {
+                //Generate Water
+                GameObject water = new GameObject();
+                water.name = "Water";
+                water.transform.SetParent(transform);
+                water.transform.position = transform.position;
+                Water wg = water.AddComponent<Water>();
+                wg.AddWater(chunkSize, waterHeight, waveOctaves);
+                water.GetComponent<MeshRenderer>().sharedMaterial = waterMaterial;
+                break;
+                    
+            }
+            
+        }
+
     }
 
     //Updates mesh data

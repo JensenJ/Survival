@@ -16,6 +16,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private Material material = null;
     [SerializeField] private Material waterMaterial = null;
     [SerializeField] private bool generateOnStart = false;
+    [SerializeField] public WaveOctave[] waveOctaves;
     [SerializeField] public HeightData[] heights;
 
     //Function for creating the chunk objects and drawing the map
@@ -51,7 +52,7 @@ public class MapGenerator : MonoBehaviour
         terrain.transform.SetParent(transform);
         terrain.transform.position = new Vector3(x * chunkSize, 0, z * chunkSize);
         ChunkGenerator cg = terrain.AddComponent<ChunkGenerator>();
-        cg.DrawChunk(chunkSize, amplitude, frequency, seed, new Vector2((chunkSize * x) + offset.x, (chunkSize * z) + offset.y), material, loaderID, heights, waterHeight, waterMaterial);
+        cg.DrawChunk(chunkSize, amplitude, frequency, seed, new Vector2((chunkSize * x) + offset.x, (chunkSize * z) + offset.y), material, loaderID, heights, waterHeight, waterMaterial, waveOctaves);
         return terrain;
     }
 }

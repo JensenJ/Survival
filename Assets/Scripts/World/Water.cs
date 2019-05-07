@@ -3,6 +3,7 @@
 // PURPOSE: Generates Water and creates wave effects
 
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -15,13 +16,19 @@ public class Water : MonoBehaviour
     int chunkSize = 16;
     int[] triangles;
     float waterHeight;
+    public WaveOctave[] octaves;
+
+    //Coroutines
+    IEnumerator currentWaveCoroutine;
 
     //Function to generate water mesh.
-    public void AddWater(int m_chunkSize, float m_waterHeight)
+    public void AddWater(int m_chunkSize, float m_waterHeight, WaveOctave[] m_waveOctaves)
     {
         //Variable assigning
         chunkSize = m_chunkSize;
         waterHeight = m_waterHeight;
+        octaves = m_waveOctaves;
+        print(octaves.Length);
         //Create new mesh
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
@@ -31,11 +38,63 @@ public class Water : MonoBehaviour
         UpdateMesh();
     }
 
+    void Update()
+    {
+        //Run wave coroutine
+        //if (currentWaveCoroutine != null)
+        //{
+        //    StopCoroutine(currentWaveCoroutine);
+        //}
+        //Waves();
+        UpdateMesh();
+    }
+
+    // TODO: Optimise to run much smoother
+    IEnumerator Waves()
+    {
+        while (true)
+        {
+            //For each vertex on z axis
+            for (int i = 0, z = 0; z <= chunkSize; z++)
+            {
+                //For each vertex on x axis
+                for (int x = 0; x <= chunkSize; x++)
+                {
+                    float y = waterHeight;
+                    //Calculate next position in wave, for each octave
+                    for (int j = 0; j < octaves.Length; j++)
+                    {
+                        //If alternate
+                        if (octaves[j].alternate)
+                        {
+                            //Calculate position of vertex using perlin noise, using method 1
+                            float perl = Mathf.PerlinNoise((x * octaves[j].scale.x) / chunkSize, (z * octaves[j].scale.y) / chunkSize) * Mathf.PI * 2f;
+                            y += Mathf.Cos(perl + octaves[j].speed.magnitude * Time.time) * octaves[j].height;
+                        }
+                        else
+                        {
+                            //Calculate position of vertex using perlin noise, using method 2
+                            float perl = Mathf.PerlinNoise((x * octaves[j].scale.x + Time.time * octaves[j].speed.x), (z * octaves[j].scale.y + Time.time * octaves[j].speed.y) / chunkSize) - 0.5f;
+                            y += perl * octaves[j].height;
+                        }
+                    }
+                    //Set vertex position
+                    vertices[i].y = y;
+                    i++;
+                }
+            }
+            yield return null;
+        }
+    }
+
     void CreateMesh()
     {
         //Functions for generating parts of a mesh
         Vertices();
         Triangles();
+        //Run wave coroutine
+        currentWaveCoroutine = Waves();
+        StartCoroutine(currentWaveCoroutine);
     }
 
     //Generates vertices for a mesh
@@ -93,4 +152,13 @@ public class Water : MonoBehaviour
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
     }
+}
+
+[System.Serializable]
+public struct WaveOctave
+{
+    public Vector2 speed;
+    public Vector2 scale;
+    public float height;
+    public bool alternate;
 }
