@@ -246,7 +246,7 @@ public class ChunkGenerator : MonoBehaviour
                 water.transform.SetParent(transform);
                 water.transform.position = transform.position;
                 Water wg = water.AddComponent<Water>();
-                wg.AddWater(chunkSize, waterHeight, waveOctaves);
+                wg.AddWater(chunkSize, waterHeight, waveOctaves, offset);
                 water.GetComponent<MeshRenderer>().sharedMaterial = waterMaterial;
                 break;
                     

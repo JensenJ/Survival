@@ -17,17 +17,19 @@ public class Water : MonoBehaviour
     int[] triangles;
     float waterHeight;
     public WaveOctave[] octaves;
+    [SerializeField] Vector2 offset;
 
     //Coroutines
     IEnumerator currentWaveCoroutine;
 
     //Function to generate water mesh.
-    public void AddWater(int m_chunkSize, float m_waterHeight, WaveOctave[] m_waveOctaves)
+    public void AddWater(int m_chunkSize, float m_waterHeight, WaveOctave[] m_waveOctaves, Vector2 m_offset)
     {
         //Variable assigning
         chunkSize = m_chunkSize;
         waterHeight = m_waterHeight;
         octaves = m_waveOctaves;
+        offset = m_offset;
         //Create new mesh
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
@@ -67,13 +69,19 @@ public class Water : MonoBehaviour
                         if (octaves[j].alternate)
                         {
                             //Calculate position of vertex using perlin noise, using method 1
-                            float perl = Mathf.PerlinNoise((x * octaves[j].scale.x) / chunkSize, (z * octaves[j].scale.y) / chunkSize) * Mathf.PI * 2f;
+                            float xSample = ((x + offset.x) * octaves[j].scale.x) / chunkSize;
+                            float zSample = ((z + offset.y) * octaves[j].scale.y) / chunkSize;
+
+                            float perl = Mathf.PerlinNoise(xSample, zSample) * Mathf.PI * 2f;
                             y += Mathf.Cos(perl + octaves[j].speed.magnitude * Time.time) * octaves[j].height;
                         }
                         else
                         {
                             //Calculate position of vertex using perlin noise, using method 2
-                            float perl = Mathf.PerlinNoise((x * octaves[j].scale.x + Time.time * octaves[j].speed.x), (z * octaves[j].scale.y + Time.time * octaves[j].speed.y) / chunkSize) - 0.5f;
+                            float xSample = ((x + offset.x) * octaves[j].scale.x + Time.time * octaves[j].speed.x) / chunkSize;
+                            float zSample = ((z + offset.y) * octaves[j].scale.y + Time.time * octaves[j].speed.y) / chunkSize; 
+
+                            float perl = Mathf.PerlinNoise(xSample, zSample) - 0.5f;
                             y += perl * octaves[j].height;
                         }
                     }
