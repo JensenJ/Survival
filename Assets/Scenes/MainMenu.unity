@@ -4773,9 +4773,11 @@ MonoBehaviour:
   chunkSize: 64
   amplitude: 15
   frequency: 2
+  waterHeight: 5.1
   seed: 0
   offset: {x: 655, y: 400}
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
+  waterMaterial: {fileID: 2100000, guid: 4e19fefed94bad84a8b3c68ec77d0b8f, type: 2}
   generateOnStart: 1
   heights:
   - layerName: Water 1
@@ -4788,7 +4790,7 @@ MonoBehaviour:
     resourceData: []
   - layerName: Water 3
     height: 4
-    colour: {r: 0.25490198, g: 0.45882356, b: 0.70980394, a: 0}
+    colour: {r: 0.33980063, g: 0.5745223, b: 0.8679245, a: 0}
     resourceData: []
   - layerName: Sand 1
     height: 5

@@ -24,6 +24,8 @@ public class ChunkGenerator : MonoBehaviour
     int chunkSize = 16;
     float amplitude = 10.0f;
     float frequency = 1.0f;
+    float waterHeight = 4.0f;
+    Material waterMaterial;
 
     //Variables only relevant to this chunk
     [SerializeField] Vector2 offset;
@@ -34,7 +36,8 @@ public class ChunkGenerator : MonoBehaviour
 
     //Draw new chunk with info from map generator.
     public void DrawChunk(int m_chunkSize, float m_amplitude, float m_frequency, int m_seed, 
-        Vector2 m_offset, Material m_mat, int m_loaderID, HeightData[] m_heights)
+        Vector2 m_offset, Material m_mat, int m_loaderID, HeightData[] m_heights, float m_waterHeight,
+        Material m_waterMaterial)
     {
         //Variable assigning
         mapgen = new System.Random(m_seed);
@@ -46,6 +49,9 @@ public class ChunkGenerator : MonoBehaviour
         heightData = m_heights;
         meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = new Material(m_mat);
+
+        waterHeight = m_waterHeight;
+        waterMaterial = m_waterMaterial;
 
         //Create new mesh
         mesh = new Mesh();
@@ -69,6 +75,7 @@ public class ChunkGenerator : MonoBehaviour
         Triangles();
         Colours();
         StartCoroutine(Resources());
+        Water();
     }
 
     //Generates vertices for a mesh
@@ -222,6 +229,17 @@ public class ChunkGenerator : MonoBehaviour
             Vector3 position = new Vector3(vertices[iteration].x + transform.position.x, vertices[iteration].y + transform.position.y, vertices[iteration].z + transform.position.z);
             Instantiate(toSpawn, position, Quaternion.identity, transform);
         }
+    }
+
+    void Water()
+    {
+        GameObject water = new GameObject();
+        water.name = "Water";
+        water.transform.SetParent(transform);
+        water.transform.position = transform.position;
+        Water wg = water.AddComponent<Water>();
+        wg.AddWater(chunkSize, waterHeight);
+        water.GetComponent<MeshRenderer>().sharedMaterial = waterMaterial;
     }
 
     //Updates mesh data

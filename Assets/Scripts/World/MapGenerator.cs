@@ -8,11 +8,13 @@ public class MapGenerator : MonoBehaviour
 {
     //Settings for map generation
     [SerializeField] [Range(16, 128)] public int chunkSize = 16;
-    [SerializeField] [Range(1, 20)] public float amplitude = 10.0f;
-    [SerializeField] [Range(0.1f, 20)] public float frequency = 1.0f;
+    [SerializeField] [Range(1.0f, 20.0f)] public float amplitude = 10.0f;
+    [SerializeField] [Range(0.1f, 20.0f)] public float frequency = 1.0f;
+    [SerializeField] [Range(2.0f, 20.0f)] public float waterHeight = 5.0f;
     [SerializeField] [Range(-100000, 100000)] public int seed = 0;
     [SerializeField] public Vector2 offset;
-    [SerializeField] Material material = null;
+    [SerializeField] private Material material = null;
+    [SerializeField] private Material waterMaterial = null;
     [SerializeField] private bool generateOnStart = false;
     [SerializeField] public HeightData[] heights;
 
@@ -49,7 +51,7 @@ public class MapGenerator : MonoBehaviour
         terrain.transform.SetParent(transform);
         terrain.transform.position = new Vector3(x * chunkSize, 0, z * chunkSize);
         ChunkGenerator cg = terrain.AddComponent<ChunkGenerator>();
-        cg.DrawChunk(chunkSize, amplitude, frequency, seed, new Vector2((chunkSize * x) + offset.x, (chunkSize * z) + offset.y), material, loaderID, heights);
+        cg.DrawChunk(chunkSize, amplitude, frequency, seed, new Vector2((chunkSize * x) + offset.x, (chunkSize * z) + offset.y), material, loaderID, heights, waterHeight, waterMaterial);
         return terrain;
     }
 }
