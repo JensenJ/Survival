@@ -239,7 +239,7 @@ public class ChunkGenerator : MonoBehaviour
         for (int i = 0; i < vertices.Length; i++)
         {
             //If the height of vertex is less than the water height
-            if (vertices[i].y <= waterHeight)
+            if (vertices[i].y <= waterHeight + 1)
             {
                 //Generate Water
                 GameObject water = new GameObject();

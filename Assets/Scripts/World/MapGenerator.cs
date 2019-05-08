@@ -39,7 +39,7 @@ public class MapGenerator : MonoBehaviour
     {
         if(generateOnStart == true)
         {
-            GenerateMap(seed);
+            GenerateMap(Random.Range(-100000, 100000));
         }
     }
 
