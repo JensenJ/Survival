@@ -37,7 +37,7 @@ public static class SaveSystem
         }
         else
         {
-            Debug.LogError("Path does not exist: " + path);
+            Debug.LogWarning("Path does not exist: " + path);
             return null;
         }
     }
@@ -70,7 +70,7 @@ public static class SaveSystem
         }
         else
         {
-            Debug.LogError("Path does not exist: " + path);
+            Debug.LogWarning("Path does not exist: " + path);
             return null;
         }
     }
@@ -104,7 +104,7 @@ public static class SaveSystem
         }
         else
         {
-            Debug.LogError("Path does not exist: " + path);
+            Debug.LogWarning("Path does not exist: " + path);
             return null;
         }
 
@@ -138,7 +138,7 @@ public static class SaveSystem
         }
         else
         {
-            Debug.LogError("Path does not exist: " + path);
+            Debug.LogWarning("Path does not exist: " + path);
             return null;
         }
     }
@@ -171,7 +171,7 @@ public static class SaveSystem
         }
         else
         {
-            Debug.LogError("Path does not exist: " + path);
+            Debug.LogWarning("Path does not exist: " + path);
             return null;
         }
     }
@@ -204,7 +204,7 @@ public static class SaveSystem
         }
         else
         {
-            Debug.LogError("Path does not exist: " + path);
+            Debug.LogWarning("Path does not exist: " + path);
             return null;
         }
     }
