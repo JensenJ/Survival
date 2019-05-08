@@ -13,8 +13,8 @@ public static class SaveSystem
     public static void SavePlayer(PlayerController player, string worldName)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        Directory.CreateDirectory(Application.dataPath + "/Saves/" + worldName);
-        string path = Application.dataPath + "/Saves/" + worldName + "/Player.SGSAVE";
+        Directory.CreateDirectory(Application.persistentDataPath + "/Saves/" + worldName);
+        string path = Application.persistentDataPath + "/Saves/" + worldName + "/Player.SGSAVE";
         FileStream stream = new FileStream(path, FileMode.Create);
 
         PlayerData data = new PlayerData(player);
@@ -25,7 +25,7 @@ public static class SaveSystem
     //Loads player date
     public static PlayerData LoadPlayer(string worldName)
     {
-        string path = Application.dataPath + "/Saves/" + worldName + "/Player.SGSAVE";
+        string path = Application.persistentDataPath + "/Saves/" + worldName + "/Player.SGSAVE";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -46,8 +46,8 @@ public static class SaveSystem
     public static void SaveAttributes(Attributes attributes, string worldName)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        Directory.CreateDirectory(Application.dataPath + "/Saves/" + worldName);
-        string path = Application.dataPath + "/Saves/" + worldName + "/PlayerAttributes.SGSAVE";
+        Directory.CreateDirectory(Application.persistentDataPath + "/Saves/" + worldName);
+        string path = Application.persistentDataPath + "/Saves/" + worldName + "/PlayerAttributes.SGSAVE";
         FileStream stream = new FileStream(path, FileMode.Create);
 
         AttributeData data = new AttributeData(attributes);
@@ -58,7 +58,7 @@ public static class SaveSystem
     //Loads attributes
     public static AttributeData LoadAttributes(string worldName)
     {
-        string path = Application.dataPath + "/Saves/" + worldName + "/PlayerAttributes.SGSAVE";
+        string path = Application.persistentDataPath + "/Saves/" + worldName + "/PlayerAttributes.SGSAVE";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -79,8 +79,8 @@ public static class SaveSystem
     public static void SaveWaypoints(WaypointManager manager, string worldName)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        Directory.CreateDirectory(Application.dataPath + "/Saves/" + worldName);
-        string path = Application.dataPath + "/Saves/" + worldName + "/Waypoints.SGSAVE";
+        Directory.CreateDirectory(Application.persistentDataPath + "/Saves/" + worldName);
+        string path = Application.persistentDataPath + "/Saves/" + worldName + "/Waypoints.SGSAVE";
         FileStream stream = new FileStream(path, FileMode.Create);
 
         WaypointData data = new WaypointData(manager);
@@ -91,7 +91,7 @@ public static class SaveSystem
     //Loads waypoint data
     public static WaypointData LoadWaypoints(string worldName)
     {
-        string path = Application.dataPath + "/Saves/" + worldName + "/Waypoints.SGSAVE";
+        string path = Application.persistentDataPath + "/Saves/" + worldName + "/Waypoints.SGSAVE";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -114,8 +114,8 @@ public static class SaveSystem
     public static void SaveMap(MapGenerator mapgen, string worldName)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        Directory.CreateDirectory(Application.dataPath + "/Saves/" + worldName);
-        string path = Application.dataPath + "/Saves/" + worldName + "/Map.SGSAVE";
+        Directory.CreateDirectory(Application.persistentDataPath + "/Saves/" + worldName);
+        string path = Application.persistentDataPath + "/Saves/" + worldName + "/Map.SGSAVE";
         FileStream stream = new FileStream(path, FileMode.Create);
 
         MapData data = new MapData(mapgen);
@@ -126,7 +126,7 @@ public static class SaveSystem
     //Loads map
     public static MapData LoadMap(string worldName)
     {
-        string path = Application.dataPath + "/Saves/" + worldName + "/Map.SGSAVE";
+        string path = Application.persistentDataPath + "/Saves/" + worldName + "/Map.SGSAVE";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -147,8 +147,8 @@ public static class SaveSystem
     public static void SaveLoadedChunks(ChunkLoader loader, string worldName)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        Directory.CreateDirectory(Application.dataPath + "/Saves/" + worldName);
-        string path = Application.dataPath + "/Saves/" + worldName + "/Chunks.SGSAVE";
+        Directory.CreateDirectory(Application.persistentDataPath + "/Saves/" + worldName);
+        string path = Application.persistentDataPath + "/Saves/" + worldName + "/Chunks.SGSAVE";
         FileStream stream = new FileStream(path, FileMode.Create);
 
         ChunkData data = new ChunkData(loader);
@@ -159,7 +159,7 @@ public static class SaveSystem
     //Load loaded chunks
     public static ChunkData LoadLoadedChunks(string worldName)
     {
-        string path = Application.dataPath + "/Saves/" + worldName + "/Chunks.SGSAVE";
+        string path = Application.persistentDataPath + "/Saves/" + worldName + "/Chunks.SGSAVE";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -180,8 +180,8 @@ public static class SaveSystem
     public static void SaveSaves(WorldManager worldman)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        Directory.CreateDirectory(Application.dataPath + "/Saves/");
-        string path = Application.dataPath + "/Saves/SaveList.SGSAVE";
+        Directory.CreateDirectory(Application.persistentDataPath + "/Saves/");
+        string path = Application.persistentDataPath + "/Saves/SaveList.SGSAVE";
         FileStream stream = new FileStream(path, FileMode.Create);
 
         SaveData data = new SaveData(worldman);
@@ -192,7 +192,7 @@ public static class SaveSystem
     //Load all save games
     public static SaveData LoadSaves()
     {
-        string path = Application.dataPath + "/Saves/SaveList.SGSAVE";
+        string path = Application.persistentDataPath + "/Saves/SaveList.SGSAVE";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

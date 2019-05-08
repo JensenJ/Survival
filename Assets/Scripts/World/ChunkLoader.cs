@@ -41,15 +41,7 @@ public class ChunkLoader : MonoBehaviour
             //Get chunknames from the surrounding chunks
             chunknames = GetSurroundingChunks(new Vector2(chunk.transform.position.x, chunk.transform.position.z));
 
-
-            //Run loading coroutine
-            if (currentLoadCoroutine != null)
-            {
-                StopCoroutine(currentLoadCoroutine);
-            }
-            currentLoadCoroutine = LoadChunks();
-            StartCoroutine(currentLoadCoroutine);
-
+            LoadMap();
         }
 
         //Run unloading coroutine
