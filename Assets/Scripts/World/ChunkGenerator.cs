@@ -27,6 +27,7 @@ public class ChunkGenerator : MonoBehaviour
     float waterHeight = 4.0f;
     Material waterMaterial;
     WaveOctave[] waveOctaves;
+    int waveLOD;
 
     //Variables only relevant to this chunk
     [SerializeField] Vector2 offset;
@@ -38,7 +39,7 @@ public class ChunkGenerator : MonoBehaviour
     //Draw new chunk with info from map generator.
     public void DrawChunk(int m_chunkSize, float m_amplitude, float m_frequency, int m_seed, 
         Vector2 m_offset, Material m_mat, int m_loaderID, HeightData[] m_heights, float m_waterHeight,
-        Material m_waterMaterial, WaveOctave[] m_WaveOctaves)
+        Material m_waterMaterial, WaveOctave[] m_waveOctaves, int m_waveLOD)
     {
         //Variable assigning
         mapgen = new System.Random(m_seed);
@@ -53,7 +54,8 @@ public class ChunkGenerator : MonoBehaviour
 
         waterHeight = m_waterHeight;
         waterMaterial = m_waterMaterial;
-        waveOctaves = m_WaveOctaves;
+        waveOctaves = m_waveOctaves;
+        waveLOD = m_waveLOD;
 
         //Create new mesh
         mesh = new Mesh();
@@ -254,7 +256,7 @@ public class ChunkGenerator : MonoBehaviour
                 water.GetComponent<MeshRenderer>().material = waterMat;
 
                 //Spawn water
-                wg.AddWater(chunkSize, waterHeight, waveOctaves, offset);
+                wg.AddWater(chunkSize, waterHeight, waveOctaves, offset, waveLOD);
                 break;
             }
         }
