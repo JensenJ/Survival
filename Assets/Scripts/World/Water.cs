@@ -11,10 +11,10 @@ public class Water : MonoBehaviour
 {
     //Variables
     Mesh mesh;
-    MeshRenderer meshRenderer;
     Vector3[] vertices;
     int chunkSize = 16;
     int[] triangles;
+    Vector2[] uvs;
     float waterHeight;
     public WaveOctave[] octaves;
     [SerializeField] Vector2 offset;
@@ -41,12 +41,6 @@ public class Water : MonoBehaviour
 
     void Update()
     {
-        //Run wave coroutine
-        //if (currentWaveCoroutine != null)
-        //{
-        //    StopCoroutine(currentWaveCoroutine);
-        //}
-        //Waves();
         UpdateMesh();
     }
 
@@ -79,7 +73,7 @@ public class Water : MonoBehaviour
                         {
                             //Calculate position of vertex using perlin noise, using method 2
                             float xSample = ((x + offset.x) * octaves[j].scale.x + Time.time * octaves[j].speed.x) / chunkSize;
-                            float zSample = ((z + offset.y) * octaves[j].scale.y + Time.time * octaves[j].speed.y) / chunkSize; 
+                            float zSample = ((z + offset.y) * octaves[j].scale.y + Time.time * octaves[j].speed.y) / chunkSize;
 
                             float perl = Mathf.PerlinNoise(xSample, zSample) - 0.5f;
                             y += perl * octaves[j].height;
@@ -99,6 +93,7 @@ public class Water : MonoBehaviour
         //Functions for generating parts of a mesh
         Vertices();
         Triangles();
+        Colours();
         //Run wave coroutine
         currentWaveCoroutine = Waves();
         StartCoroutine(currentWaveCoroutine);
@@ -151,12 +146,31 @@ public class Water : MonoBehaviour
         }
     }
 
+    //Creates UV Map
+    void Colours()
+    {
+        //Set UV length
+        uvs = new Vector2[vertices.Length];
+
+        //Iterate through every vertices
+        for (int i = 0, z = 0; z <= chunkSize; z++)
+        {
+            for (int x = 0; x <= chunkSize; x++)
+            {
+                //Set UV position to current vertex / chunksize
+                uvs[i] = new Vector2((float)x / chunkSize, (float)z / chunkSize);
+                i++;
+            }
+        }
+    }
+
     //Updates mesh data
     void UpdateMesh()
     {
         mesh.Clear();
         mesh.vertices = vertices;
         mesh.triangles = triangles;
+        mesh.uv = uvs;
         mesh.RecalculateNormals();
     }
 }

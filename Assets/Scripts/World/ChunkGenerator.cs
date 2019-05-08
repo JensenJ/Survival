@@ -235,9 +235,10 @@ public class ChunkGenerator : MonoBehaviour
 
     void Water()
     {
+        //Iterate through all vertices
         for (int i = 0; i < vertices.Length; i++)
         {
-            //If the normalised height is less than the height data region's height
+            //If the height of vertex is less than the water height
             if (vertices[i].y <= waterHeight)
             {
                 //Generate Water
@@ -246,14 +247,17 @@ public class ChunkGenerator : MonoBehaviour
                 water.transform.SetParent(transform);
                 water.transform.position = transform.position;
                 Water wg = water.AddComponent<Water>();
-                wg.AddWater(chunkSize, waterHeight, waveOctaves, offset);
-                water.GetComponent<MeshRenderer>().sharedMaterial = waterMaterial;
-                break;
-                    
-            }
-            
-        }
 
+                //Material
+                Material waterMat = new Material(waterMaterial);
+                waterMat.SetVector("_Offset", offset/chunkSize);
+                water.GetComponent<MeshRenderer>().material = waterMat;
+
+                //Spawn water
+                wg.AddWater(chunkSize, waterHeight, waveOctaves, offset);
+                break;
+            }
+        }
     }
 
     //Updates mesh data
