@@ -28,11 +28,14 @@ public class SaveManager : MonoBehaviour
     //Function for saving all data in game
     public void SaveGame()
     {
-        SaveSystem.SaveMap(mg, WorldData.currentlyLoadedName);
-        SaveSystem.SavePlayer(pc, WorldData.currentlyLoadedName);
-        SaveSystem.SaveAttributes(pa, WorldData.currentlyLoadedName);
-        SaveSystem.SaveLoadedChunks(pcl, WorldData.currentlyLoadedName);
-        SaveSystem.SaveWaypoints(wm, WorldData.currentlyLoadedName);
+        if (WorldData.currentlyLoadedName != null)
+        {
+            SaveSystem.SaveMap(mg, WorldData.currentlyLoadedName);
+            SaveSystem.SavePlayer(pc, WorldData.currentlyLoadedName);
+            SaveSystem.SaveAttributes(pa, WorldData.currentlyLoadedName);
+            SaveSystem.SaveLoadedChunks(pcl, WorldData.currentlyLoadedName);
+            SaveSystem.SaveWaypoints(wm, WorldData.currentlyLoadedName);
+        }
     }
 
     //Exits to main menu with saving

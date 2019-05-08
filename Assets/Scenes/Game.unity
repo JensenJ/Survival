@@ -9316,7 +9316,7 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
   waterMaterial: {fileID: 2100000, guid: 4e19fefed94bad84a8b3c68ec77d0b8f, type: 2}
   generateOnStart: 0
-  waveLevelOfDetail: 2
+  waveLevelOfDetail: 1
   waveOctaves:
   - speed: {x: 0.4, y: 0.5}
     scale: {x: 0.4, y: 0.45}

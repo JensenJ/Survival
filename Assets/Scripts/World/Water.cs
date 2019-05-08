@@ -109,7 +109,6 @@ public class Water : MonoBehaviour
     {
         //Create vertices array
         vertices = new Vector3[(chunkSize + 1) * (chunkSize + 1)];
-        print(vertices.Length);
 
         //For each vertex on z axis
         for (int i = 0, z = 0; z <= chunkSize; z++)
