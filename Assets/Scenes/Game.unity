@@ -9310,52 +9310,150 @@ MonoBehaviour:
   chunkSize: 16
   amplitude: 12
   frequency: 12
+  waterHeight: 4.9
   seed: 0
   offset: {x: 0, y: 0}
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
+  waterMaterial: {fileID: 2100000, guid: 4e19fefed94bad84a8b3c68ec77d0b8f, type: 2}
+  generateOnStart: 0
+  waveOctaves:
+  - speed: {x: 0.4, y: 0.5}
+    scale: {x: 0.4, y: 0.45}
+    height: 0.15
+    alternate: 0
+  - speed: {x: 0.2, y: 0.4}
+    scale: {x: 0.45, y: 0.5}
+    height: 0.2
+    alternate: 1
+  - speed: {x: 0.35, y: 0.6}
+    scale: {x: 0.4, y: 0.35}
+    height: 0.1
+    alternate: 0
   heights:
   - layerName: Water 1
     height: -10
-    colour: {r: 0.25882354, g: 0.43921572, b: 0.6509804, a: 0}
+    colour: {r: 0.6226415, g: 0.618236, b: 0.43761125, a: 0}
+    resourceData: []
   - layerName: Water 2
     height: 3
-    colour: {r: 0.2509804, g: 0.42352945, b: 0.6392157, a: 0}
+    colour: {r: 0.6698113, g: 0.661269, b: 0.43916875, a: 0}
+    resourceData: []
   - layerName: Water 3
     height: 4
-    colour: {r: 0.25490198, g: 0.45882356, b: 0.70980394, a: 0}
+    colour: {r: 0.735849, g: 0.72690266, b: 0.5241189, a: 0}
+    resourceData: []
   - layerName: Sand 1
     height: 5
     colour: {r: 0.9450981, g: 0.9333334, b: 0.6666667, a: 0}
+    resourceData:
+    - resourceName: Palm Trees
+      resourceModel: {fileID: 4750914479033986393, guid: 4e38aa7f0671dd74b889b13448041f2e,
+        type: 3}
+      density: 0.005
+    - resourceName: Rock 2
+      resourceModel: {fileID: 3839137905623225891, guid: 4a7117b1a3c42364cb73e1a052cfe1ba,
+        type: 3}
+      density: 0.002
+    - resourceName: Rock 3
+      resourceModel: {fileID: 2677103081816933285, guid: 55d78c0b69dcf0340870869bcf6c667c,
+        type: 3}
+      density: 0.001
   - layerName: Sand 2
     height: 6
     colour: {r: 0.8024337, g: 0.81960785, b: 0.30588233, a: 0}
+    resourceData:
+    - resourceName: Rock 1
+      resourceModel: {fileID: 7844852150775855235, guid: 9f22bd66f39b617468b897da04733304,
+        type: 3}
+      density: 0.002
+    - resourceName: Rock 2
+      resourceModel: {fileID: 3839137905623225891, guid: 4a7117b1a3c42364cb73e1a052cfe1ba,
+        type: 3}
+      density: 0.004
   - layerName: Sand 3
     height: 7
     colour: {r: 0.6349953, g: 0.81960785, b: 0.30588233, a: 0}
+    resourceData:
+    - resourceName: Rock 1
+      resourceModel: {fileID: 7844852150775855235, guid: 9f22bd66f39b617468b897da04733304,
+        type: 3}
+      density: 0.0015
   - layerName: Grass 1
     height: 8
     colour: {r: 0.46274513, g: 0.74509805, b: 0.13725491, a: 0}
+    resourceData:
+    - resourceName: Trees
+      resourceModel: {fileID: 5152800986487761582, guid: b57cd407015aa8745ba92844d0236064,
+        type: 3}
+      density: 0.008
+    - resourceName: Rock 1
+      resourceModel: {fileID: 7844852150775855235, guid: 9f22bd66f39b617468b897da04733304,
+        type: 3}
+      density: 0.002
   - layerName: Grass 2
     height: 9
     colour: {r: 0.37647063, g: 0.6117647, b: 0.29411766, a: 0}
+    resourceData:
+    - resourceName: Pine Trees
+      resourceModel: {fileID: 8352412142901936543, guid: ceec7a40774e2bb4aadab29e5d516a4c,
+        type: 3}
+      density: 0.004
+    - resourceName: Trees
+      resourceModel: {fileID: 5152800986487761582, guid: b57cd407015aa8745ba92844d0236064,
+        type: 3}
+      density: 0.006
+    - resourceName: Rock 1
+      resourceModel: {fileID: 7844852150775855235, guid: 9f22bd66f39b617468b897da04733304,
+        type: 3}
+      density: 0.001
   - layerName: Grass 3
     height: 10
     colour: {r: 0.26415092, g: 0.5, b: 0.18160376, a: 0}
+    resourceData:
+    - resourceName: Pine Trees
+      resourceModel: {fileID: 8352412142901936543, guid: ceec7a40774e2bb4aadab29e5d516a4c,
+        type: 3}
+      density: 0.015
+    - resourceName: Rock 1
+      resourceModel: {fileID: 7844852150775855235, guid: 9f22bd66f39b617468b897da04733304,
+        type: 3}
+      density: 0.001
+    - resourceName: Rock 2
+      resourceModel: {fileID: 3839137905623225891, guid: 4a7117b1a3c42364cb73e1a052cfe1ba,
+        type: 3}
+      density: 0.001
   - layerName: Grass 4
     height: 11
     colour: {r: 0.20019057, g: 0.33962262, b: 0.15218937, a: 0}
+    resourceData:
+    - resourceName: Pine Trees
+      resourceModel: {fileID: 8352412142901936543, guid: ceec7a40774e2bb4aadab29e5d516a4c,
+        type: 3}
+      density: 0.0225
+    - resourceName: Rock 1
+      resourceModel: {fileID: 7844852150775855235, guid: 9f22bd66f39b617468b897da04733304,
+        type: 3}
+      density: 0.004
+    - resourceName: Rock 2
+      resourceModel: {fileID: 3839137905623225891, guid: 4a7117b1a3c42364cb73e1a052cfe1ba,
+        type: 3}
+      density: 0.002
   - layerName: Grass 5
     height: 12
     colour: {r: 0.14549217, g: 0.24528301, b: 0.11222855, a: 0}
+    resourceData: []
   - layerName: Dirt 1
     height: 13
     colour: {r: 0.18377765, g: 0.24705882, b: 0.1137255, a: 0}
+    resourceData: []
   - layerName: Dirt 2
     height: 14
     colour: {r: 0.22896731, g: 0.24705882, b: 0.1137255, a: 0}
+    resourceData: []
   - layerName: Dirt 3
     height: 15
     colour: {r: 0.24705882, g: 0.23104124, b: 0.1137255, a: 0}
+    resourceData: []
 --- !u!1 &1922498980
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,6 +3,8 @@
 // PURPOSE: Generates a chunk of the map
 
 using UnityEngine;
+using System;
+using System.Collections;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -22,6 +24,9 @@ public class ChunkGenerator : MonoBehaviour
     int chunkSize = 16;
     float amplitude = 10.0f;
     float frequency = 1.0f;
+    float waterHeight = 4.0f;
+    Material waterMaterial;
+    WaveOctave[] waveOctaves;
 
     //Variables only relevant to this chunk
     [SerializeField] Vector2 offset;
@@ -32,7 +37,8 @@ public class ChunkGenerator : MonoBehaviour
 
     //Draw new chunk with info from map generator.
     public void DrawChunk(int m_chunkSize, float m_amplitude, float m_frequency, int m_seed, 
-        Vector2 m_offset, Material m_mat, int m_loaderID, HeightData[] m_heights)
+        Vector2 m_offset, Material m_mat, int m_loaderID, HeightData[] m_heights, float m_waterHeight,
+        Material m_waterMaterial, WaveOctave[] m_WaveOctaves)
     {
         //Variable assigning
         mapgen = new System.Random(m_seed);
@@ -44,6 +50,10 @@ public class ChunkGenerator : MonoBehaviour
         heightData = m_heights;
         meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = new Material(m_mat);
+
+        waterHeight = m_waterHeight;
+        waterMaterial = m_waterMaterial;
+        waveOctaves = m_WaveOctaves;
 
         //Create new mesh
         mesh = new Mesh();
@@ -66,6 +76,8 @@ public class ChunkGenerator : MonoBehaviour
         Vertices();
         Triangles();
         Colours();
+        StartCoroutine(Resources());
+        Water();
     }
 
     //Generates vertices for a mesh
@@ -147,6 +159,103 @@ public class ChunkGenerator : MonoBehaviour
                 {
                     break;
                 }
+            }
+        }
+    }
+
+    IEnumerator Resources()
+    {
+        //For each layer
+        for (int i = 0; i < heightData.Length; i++)
+        {
+            //For each resource in layer
+            for (int j = 0; j < heightData[i].resourceData.Length; j++)
+            {
+                //Check if there is resource data in the layer
+                if (heightData[i].resourceData.Length != 0) {
+                    //Get the resource density
+                    float density = heightData[i].resourceData[j].density;
+
+                    //Get the resource to spawn
+                    GameObject resourceToSpawn = heightData[i].resourceData[j].resourceModel;
+
+                    //For each vertex
+                    for (int k = 0; k < vertices.Length; k++)
+                    {
+
+                        //Prevents index out of range error
+                        if (i + 1 != heightData.Length)
+                        { 
+                            //Check whether height for resource is correct
+                            if (vertices[k].y >= heightData[i].height && vertices[k].y < heightData[i + 1].height)
+                            {
+                                GenerateResources(density, k, resourceToSpawn);
+                            }
+                        }
+                        else
+                        {
+                            //Check whether height for resource is correct
+                            if (vertices[k].y >= heightData[i].height)
+                            {
+                                GenerateResources(density, k, resourceToSpawn);
+                            }
+                        }
+
+                        //Performance for coroutine, every 100 vertices in loop, return to main method
+                        if (k % 100 == 0)
+                        {
+                            yield return null;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void GenerateResources(float density, int iteration, GameObject toSpawn)
+    {
+        //Generate random value
+        System.Random rand = new System.Random(iteration + (int)offset.x + (int)offset.y + mapgen.Next());
+        float randomValue = rand.Next(1, 10000);
+
+        float xSample = (iteration + offset.x) * frequency;
+        float zSample = (iteration + offset.y) * frequency;
+
+        randomValue /= (xSample * zSample) / chunkSize + 10000.0f;
+
+        //If random value is less than density
+        //Cut off value for whether resources spawn or not
+        if (randomValue < density)
+        {
+            //Spawn new resource object
+            Vector3 position = new Vector3(vertices[iteration].x + transform.position.x, vertices[iteration].y + transform.position.y, vertices[iteration].z + transform.position.z);
+            Instantiate(toSpawn, position, Quaternion.identity, transform);
+        }
+    }
+
+    void Water()
+    {
+        //Iterate through all vertices
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            //If the height of vertex is less than the water height
+            if (vertices[i].y <= waterHeight)
+            {
+                //Generate Water
+                GameObject water = new GameObject();
+                water.name = "Water";
+                water.transform.SetParent(transform);
+                water.transform.position = transform.position;
+                Water wg = water.AddComponent<Water>();
+
+                //Material
+                Material waterMat = new Material(waterMaterial);
+                waterMat.SetVector("_Offset", offset / chunkSize);
+                water.GetComponent<MeshRenderer>().material = waterMat;
+
+                //Spawn water
+                wg.AddWater(chunkSize, waterHeight, waveOctaves, offset);
+                break;
             }
         }
     }

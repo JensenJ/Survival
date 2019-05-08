@@ -28,4 +28,14 @@ public struct HeightData
     public string layerName;
     public float height;
     public Color colour;
+    public ResourceData[] resourceData;
+}
+
+[System.Serializable]
+
+public struct ResourceData
+{
+    public string resourceName;
+    public GameObject resourceModel;
+    public float density;
 }
