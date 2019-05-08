@@ -250,7 +250,7 @@ public class ChunkGenerator : MonoBehaviour
 
                 //Material
                 Material waterMat = new Material(waterMaterial);
-                waterMat.SetVector("_Offset", offset/chunkSize);
+                waterMat.SetVector("_Offset", offset / chunkSize);
                 water.GetComponent<MeshRenderer>().material = waterMat;
 
                 //Spawn water
