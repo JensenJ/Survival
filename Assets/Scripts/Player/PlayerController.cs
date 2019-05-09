@@ -23,7 +23,6 @@ public class PlayerController : MonoBehaviour
     private bool bCanUseWaypointManager = true;
     private PlayerMotor motor;
     MapGenerator mapgen;
-    MenuManager mm;
     SaveManager sm;
 
     [Header("Debug:")]
@@ -41,7 +40,6 @@ public class PlayerController : MonoBehaviour
         waypointManager = transform.root.GetChild(2).GetComponent<WaypointManager>();
         mapgen = transform.root.GetChild(4).GetComponent<MapGenerator>();
         Crosshair = transform.root.GetChild(1).GetChild(3).GetComponent<Image>();
-        mm = transform.root.GetChild(5).GetComponent<MenuManager>();
         sm = transform.root.GetChild(5).GetComponent<SaveManager>();
         pausePanel = transform.root.GetChild(1).GetChild(5).gameObject;
         Cursor.lockState = CursorLockMode.Locked;

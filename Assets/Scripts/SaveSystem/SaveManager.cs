@@ -60,8 +60,7 @@ public class SaveManager : MonoBehaviour
         pc.sprintSpeed = playerData.sprintSpeed;
         pc.jumpForce = playerData.jumpForce;
         pc.transform.position = new Vector3(playerData.position[0], playerData.position[1], playerData.position[2]);
-        pc.transform.rotation = Quaternion.Euler(0, playerData.rotation[1], playerData.rotation[2]);
-        pc.transform.GetChild(1).rotation = Quaternion.Euler(playerData.rotation[0], 0, 0);
+        pc.transform.rotation = Quaternion.Euler(new Vector3(0, playerData.playerRot, 0));
 
         //Player attribute data
         AttributeData attributeData = SaveSystem.LoadAttributes(WorldData.currentlyLoadedName);

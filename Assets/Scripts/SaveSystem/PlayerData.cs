@@ -11,7 +11,7 @@ public class PlayerData
 {
     //Current player data
     public float[] position;
-    public float[] rotation;
+    public float playerRot;
     public float speed;
     public float sprintSpeed;
     public float jumpForce;
@@ -25,10 +25,7 @@ public class PlayerData
         position[2] = player.transform.position.z;
 
         //Rotation
-        rotation = new float[3];
-        rotation[0] = player.transform.GetChild(1).rotation.eulerAngles.x;
-        rotation[1] = player.transform.rotation.eulerAngles.y;
-        rotation[2] = player.transform.rotation.eulerAngles.z;
+        playerRot = player.transform.rotation.eulerAngles.y;
 
         //Other attributes
         speed = player.speed;
