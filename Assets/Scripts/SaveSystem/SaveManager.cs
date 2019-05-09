@@ -50,8 +50,11 @@ public class SaveManager : MonoBehaviour
     {
         //Map Data
         MapData mapData = SaveSystem.LoadMap(WorldData.currentlyLoadedName);
-        mg.amplitude = mapData.amplitude;
-        mg.frequency = mapData.frequency;
+        for (int i = 0; i < mapData.amplitude.Length; i++)
+        {
+            mg.terrainOctaves[i].amplitude = mapData.amplitude[i];
+            mg.terrainOctaves[i].frequency = mapData.frequency[i];
+        }
         mg.GenerateMap(mapData.seed);
 
         //Player Data

@@ -1183,7 +1183,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 391.84424, y: -25}
+  m_AnchoredPosition: {x: 391.84375, y: -25}
   m_SizeDelta: {x: 261.2295, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &474386654
@@ -2805,7 +2805,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 130.61475, y: -25}
+  m_AnchoredPosition: {x: 130.61523, y: -25}
   m_SizeDelta: {x: 261.2295, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &993815417
@@ -4872,8 +4872,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chunkSize: 16
-  amplitude: 11
-  frequency: 8.75
+  terrainOctaves:
+  - amplitude: 4
+    frequency: 8.75
+  - amplitude: 3
+    frequency: 7.5
+  - amplitude: 6
+    frequency: 6
   waterHeight: 4.9
   seed: 0
   offset: {x: 0, y: 0}

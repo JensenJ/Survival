@@ -9308,15 +9308,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chunkSize: 16
-  amplitude: 12
-  frequency: 12
+  terrainOctaves:
+  - amplitude: 4
+    frequency: 8.75
+  - amplitude: 3
+    frequency: 7.5
+  - amplitude: 6
+    frequency: 6
   waterHeight: 4.9
   seed: 0
   offset: {x: 0, y: 0}
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
   waterMaterial: {fileID: 2100000, guid: 4e19fefed94bad84a8b3c68ec77d0b8f, type: 2}
   generateOnStart: 0
-  waveLevelOfDetail: 1
+  waveLevelOfDetail: 3
   waveOctaves:
   - speed: {x: 0.4, y: 0.5}
     scale: {x: 0.4, y: 0.45}
@@ -9406,7 +9411,7 @@ MonoBehaviour:
     - resourceName: Rock 1
       resourceModel: {fileID: 7844852150775855235, guid: 9f22bd66f39b617468b897da04733304,
         type: 3}
-      density: 0.001
+      density: 0.002
   - layerName: Grass 3
     height: 10
     colour: {r: 0.26415092, g: 0.5, b: 0.18160376, a: 0}

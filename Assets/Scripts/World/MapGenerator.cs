@@ -8,8 +8,7 @@ public class MapGenerator : MonoBehaviour
 {
     //Settings for map generation
     [SerializeField] [Range(16, 128)] public int chunkSize = 16;
-    [SerializeField] [Range(1.0f, 20.0f)] public float amplitude = 10.0f;
-    [SerializeField] [Range(0.1f, 20.0f)] public float frequency = 1.0f;
+    [SerializeField] public TerrainOctave[] terrainOctaves;
     [SerializeField] [Range(2.0f, 20.0f)] public float waterHeight = 5.0f;
     [SerializeField] [Range(-100000, 100000)] public int seed = 0;
     [SerializeField] public Vector2 offset;
@@ -30,8 +29,6 @@ public class MapGenerator : MonoBehaviour
         //If map is new, randomly generate values
         if (WorldData.isNewMap == true)
         {
-            amplitude = 11;
-            frequency = 8.75f;
             seed = WorldData.currentSeed;
         }
         CreateNewChunk(0, 0, 0);
@@ -54,7 +51,7 @@ public class MapGenerator : MonoBehaviour
         terrain.transform.SetParent(transform);
         terrain.transform.position = new Vector3(x * chunkSize, 0, z * chunkSize);
         ChunkGenerator cg = terrain.AddComponent<ChunkGenerator>();
-        cg.DrawChunk(chunkSize, amplitude, frequency, seed, new Vector2((chunkSize * x) + offset.x, (chunkSize * z) + offset.y), material, loaderID, heights, waterHeight, waterMaterial, waveOctaves, waveLevelOfDetail);
+        cg.DrawChunk(chunkSize, terrainOctaves, seed, new Vector2((chunkSize * x) + offset.x, (chunkSize * z) + offset.y), material, loaderID, heights, waterHeight, waterMaterial, waveOctaves, waveLevelOfDetail);
         return terrain;
     }
 }
