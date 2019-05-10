@@ -13,6 +13,7 @@ public class SaveManager : MonoBehaviour
     ChunkLoader pcl;
     Attributes pa;
     WaypointManager wm;
+    EnvironmentController env;
 
     //Get references
     public void Start()
@@ -23,6 +24,7 @@ public class SaveManager : MonoBehaviour
         pa = transform.root.GetChild(3).GetComponent<Attributes>();
         wm = transform.root.GetChild(2).GetComponent<WaypointManager>();
         pcl = transform.root.GetChild(3).GetComponent<ChunkLoader>();
+        env = transform.root.GetChild(5).GetComponent<EnvironmentController>();
     }
 
     //Function for saving all data in game
@@ -35,6 +37,7 @@ public class SaveManager : MonoBehaviour
             SaveSystem.SaveAttributes(pa, WorldData.currentlyLoadedName);
             SaveSystem.SaveLoadedChunks(pcl, WorldData.currentlyLoadedName);
             SaveSystem.SaveWaypoints(wm, WorldData.currentlyLoadedName);
+            SaveSystem.SaveEnvironment(env, WorldData.currentlyLoadedName);
         }
     }
 
@@ -118,5 +121,27 @@ public class SaveManager : MonoBehaviour
                 wm.AddWaypoint(name, new Vector3(x, y, z), new Color(r, g, b), enabled);
             }
         }
+
+        //Load environment data
+        EnvironmentData envData = SaveSystem.LoadEnvironment(WorldData.currentlyLoadedName);
+        env.timeMultiplier = envData.timeMultiplier;
+        env.daysInMonth = envData.daysInMonth;
+        env.monthsInYear = envData.MonthsInYear;
+        env.Clockwork = envData.clockWork;
+
+        env.tempMultiplier = envData.tempMultiplier;
+        env.bIsTempFahrenheit = envData.tempFahrenheit;
+        env.temperature = envData.temperature;
+        env.tempPrecision = envData.tempPrecision;
+
+        env.windStrengthMultiplier = envData.windStrengthMultiplier;
+        env.windStrength = envData.windStrength;
+        env.windStrengthPrecision = envData.windStrengthPrecision;
+
+        env.windAnglePrecision = envData.windAnglePrecision;
+        env.windAngle = envData.windAngle;
+
+        env.seasonEnum = (EnvironmentController.ESeasonEnum)System.Enum.Parse(typeof(EnvironmentController.ESeasonEnum), envData.season);
+        env.weatherEnum = (EnvironmentController.EWeatherEnum)System.Enum.Parse(typeof(EnvironmentController.EWeatherEnum), envData.weather);
     }
 }

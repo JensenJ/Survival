@@ -176,6 +176,39 @@ public static class SaveSystem
         }
     }
 
+    //Save environment data
+    public static void SaveEnvironment(EnvironmentController controller, string worldName)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        Directory.CreateDirectory(Application.persistentDataPath + "/Saves/" + worldName);
+        string path = Application.persistentDataPath + "/Saves/" + worldName + "/Environment.SGSAVE";
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        EnvironmentData data = new EnvironmentData(controller);
+        formatter.Serialize(stream, data);
+        stream.Close();
+    }
+
+    //Load environment data
+    public static EnvironmentData LoadEnvironment(string worldName)
+    {
+        string path = Application.persistentDataPath + "/Saves/" + worldName + "/Environment.SGSAVE";
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            EnvironmentData data = formatter.Deserialize(stream) as EnvironmentData;
+            stream.Close();
+            return data;
+        }
+        else
+        {
+            Debug.LogWarning("Path does not exist: " + path);
+            return null;
+        }
+    }
+
     //Save all save games
     public static void SaveSaves(WorldManager worldman)
     {

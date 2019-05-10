@@ -98,7 +98,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
   m_LightingDataAsset: {fileID: 112000000, guid: f47d4a14101103446b725887d13aa447,
     type: 2}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1754,12 +1754,12 @@ MonoBehaviour:
   tempMultiplier: 1
   bIsTempFahrenheit: 0
   temperature: 0
-  tempAccuracy: 2
+  tempPrecision: 2
   windStrengthMultiplier: 1
   windStrength: 0
-  windStrengthAccuracy: 2
+  windStrengthPrecision: 2
   windAngle: 0
-  windAngleAccuracy: 2
+  windAnglePrecision: 2
   weatherEnum: 0
 --- !u!114 &693049472
 MonoBehaviour:
