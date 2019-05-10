@@ -5232,18 +5232,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chunkSize: 16
-  amplitude: 10
-  frequency: 10
-  waterHeight: 4.9
+  terrainOctaves:
+  - amplitude: 2.75
+    frequency: 3.57
+  - amplitude: 4.54
+    frequency: 10.7
+  - amplitude: 8.42
+    frequency: 9.27
+  waterHeight: 5.49
   seed: 0
   offset: {x: 0, y: 0}
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
   waterMaterial: {fileID: 2100000, guid: 4e19fefed94bad84a8b3c68ec77d0b8f, type: 2}
   generateOnStart: 1
+  waveLevelOfDetail: 3
   waveOctaves:
   - speed: {x: 0.4, y: 0.5}
     scale: {x: 0.4, y: 0.45}
-    height: 1
+    height: 0.15
+    alternate: 0
+  - speed: {x: 0.2, y: 0.4}
+    scale: {x: 0.45, y: 0.5}
+    height: 0.2
+    alternate: 1
+  - speed: {x: 0.35, y: 0.6}
+    scale: {x: 0.4, y: 0.35}
+    height: 0.1
     alternate: 0
   heights:
   - layerName: Water 1

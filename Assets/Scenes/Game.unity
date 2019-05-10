@@ -9309,18 +9309,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chunkSize: 16
   terrainOctaves:
-  - amplitude: 4
-    frequency: 8.75
-  - amplitude: 3
-    frequency: 7.5
-  - amplitude: 6
-    frequency: 6
-  waterHeight: 4.9
+  - amplitude: 2.75
+    frequency: 3.57
+  - amplitude: 4.54
+    frequency: 10.7
+  - amplitude: 8.42
+    frequency: 9.27
+  waterHeight: 5.49
   seed: 0
   offset: {x: 0, y: 0}
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
   waterMaterial: {fileID: 2100000, guid: 4e19fefed94bad84a8b3c68ec77d0b8f, type: 2}
-  generateOnStart: 0
+  generateOnStart: 1
   waveLevelOfDetail: 3
   waveOctaves:
   - speed: {x: 0.4, y: 0.5}
