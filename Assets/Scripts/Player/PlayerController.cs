@@ -4,6 +4,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering.PostProcessing;
 
 [RequireComponent(typeof(Compass))]
 [RequireComponent(typeof(PlayerMotor))]
@@ -28,6 +29,10 @@ public class PlayerController : MonoBehaviour
     MapGenerator mapgen;
     SaveManager sm;
 
+    public PostProcessProfile normalProfile;
+    public PostProcessProfile waterProfile;
+    PostProcessVolume postProcessingVolume = null;
+
     //Swimming
     bool isUnderWater;
 
@@ -47,6 +52,7 @@ public class PlayerController : MonoBehaviour
         mapgen = transform.root.GetChild(4).GetComponent<MapGenerator>();
         Crosshair = transform.root.GetChild(1).GetChild(3).GetComponent<Image>();
         sm = transform.root.GetChild(5).GetComponent<SaveManager>();
+        postProcessingVolume = transform.root.GetChild(7).GetComponent<PostProcessVolume>();
         pausePanel = transform.root.GetChild(1).GetChild(5).gameObject;
         Cursor.lockState = CursorLockMode.Locked;
         Crosshair.gameObject.SetActive(true);
@@ -88,6 +94,15 @@ public class PlayerController : MonoBehaviour
         else
         {
             isUnderWater = false;
+        }
+
+        if(transform.position.y < mapgen.waterHeight - 0.1f)
+        {
+            postProcessingVolume.profile = waterProfile;
+        }
+        else
+        {
+            postProcessingVolume.profile = normalProfile;
         }
 
         //Waypoint Manager
