@@ -15,6 +15,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private Material material = null;
     [SerializeField] private Material waterMaterial = null;
     [SerializeField] private bool generateOnStart = false;
+    [SerializeField] private bool isRandomMap = false;
     [SerializeField] private int waveLevelOfDetail = 1;
     [SerializeField] public WaveOctave[] waveOctaves;
     [SerializeField] public HeightData[] heights;
@@ -36,9 +37,17 @@ public class MapGenerator : MonoBehaviour
 
     void Start()
     {
-        if(generateOnStart == true)
+        if (generateOnStart == true)
         {
-            GenerateMap(Random.Range(-100000, 100000));
+            if (isRandomMap == true)
+            {
+                GenerateMap(Random.Range(-100000, 100000));
+            }
+            else
+            {
+
+                GenerateMap(seed);
+            }
         }
     }
 

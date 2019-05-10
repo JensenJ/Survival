@@ -27,7 +27,7 @@ public class ChunkGenerator : MonoBehaviour
     WaveOctave[] waveOctaves;
     int waveLOD;
 
-    TerrainOctave[] landOctaves;
+    public TerrainOctave[] landOctaves;
 
     //Variables only relevant to this chunk
     [SerializeField] Vector2 offset;
