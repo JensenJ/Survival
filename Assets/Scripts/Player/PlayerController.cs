@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Range(0, 15)] public float sprintSpeed = 7.0f;
     [SerializeField] [Range(0, 5)] public float sensitivity = 3.0f;
     [SerializeField] [Range(0, 4)] public float jumpForce = 2.0f;
+    [SerializeField] [Range(0, 4)] public float swimForce = 2.0f;
+
+    [SerializeField] [Range(0, 5)] public float swimmingSpeed = 2.0f;
 
     //References
     private Attributes attributes = null;
@@ -24,6 +27,9 @@ public class PlayerController : MonoBehaviour
     private PlayerMotor motor;
     MapGenerator mapgen;
     SaveManager sm;
+
+    //Swimming
+    bool isUnderWater;
 
     [Header("Debug:")]
     public Image Crosshair = null;
@@ -75,6 +81,15 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        if(transform.position.y < mapgen.waterHeight + 0.5f)
+        {
+            isUnderWater = true;
+        }
+        else
+        {
+            isUnderWater = false;
+        }
+
         //Waypoint Manager
         if (Input.GetKeyDown(KeyCode.B) && bCanUseWaypointManager)
         {
@@ -113,6 +128,7 @@ public class PlayerController : MonoBehaviour
                 isInMenu = true;
             }
         }
+
         //Movement
         Move();
         Rotate();
@@ -146,7 +162,7 @@ public class PlayerController : MonoBehaviour
             Vector3 moveVertical = transform.forward * zMove;
 
             //Sprinting
-            if (Input.GetButton("Run") && (xMove != 0.0f || zMove != 0.0f))
+            if (Input.GetButton("Run") && (xMove != 0.0f || zMove != 0.0f) && !isUnderWater)
             {
                 //Disables stamina regen while running
                 attributes.bCanRegenStamina = false;
@@ -177,8 +193,18 @@ public class PlayerController : MonoBehaviour
             {
                 //Otherwise allow regen of stamina
                 attributes.bCanRegenStamina = true;
-                //Apply normal speed
-                velocity = (moveHorizontal + moveVertical).normalized * speed;
+
+                if (isUnderWater)
+                {
+                    //Apply swim speed
+                    velocity = (moveHorizontal + moveVertical).normalized * swimmingSpeed;
+                }
+                else
+                {
+
+                    //Apply normal speed
+                    velocity = (moveHorizontal + moveVertical).normalized * speed;
+                }
             }
 
         }
@@ -210,15 +236,25 @@ public class PlayerController : MonoBehaviour
         //Checks whether player can move
         if (bCanMove)
         {
-            if (Input.GetButtonDown("Jump"))
+            if (isUnderWater)
             {
-                power = jumpForce;
+                if (Input.GetButton("Jump"))
+                {
+                    power = swimForce;
+                }
             }
             else
             {
-                power = 0.0f;
+                if (Input.GetButtonDown("Jump"))
+                {
+                    power = jumpForce;
+                }
+                else
+                {
+                    power = 0.0f;
+                }
             }
         }
-        motor.Jump(power);
+        motor.Jump(power, isUnderWater);
     }
 }

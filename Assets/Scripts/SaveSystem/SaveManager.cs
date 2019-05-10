@@ -63,6 +63,7 @@ public class SaveManager : MonoBehaviour
         //Player Data
         PlayerData playerData = SaveSystem.LoadPlayer(WorldData.currentlyLoadedName);
         pc.speed = playerData.speed;
+        pc.swimmingSpeed = playerData.swimSpeed;
         pc.sprintSpeed = playerData.sprintSpeed;
         pc.jumpForce = playerData.jumpForce;
         pc.transform.position = new Vector3(playerData.position[0], playerData.position[1], playerData.position[2]);
@@ -70,6 +71,7 @@ public class SaveManager : MonoBehaviour
 
         //Player attribute data
         AttributeData attributeData = SaveSystem.LoadAttributes(WorldData.currentlyLoadedName);
+
         pa.bCanRegenHealth = attributeData.canRegen[0];
         pa.bCanRegenStamina = attributeData.canRegen[1];
         pa.bCanRegenThirst = attributeData.canRegen[2];

@@ -15,6 +15,7 @@ public class PlayerData
     public float speed;
     public float sprintSpeed;
     public float jumpForce;
+    public float swimSpeed;
 
     public PlayerData(PlayerController player)
     {
@@ -29,6 +30,7 @@ public class PlayerData
 
         //Other attributes
         speed = player.speed;
+        swimSpeed = player.swimmingSpeed;
         sprintSpeed = player.sprintSpeed;
         jumpForce = player.jumpForce;
     }

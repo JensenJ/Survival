@@ -53,13 +53,22 @@ public class PlayerMotor : MonoBehaviour
     }
 
     // jump function called from player controller
-    public void Jump(float m_jumpForce)
+    public void Jump(float m_jumpForce, bool m_isSwimming)
     {
+        //Swimming
         jumpForce = m_jumpForce;
-        //Prevents double jumps
-        if (IsGrounded())
+        if (m_isSwimming)
         {
             rb.AddForce(0.0f, jumpForce, 0.0f, ForceMode.Impulse);
+        }
+        //Jumping
+        else
+        {
+            //Prevents double jumps
+            if (IsGrounded())
+            {
+                rb.AddForce(0.0f, jumpForce, 0.0f, ForceMode.Impulse);
+            }
         }
     }
 
