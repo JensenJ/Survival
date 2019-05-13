@@ -1507,7 +1507,7 @@ MonoBehaviour:
     value: 0.5
   smoothness:
     overrideState: 1
-    value: 0.15
+    value: 0.5
   roundness:
     overrideState: 1
     value: 1
@@ -1539,10 +1539,10 @@ MonoBehaviour:
     value: 1
   filtering:
     overrideState: 1
-    value: {x: 50, y: 95}
+    value: {x: 46.085693, y: 91.08569}
   minLuminance:
     overrideState: 1
-    value: 0.6
+    value: 4
   maxLuminance:
     overrideState: 1
     value: 9
