@@ -18,12 +18,13 @@ public class Water : MonoBehaviour
     float waterHeight;
     public WaveOctave[] octaves;
     [SerializeField] Vector2 offset;
+    int chunkLOD;
 
     //Coroutines
     IEnumerator currentWaveCoroutine;
 
     //Function to generate water mesh.
-    public void AddWater(int m_chunkSize, float m_waterHeight, WaveOctave[] m_waveOctaves, Vector2 m_offset)
+    public void AddWater(int m_chunkSize, float m_waterHeight, WaveOctave[] m_waveOctaves, Vector2 m_offset, int m_levelOfDetail)
     {
         //Variable assigning
         chunkSize = m_chunkSize;
@@ -35,8 +36,12 @@ public class Water : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
         mesh.name = "Water";
 
+        chunkLOD = (int)Mathf.Pow(2, m_levelOfDetail);
+        chunkSize /= chunkLOD;
+
         CreateMesh();
         UpdateMesh();
+
     }
 
     void Update()
@@ -63,8 +68,8 @@ public class Water : MonoBehaviour
                         if (octaves[j].alternate)
                         {
                             //Calculate position of vertex using perlin noise, using method 1
-                            float xSample = ((x + offset.x) * octaves[j].scale.x) / chunkSize;
-                            float zSample = ((z + offset.y) * octaves[j].scale.y) / chunkSize;
+                            float xSample = (((x * chunkLOD) + offset.x) * octaves[j].scale.x) / chunkSize;
+                            float zSample = (((z * chunkLOD) + offset.y) * octaves[j].scale.y) / chunkSize;
 
                             float perl = Mathf.PerlinNoise(xSample, zSample) * Mathf.PI * 2f;
                             y += Mathf.Cos(perl + octaves[j].speed.magnitude * Time.time) * octaves[j].height;
@@ -72,8 +77,8 @@ public class Water : MonoBehaviour
                         else
                         {
                             //Calculate position of vertex using perlin noise, using method 2
-                            float xSample = ((x + offset.x) * octaves[j].scale.x + Time.time * octaves[j].speed.x) / chunkSize;
-                            float zSample = ((z + offset.y) * octaves[j].scale.y + Time.time * octaves[j].speed.y) / chunkSize;
+                            float xSample = (((x * chunkLOD) + offset.x) * octaves[j].scale.x + Time.time * octaves[j].speed.x) / chunkSize;
+                            float zSample = (((z * chunkLOD) + offset.y) * octaves[j].scale.y + Time.time * octaves[j].speed.y) / chunkSize;
 
                             float perl = Mathf.PerlinNoise(xSample, zSample) - 0.5f;
                             y += perl * octaves[j].height;
@@ -112,7 +117,8 @@ public class Water : MonoBehaviour
             for (int x = 0; x <= chunkSize; x++)
             {
                 //Set vertex position
-                vertices[i] = new Vector3(x, waterHeight, z);
+                vertices[i] = new Vector3(x * chunkLOD, waterHeight, z * chunkLOD);
+                //vertices[i] = new Vector3(x, waterHeight, z);
                 i++;
             }
         }

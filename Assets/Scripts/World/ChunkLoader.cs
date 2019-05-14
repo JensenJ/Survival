@@ -22,7 +22,7 @@ public class ChunkLoader : MonoBehaviour
     IEnumerator currentLoadCoroutine;
     IEnumerator currentUnloadCoroutine;
 
-    void Start()
+    void Awake()
     {
         //Setup
         cm = transform.root.GetChild(5).GetComponent<ChunkManager>();
@@ -41,15 +41,7 @@ public class ChunkLoader : MonoBehaviour
             //Get chunknames from the surrounding chunks
             chunknames = GetSurroundingChunks(new Vector2(chunk.transform.position.x, chunk.transform.position.z));
 
-
-            //Run loading coroutine
-            if (currentLoadCoroutine != null)
-            {
-                StopCoroutine(currentLoadCoroutine);
-            }
-            currentLoadCoroutine = LoadChunks();
-            StartCoroutine(currentLoadCoroutine);
-
+            LoadMap();
         }
 
         //Run unloading coroutine
@@ -130,7 +122,6 @@ public class ChunkLoader : MonoBehaviour
             for (int j = 0; j < chunknames.Length; j++)
             {
                 string chunkname = chunknames[j];
-
                 //If chunk does not exist, create a new one at this position. This allows creation of endless terrain.
                 GameObject chunk = GameObject.Find(chunkname);
                 if (chunk == null)

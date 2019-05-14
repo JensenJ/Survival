@@ -13,11 +13,11 @@ public class EnvironmentController : MonoBehaviour
 
     //Time settings
     [Header("Time:")]
-    [SerializeField] [Range(1, 8)] private float timeMultiplier = 1f;
-    [SerializeField] [Range(1, 120)] private int daysInMonth = 30;
-    [SerializeField] [Range(1, 40)] private int monthsInYear = 12;
+    [SerializeField] [Range(1, 64)] public float timeMultiplier = 1f;
+    [SerializeField] [Range(1, 120)] public int daysInMonth = 30;
+    [SerializeField] [Range(1, 40)] public int monthsInYear = 12;
     //Slider for percentage of full day done
-    [Range(0, 1)] [SerializeField] private float currentTimeOfDay = 0;
+    [Range(0, 1)] [SerializeField] public float currentTimeOfDay = 0;
 
     //Time variables
     [Space(10)]
@@ -27,11 +27,11 @@ public class EnvironmentController : MonoBehaviour
     private int Day = 1;
     private int Month = 1;
     private int Year = 1;
-    [SerializeField] private float Clockwork = 360; // 6 o'clock
+    [SerializeField] public float Clockwork = 360; // 6 o'clock
 
     //Seasons
-    enum ESeasonEnum { ENone, ESpring, ESummer, EAutumn, EWinter };
-    [SerializeField] ESeasonEnum seasonEnum;
+    public enum ESeasonEnum { ENone, ESpring, ESummer, EAutumn, EWinter };
+    [SerializeField] public ESeasonEnum seasonEnum;
 
     //Variables for calculations later.
     private float DayTick;
@@ -41,10 +41,10 @@ public class EnvironmentController : MonoBehaviour
     //Temperature
     [Header("Temperature:")]
     //Temperature settings
-    [SerializeField] [Range(0, 5)] float tempMultiplier = 1;
-    [SerializeField] bool bIsTempFahrenheit = false;
-    [SerializeField] float temperature = 0;
-    [SerializeField] [Range(0, 4)] int tempAccuracy = 2;
+    [SerializeField] [Range(0, 5)] public float tempMultiplier = 1;
+    [SerializeField] public bool bIsTempFahrenheit = false;
+    [SerializeField] public float temperature = 0;
+    [SerializeField] [Range(0, 4)] public int tempPrecision = 2;
 
     //Temperature variables
     bool bNewGenerationTemp = true;
@@ -59,9 +59,9 @@ public class EnvironmentController : MonoBehaviour
     //Wind
     [Header("Wind:")]
     //Wind settings
-    [SerializeField] [Range(0, 5)] float windStrengthMultiplier = 1;
-    [SerializeField] float windStrength = 0;
-    [SerializeField] [Range(0, 4)] int windStrengthAccuracy = 2;
+    [SerializeField] [Range(0, 5)] public float windStrengthMultiplier = 1;
+    [SerializeField] public float windStrength = 0;
+    [SerializeField] [Range(0, 4)] public int windStrengthPrecision = 2;
 
     //Wind variable
     bool bNewGenerationWind = true;
@@ -72,8 +72,8 @@ public class EnvironmentController : MonoBehaviour
     float averageWind;
 
     //Wind angle settings
-    [SerializeField] float windAngle = 0;
-    [SerializeField] [Range(0, 4)] int windAngleAccuracy = 2;
+    [SerializeField] public float windAngle = 0;
+    [SerializeField] [Range(0, 4)] public int windAnglePrecision = 2;
 
     //Wind angle variables
     bool bNewGenerationWindAngle = true;
@@ -86,12 +86,12 @@ public class EnvironmentController : MonoBehaviour
     //Weather
     [Header("Weather:")]
     //Current weather
-    [SerializeField] EWeatherEnum weatherEnum;
+    [SerializeField] public EWeatherEnum weatherEnum;
 
     //Weather variables
     bool bNewGenerationWeather = true;
     bool bHasGeneratedWeather = false;
-    enum EWeatherEnum { ENone, ESunny, EOvercast, ECloudy, ERain, ESnow, EThunder, EFog };
+    public enum EWeatherEnum { ENone, ESunny, EOvercast, ECloudy, ERain, ESnow, EThunder, EFog };
     EWeatherEnum lastWeather;
     EWeatherEnum weather;
 
@@ -161,25 +161,33 @@ public class EnvironmentController : MonoBehaviour
 
     void UpdateSun()
     {
-        //Updates sun position based on currentTimeOfDay
-        sun.transform.localRotation = Quaternion.Euler((currentTimeOfDay * 360f) - 90, 170, 0);
-
+        //Intensity
         float intensityMultiplier = 1;
 
         if (currentTimeOfDay <= 0.25f || currentTimeOfDay >= 0.75f)
         {
-            intensityMultiplier = 0;
+            intensityMultiplier = 0.1f;
         }
-        else if (currentTimeOfDay <= 0.25f)
+        else if (currentTimeOfDay <= 0.20f)
         {
             intensityMultiplier = Mathf.Clamp01((currentTimeOfDay - 0.23f) * (1 / 0.02f));
         }
-        else if (currentTimeOfDay >= 0.73)
+        else if (currentTimeOfDay >= 0.70)
         {
             intensityMultiplier = Mathf.Clamp01(1 - ((currentTimeOfDay - 0.73f) * (1 / 0.02f)));
         }
 
-        sun.intensity = sunInitialIntensity * intensityMultiplier;
+
+        //Sun rotation
+        if (currentTimeOfDay <= 0.25f || currentTimeOfDay >= 0.75f)
+        {
+            sun.transform.localRotation = Quaternion.Euler((currentTimeOfDay * 360) + 90, 170, 0);
+        }
+        else
+        {
+            sun.transform.localRotation = Quaternion.Euler((currentTimeOfDay * 360) - 90, 170, 0);
+        }
+            sun.intensity = sunInitialIntensity * intensityMultiplier;
     }
 
     void Calendar()
@@ -310,7 +318,7 @@ public class EnvironmentController : MonoBehaviour
                 }
 
                 //Rounds to chosen number of dp
-                averageTemp = (float)System.Math.Round(averageTemp, tempAccuracy);
+                averageTemp = (float)System.Math.Round(averageTemp, tempPrecision);
 
                 bHasGeneratedTemp = true; //Stops repetition of code.
             }
@@ -373,7 +381,7 @@ public class EnvironmentController : MonoBehaviour
                 averageWind = averageWind * windStrengthMultiplier;
 
                 //rounds to chosen number of dp
-                averageWind = (float)System.Math.Round(averageWind, windStrengthAccuracy);
+                averageWind = (float)System.Math.Round(averageWind, windStrengthPrecision);
 
                 bHasGeneratedWind = true; //stops repetition
             }
@@ -425,7 +433,7 @@ public class EnvironmentController : MonoBehaviour
                 lastWindAngle = averageWindAngle;
 
                 //rounds to chosen number of dp
-                averageWindAngle = (float)System.Math.Round(averageTemp, windAngleAccuracy);
+                averageWindAngle = (float)System.Math.Round(averageTemp, windAnglePrecision);
 
                 bHasGeneratedWindAngle = true; //stops repetitions.
             }

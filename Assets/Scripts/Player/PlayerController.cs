@@ -4,6 +4,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering.PostProcessing;
 
 [RequireComponent(typeof(Compass))]
 [RequireComponent(typeof(PlayerMotor))]
@@ -16,6 +17,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Range(0, 15)] public float sprintSpeed = 7.0f;
     [SerializeField] [Range(0, 5)] public float sensitivity = 3.0f;
     [SerializeField] [Range(0, 4)] public float jumpForce = 2.0f;
+    [SerializeField] [Range(0, 4)] public float swimForce = 2.0f;
+
+    [SerializeField] [Range(0, 5)] public float swimmingSpeed = 2.0f;
 
     //References
     private Attributes attributes = null;
@@ -23,14 +27,23 @@ public class PlayerController : MonoBehaviour
     private bool bCanUseWaypointManager = true;
     private PlayerMotor motor;
     MapGenerator mapgen;
-    MenuManager mm;
     SaveManager sm;
+    EnvironmentController ec;
+
+    public PostProcessProfile dayProfile;
+    public PostProcessProfile nightProfile;
+    public PostProcessProfile waterProfile;
+    PostProcessVolume postProcessingVolume = null;
+
+    //Swimming
+    bool isUnderWater;
 
     [Header("Debug:")]
     public Image Crosshair = null;
     GameObject pausePanel = null;
     bool bHasSpawned = false;
     bool isInMenu = false;
+    bool isNight = false;
 
     // Setup
     void Start()
@@ -41,8 +54,9 @@ public class PlayerController : MonoBehaviour
         waypointManager = transform.root.GetChild(2).GetComponent<WaypointManager>();
         mapgen = transform.root.GetChild(4).GetComponent<MapGenerator>();
         Crosshair = transform.root.GetChild(1).GetChild(3).GetComponent<Image>();
-        mm = transform.root.GetChild(5).GetComponent<MenuManager>();
         sm = transform.root.GetChild(5).GetComponent<SaveManager>();
+        ec = transform.root.GetChild(5).GetComponent<EnvironmentController>();
+        postProcessingVolume = transform.root.GetChild(7).GetComponent<PostProcessVolume>();
         pausePanel = transform.root.GetChild(1).GetChild(5).gameObject;
         Cursor.lockState = CursorLockMode.Locked;
         Crosshair.gameObject.SetActive(true);
@@ -74,6 +88,42 @@ public class PlayerController : MonoBehaviour
                 transform.position = new Vector3(transform.position.x, hit.point.y + 2, transform.position.z);
                 sm.SaveGame();
                 bHasSpawned = true;
+            }
+        }
+
+        //Day Night Post Process Toggle
+        if(ec.currentTimeOfDay <= 0.25f || ec.currentTimeOfDay >= 0.75f)
+        {
+            isNight = true;
+        }
+        else
+        {
+            isNight = false;
+        }
+
+        //Swimming check
+        if (transform.position.y < mapgen.waterHeight + 0.5f)
+        {
+            isUnderWater = true;
+        }
+        else
+        {
+            isUnderWater = false;
+        }
+
+        if(transform.position.y < mapgen.waterHeight - 0.1f)
+        {
+            postProcessingVolume.profile = waterProfile;
+        }
+        else
+        {
+            if (isNight)
+            {
+                postProcessingVolume.profile = nightProfile;
+            }
+            else
+            {
+                postProcessingVolume.profile = dayProfile;
             }
         }
 
@@ -115,6 +165,7 @@ public class PlayerController : MonoBehaviour
                 isInMenu = true;
             }
         }
+
         //Movement
         Move();
         Rotate();
@@ -148,7 +199,7 @@ public class PlayerController : MonoBehaviour
             Vector3 moveVertical = transform.forward * zMove;
 
             //Sprinting
-            if (Input.GetButton("Run") && (xMove != 0.0f || zMove != 0.0f))
+            if (Input.GetButton("Run") && (xMove != 0.0f || zMove != 0.0f) && !isUnderWater)
             {
                 //Disables stamina regen while running
                 attributes.bCanRegenStamina = false;
@@ -179,8 +230,18 @@ public class PlayerController : MonoBehaviour
             {
                 //Otherwise allow regen of stamina
                 attributes.bCanRegenStamina = true;
-                //Apply normal speed
-                velocity = (moveHorizontal + moveVertical).normalized * speed;
+
+                if (isUnderWater)
+                {
+                    //Apply swim speed
+                    velocity = (moveHorizontal + moveVertical).normalized * swimmingSpeed;
+                }
+                else
+                {
+
+                    //Apply normal speed
+                    velocity = (moveHorizontal + moveVertical).normalized * speed;
+                }
             }
 
         }
@@ -212,15 +273,25 @@ public class PlayerController : MonoBehaviour
         //Checks whether player can move
         if (bCanMove)
         {
-            if (Input.GetButtonDown("Jump"))
+            if (isUnderWater)
             {
-                power = jumpForce;
+                if (Input.GetButton("Jump"))
+                {
+                    power = swimForce;
+                }
             }
             else
             {
-                power = 0.0f;
+                if (Input.GetButtonDown("Jump"))
+                {
+                    power = jumpForce;
+                }
+                else
+                {
+                    power = 0.0f;
+                }
             }
         }
-        motor.Jump(power);
+        motor.Jump(power, isUnderWater);
     }
 }

@@ -22,11 +22,12 @@ public class ChunkGenerator : MonoBehaviour
 
     //Settings for chunk generation
     int chunkSize = 16;
-    float amplitude = 10.0f;
-    float frequency = 1.0f;
     float waterHeight = 4.0f;
     Material waterMaterial;
     WaveOctave[] waveOctaves;
+    int waveLOD;
+
+    public TerrainOctave[] landOctaves;
 
     //Variables only relevant to this chunk
     [SerializeField] Vector2 offset;
@@ -36,15 +37,14 @@ public class ChunkGenerator : MonoBehaviour
     System.Random mapgen;
 
     //Draw new chunk with info from map generator.
-    public void DrawChunk(int m_chunkSize, float m_amplitude, float m_frequency, int m_seed, 
+    public void DrawChunk(int m_chunkSize, TerrainOctave[] m_terrainOctaves, int m_seed, 
         Vector2 m_offset, Material m_mat, int m_loaderID, HeightData[] m_heights, float m_waterHeight,
-        Material m_waterMaterial, WaveOctave[] m_WaveOctaves)
+        Material m_waterMaterial, WaveOctave[] m_waveOctaves, int m_waveLOD)
     {
         //Variable assigning
         mapgen = new System.Random(m_seed);
         chunkSize = m_chunkSize;
-        amplitude = m_amplitude;
-        frequency = m_frequency;
+        landOctaves = m_terrainOctaves;
         offset = m_offset;
         LoadedBy = m_loaderID;
         heightData = m_heights;
@@ -53,7 +53,8 @@ public class ChunkGenerator : MonoBehaviour
 
         waterHeight = m_waterHeight;
         waterMaterial = m_waterMaterial;
-        waveOctaves = m_WaveOctaves;
+        waveOctaves = m_waveOctaves;
+        waveLOD = m_waveLOD;
 
         //Create new mesh
         mesh = new Mesh();
@@ -87,7 +88,6 @@ public class ChunkGenerator : MonoBehaviour
         int xSeed = mapgen.Next(-100000, 100000);
         int zSeed = mapgen.Next(-100000, 100000);
 
-        frequency /= 1000.0f;
 
         //Create vertices array
         vertices = new Vector3[(chunkSize + 1) * (chunkSize + 1)];
@@ -98,11 +98,15 @@ public class ChunkGenerator : MonoBehaviour
             //For each vertex on x axis
             for (int x = 0; x <= chunkSize; x++)
             {
-                //Generation of noise 
-                float xSample = ((x + offset.x) * frequency) + xSeed;
-                float zSample = ((z + offset.y) * frequency) + zSeed;
-                float y = Mathf.PerlinNoise(xSample, zSample) * amplitude;
-
+                float y = 0;
+                //For each octave
+                for (int j = 0; j < landOctaves.Length; j++)
+                {
+                    //Generation of noise 
+                    float xSample = ((x + offset.x) * (landOctaves[j].frequency / 1000.0f)) + xSeed;
+                    float zSample = ((z + offset.y) * (landOctaves[j].frequency / 1000.0f)) + zSeed;
+                    y += Mathf.PerlinNoise(xSample, zSample) * landOctaves[j].amplitude;
+                }
                 //Set vertex position
                 vertices[i] = new Vector3(x, y, z);
                 i++;
@@ -218,8 +222,8 @@ public class ChunkGenerator : MonoBehaviour
         System.Random rand = new System.Random(iteration + (int)offset.x + (int)offset.y + mapgen.Next());
         float randomValue = rand.Next(1, 10000);
 
-        float xSample = (iteration + offset.x) * frequency;
-        float zSample = (iteration + offset.y) * frequency;
+        float xSample = (iteration + offset.x) * (landOctaves[0].frequency / 1000.0f);
+        float zSample = (iteration + offset.y) * (landOctaves[0].frequency / 1000.0f);
 
         randomValue /= (xSample * zSample) / chunkSize + 10000.0f;
 
@@ -239,7 +243,7 @@ public class ChunkGenerator : MonoBehaviour
         for (int i = 0; i < vertices.Length; i++)
         {
             //If the height of vertex is less than the water height
-            if (vertices[i].y <= waterHeight)
+            if (vertices[i].y <= waterHeight + 0.2f)
             {
                 //Generate Water
                 GameObject water = new GameObject();
@@ -254,7 +258,7 @@ public class ChunkGenerator : MonoBehaviour
                 water.GetComponent<MeshRenderer>().material = waterMat;
 
                 //Spawn water
-                wg.AddWater(chunkSize, waterHeight, waveOctaves, offset);
+                wg.AddWater(chunkSize, waterHeight, waveOctaves, offset, waveLOD);
                 break;
             }
         }
@@ -270,4 +274,11 @@ public class ChunkGenerator : MonoBehaviour
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
     }
+}
+
+[System.Serializable]
+public struct TerrainOctave
+{
+    [Range(1, 16)] public float amplitude;
+    [Range(1, 16)] public float frequency;
 }

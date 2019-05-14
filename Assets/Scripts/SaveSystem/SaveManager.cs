@@ -13,6 +13,7 @@ public class SaveManager : MonoBehaviour
     ChunkLoader pcl;
     Attributes pa;
     WaypointManager wm;
+    EnvironmentController env;
 
     //Get references
     public void Start()
@@ -23,16 +24,21 @@ public class SaveManager : MonoBehaviour
         pa = transform.root.GetChild(3).GetComponent<Attributes>();
         wm = transform.root.GetChild(2).GetComponent<WaypointManager>();
         pcl = transform.root.GetChild(3).GetComponent<ChunkLoader>();
+        env = transform.root.GetChild(5).GetComponent<EnvironmentController>();
     }
 
     //Function for saving all data in game
     public void SaveGame()
     {
-        SaveSystem.SaveMap(mg, WorldData.currentlyLoadedName);
-        SaveSystem.SavePlayer(pc, WorldData.currentlyLoadedName);
-        SaveSystem.SaveAttributes(pa, WorldData.currentlyLoadedName);
-        SaveSystem.SaveLoadedChunks(pcl, WorldData.currentlyLoadedName);
-        SaveSystem.SaveWaypoints(wm, WorldData.currentlyLoadedName);
+        if (WorldData.currentlyLoadedName != null)
+        {
+            SaveSystem.SaveMap(mg, WorldData.currentlyLoadedName);
+            SaveSystem.SavePlayer(pc, WorldData.currentlyLoadedName);
+            SaveSystem.SaveAttributes(pa, WorldData.currentlyLoadedName);
+            SaveSystem.SaveLoadedChunks(pcl, WorldData.currentlyLoadedName);
+            SaveSystem.SaveWaypoints(wm, WorldData.currentlyLoadedName);
+            SaveSystem.SaveEnvironment(env, WorldData.currentlyLoadedName);
+        }
     }
 
     //Exits to main menu with saving
@@ -47,21 +53,25 @@ public class SaveManager : MonoBehaviour
     {
         //Map Data
         MapData mapData = SaveSystem.LoadMap(WorldData.currentlyLoadedName);
-        mg.amplitude = mapData.amplitude;
-        mg.frequency = mapData.frequency;
+        for (int i = 0; i < mapData.amplitude.Length; i++)
+        {
+            mg.terrainOctaves[i].amplitude = mapData.amplitude[i];
+            mg.terrainOctaves[i].frequency = mapData.frequency[i];
+        }
         mg.GenerateMap(mapData.seed);
 
         //Player Data
         PlayerData playerData = SaveSystem.LoadPlayer(WorldData.currentlyLoadedName);
         pc.speed = playerData.speed;
+        pc.swimmingSpeed = playerData.swimSpeed;
         pc.sprintSpeed = playerData.sprintSpeed;
         pc.jumpForce = playerData.jumpForce;
         pc.transform.position = new Vector3(playerData.position[0], playerData.position[1], playerData.position[2]);
-        pc.transform.rotation = Quaternion.Euler(0, playerData.rotation[1], playerData.rotation[2]);
-        pc.transform.GetChild(1).rotation = Quaternion.Euler(playerData.rotation[0], 0, 0);
+        pc.transform.rotation = Quaternion.Euler(new Vector3(0, playerData.playerRot, 0));
 
         //Player attribute data
         AttributeData attributeData = SaveSystem.LoadAttributes(WorldData.currentlyLoadedName);
+
         pa.bCanRegenHealth = attributeData.canRegen[0];
         pa.bCanRegenStamina = attributeData.canRegen[1];
         pa.bCanRegenThirst = attributeData.canRegen[2];
@@ -113,5 +123,27 @@ public class SaveManager : MonoBehaviour
                 wm.AddWaypoint(name, new Vector3(x, y, z), new Color(r, g, b), enabled);
             }
         }
+
+        //Load environment data
+        EnvironmentData envData = SaveSystem.LoadEnvironment(WorldData.currentlyLoadedName);
+        env.timeMultiplier = envData.timeMultiplier;
+        env.daysInMonth = envData.daysInMonth;
+        env.monthsInYear = envData.MonthsInYear;
+        env.Clockwork = envData.clockWork;
+
+        env.tempMultiplier = envData.tempMultiplier;
+        env.bIsTempFahrenheit = envData.tempFahrenheit;
+        env.temperature = envData.temperature;
+        env.tempPrecision = envData.tempPrecision;
+
+        env.windStrengthMultiplier = envData.windStrengthMultiplier;
+        env.windStrength = envData.windStrength;
+        env.windStrengthPrecision = envData.windStrengthPrecision;
+
+        env.windAnglePrecision = envData.windAnglePrecision;
+        env.windAngle = envData.windAngle;
+
+        env.seasonEnum = (EnvironmentController.ESeasonEnum)System.Enum.Parse(typeof(EnvironmentController.ESeasonEnum), envData.season);
+        env.weatherEnum = (EnvironmentController.EWeatherEnum)System.Enum.Parse(typeof(EnvironmentController.EWeatherEnum), envData.weather);
     }
 }

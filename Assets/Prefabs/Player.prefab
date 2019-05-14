@@ -177,6 +177,11 @@ MonoBehaviour:
   sprintSpeed: 15
   sensitivity: 3
   jumpForce: 4
+  swimForce: 0.5
+  swimmingSpeed: 2
+  dayProfile: {fileID: 11400000, guid: f6463a15973a7104eaf0111665a5a1c9, type: 2}
+  nightProfile: {fileID: 11400000, guid: ed64fff9e46595e40b4f88b23efda13c, type: 2}
+  waterProfile: {fileID: 11400000, guid: 234d4688930c6f242909944c2052d5e1, type: 2}
   Crosshair: {fileID: 0}
 --- !u!114 &5123572326359988360
 MonoBehaviour:
@@ -248,6 +253,7 @@ MonoBehaviour:
   chunkRenderDistance: 20
   chunkLoaderID: 0
   hitObject: {fileID: 0}
+  chunknames: []
 --- !u!1 &1758035812419762075
 GameObject:
   m_ObjectHideFlags: 0

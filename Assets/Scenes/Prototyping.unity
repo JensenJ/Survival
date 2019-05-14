@@ -1411,12 +1411,12 @@ MonoBehaviour:
   tempMultiplier: 1
   bIsTempFahrenheit: 0
   temperature: 0
-  tempAccuracy: 2
+  tempPrecision: 2
   windStrengthMultiplier: 1
   windStrength: 0
-  windStrengthAccuracy: 2
+  windStrengthPrecision: 2
   windAngle: 0
-  windAngleAccuracy: 2
+  windAnglePrecision: 2
   weatherEnum: 0
 --- !u!1 &651365708
 GameObject:
@@ -5232,18 +5232,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chunkSize: 16
-  amplitude: 10
-  frequency: 10
+  terrainOctaves:
+  - amplitude: 2.7
+    frequency: 4.6
+  - amplitude: 4.5
+    frequency: 10.7
+  - amplitude: 8.4
+    frequency: 9.3
   waterHeight: 4.9
   seed: 0
   offset: {x: 0, y: 0}
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
   waterMaterial: {fileID: 2100000, guid: 4e19fefed94bad84a8b3c68ec77d0b8f, type: 2}
   generateOnStart: 1
+  isRandomMap: 0
+  waveLevelOfDetail: 3
   waveOctaves:
   - speed: {x: 0.4, y: 0.5}
     scale: {x: 0.4, y: 0.45}
-    height: 1
+    height: 0.15
+    alternate: 0
+  - speed: {x: 0.2, y: 0.4}
+    scale: {x: 0.45, y: 0.5}
+    height: 0.2
+    alternate: 1
+  - speed: {x: 0.35, y: 0.6}
+    scale: {x: 0.4, y: 0.35}
+    height: 0.1
     alternate: 0
   heights:
   - layerName: Water 1

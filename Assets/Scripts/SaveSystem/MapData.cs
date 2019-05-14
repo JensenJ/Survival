@@ -9,15 +9,21 @@ public class MapData
 {
     //Map data
     public int seed;
-    public float frequency;
-    public float amplitude;
+    public float[] frequency;
+    public float[] amplitude;
 
     //Map data
     public MapData(MapGenerator mapgen)
     {
-        amplitude = mapgen.amplitude;
+        frequency = new float[mapgen.terrainOctaves.Length];
+        amplitude = new float[mapgen.terrainOctaves.Length];
+
+        for (int i = 0; i < mapgen.terrainOctaves.Length; i++)
+        {
+            frequency[i] = mapgen.terrainOctaves[i].frequency;
+            amplitude[i] = mapgen.terrainOctaves[i].amplitude;
+        }
         seed = mapgen.seed;
-        frequency = mapgen.frequency;
     }
 
 }

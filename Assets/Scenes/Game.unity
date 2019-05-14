@@ -33,7 +33,7 @@ RenderSettings:
   m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
   m_DefaultReflectionMode: 0
-  m_DefaultReflectionResolution: 128
+  m_DefaultReflectionResolution: 512
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
@@ -50,15 +50,15 @@ LightmapSettings:
     m_BounceScale: 1
     m_IndirectOutputScale: 1
     m_AlbedoBoost: 1
-    m_EnvironmentLightingMode: 0
+    m_EnvironmentLightingMode: 1
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
     serializedVersion: 12
     m_Resolution: 2
     m_BakeResolution: 40
-    m_AtlasSize: 1024
-    m_AO: 0
+    m_AtlasSize: 2048
+    m_AO: 1
     m_AOMaxDistance: 1
     m_CompAOExponent: 1
     m_CompAOExponentDirect: 0
@@ -71,13 +71,13 @@ LightmapSettings:
     m_FinalGatherFiltering: 1
     m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
-    m_MixedBakeMode: 2
+    m_MixedBakeMode: 1
     m_BakeBackend: 1
     m_PVRSampling: 1
-    m_PVRDirectSampleCount: 32
-    m_PVRSampleCount: 512
-    m_PVRBounces: 2
-    m_PVREnvironmentSampleCount: 256
+    m_PVRDirectSampleCount: 64
+    m_PVRSampleCount: 1000
+    m_PVRBounces: 4
+    m_PVREnvironmentSampleCount: 1000
     m_PVREnvironmentReferencePointCount: 2048
     m_PVRFilteringMode: 1
     m_PVRDenoiserTypeDirect: 1
@@ -3596,7 +3596,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 599171569}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe39737e29bdaae459b4a772367e9540, type: 3}
   m_Name: 
@@ -3611,12 +3611,12 @@ MonoBehaviour:
   tempMultiplier: 1
   bIsTempFahrenheit: 0
   temperature: 0
-  tempAccuracy: 2
+  tempPrecision: 2
   windStrengthMultiplier: 1
   windStrength: 0
-  windStrengthAccuracy: 2
+  windStrengthPrecision: 2
   windAngle: 0
-  windAngleAccuracy: 2
+  windAnglePrecision: 2
   weatherEnum: 0
 --- !u!114 &599171573
 MonoBehaviour:
@@ -7239,7 +7239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: f6463a15973a7104eaf0111665a5a1c9, type: 2}
+  sharedProfile: {fileID: 11400000, guid: ed64fff9e46595e40b4f88b23efda13c, type: 2}
   isGlobal: 1
   blendDistance: 0
   weight: 1
@@ -9308,14 +9308,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chunkSize: 16
-  amplitude: 12
-  frequency: 12
+  terrainOctaves:
+  - amplitude: 2.7
+    frequency: 4.6
+  - amplitude: 4.5
+    frequency: 10.7
+  - amplitude: 8.4
+    frequency: 9.3
   waterHeight: 4.9
   seed: 0
   offset: {x: 0, y: 0}
   material: {fileID: 2100000, guid: d09923722bc583b43b5ecf9baf521104, type: 2}
   waterMaterial: {fileID: 2100000, guid: 4e19fefed94bad84a8b3c68ec77d0b8f, type: 2}
   generateOnStart: 0
+  isRandomMap: 0
+  waveLevelOfDetail: 3
   waveOctaves:
   - speed: {x: 0.4, y: 0.5}
     scale: {x: 0.4, y: 0.45}
@@ -9405,7 +9412,7 @@ MonoBehaviour:
     - resourceName: Rock 1
       resourceModel: {fileID: 7844852150775855235, guid: 9f22bd66f39b617468b897da04733304,
         type: 3}
-      density: 0.001
+      density: 0.002
   - layerName: Grass 3
     height: 10
     colour: {r: 0.26415092, g: 0.5, b: 0.18160376, a: 0}
