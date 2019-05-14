@@ -13,11 +13,11 @@ public class EnvironmentController : MonoBehaviour
 
     //Time settings
     [Header("Time:")]
-    [SerializeField] [Range(1, 8)] public float timeMultiplier = 1f;
+    [SerializeField] [Range(1, 64)] public float timeMultiplier = 1f;
     [SerializeField] [Range(1, 120)] public int daysInMonth = 30;
     [SerializeField] [Range(1, 40)] public int monthsInYear = 12;
     //Slider for percentage of full day done
-    [Range(0, 1)] [SerializeField] private float currentTimeOfDay = 0;
+    [Range(0, 1)] [SerializeField] public float currentTimeOfDay = 0;
 
     //Time variables
     [Space(10)]
@@ -161,25 +161,33 @@ public class EnvironmentController : MonoBehaviour
 
     void UpdateSun()
     {
-        //Updates sun position based on currentTimeOfDay
-        sun.transform.localRotation = Quaternion.Euler((currentTimeOfDay * 360f) - 90, 170, 0);
-
+        //Intensity
         float intensityMultiplier = 1;
 
         if (currentTimeOfDay <= 0.25f || currentTimeOfDay >= 0.75f)
         {
-            intensityMultiplier = 0;
+            intensityMultiplier = 0.1f;
         }
-        else if (currentTimeOfDay <= 0.25f)
+        else if (currentTimeOfDay <= 0.20f)
         {
             intensityMultiplier = Mathf.Clamp01((currentTimeOfDay - 0.23f) * (1 / 0.02f));
         }
-        else if (currentTimeOfDay >= 0.73)
+        else if (currentTimeOfDay >= 0.70)
         {
             intensityMultiplier = Mathf.Clamp01(1 - ((currentTimeOfDay - 0.73f) * (1 / 0.02f)));
         }
 
-        sun.intensity = sunInitialIntensity * intensityMultiplier;
+
+        //Sun rotation
+        if (currentTimeOfDay <= 0.25f || currentTimeOfDay >= 0.75f)
+        {
+            sun.transform.localRotation = Quaternion.Euler((currentTimeOfDay * 360) + 90, 170, 0);
+        }
+        else
+        {
+            sun.transform.localRotation = Quaternion.Euler((currentTimeOfDay * 360) - 90, 170, 0);
+        }
+            sun.intensity = sunInitialIntensity * intensityMultiplier;
     }
 
     void Calendar()

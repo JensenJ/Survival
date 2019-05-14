@@ -28,8 +28,10 @@ public class PlayerController : MonoBehaviour
     private PlayerMotor motor;
     MapGenerator mapgen;
     SaveManager sm;
+    EnvironmentController ec;
 
-    public PostProcessProfile normalProfile;
+    public PostProcessProfile dayProfile;
+    public PostProcessProfile nightProfile;
     public PostProcessProfile waterProfile;
     PostProcessVolume postProcessingVolume = null;
 
@@ -41,6 +43,7 @@ public class PlayerController : MonoBehaviour
     GameObject pausePanel = null;
     bool bHasSpawned = false;
     bool isInMenu = false;
+    bool isNight = false;
 
     // Setup
     void Start()
@@ -52,6 +55,7 @@ public class PlayerController : MonoBehaviour
         mapgen = transform.root.GetChild(4).GetComponent<MapGenerator>();
         Crosshair = transform.root.GetChild(1).GetChild(3).GetComponent<Image>();
         sm = transform.root.GetChild(5).GetComponent<SaveManager>();
+        ec = transform.root.GetChild(5).GetComponent<EnvironmentController>();
         postProcessingVolume = transform.root.GetChild(7).GetComponent<PostProcessVolume>();
         pausePanel = transform.root.GetChild(1).GetChild(5).gameObject;
         Cursor.lockState = CursorLockMode.Locked;
@@ -87,7 +91,18 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(transform.position.y < mapgen.waterHeight + 0.5f)
+        //Day Night Post Process Toggle
+        if(ec.currentTimeOfDay <= 0.25f || ec.currentTimeOfDay >= 0.75f)
+        {
+            isNight = true;
+        }
+        else
+        {
+            isNight = false;
+        }
+
+        //Swimming check
+        if (transform.position.y < mapgen.waterHeight + 0.5f)
         {
             isUnderWater = true;
         }
@@ -102,7 +117,14 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            postProcessingVolume.profile = normalProfile;
+            if (isNight)
+            {
+                postProcessingVolume.profile = nightProfile;
+            }
+            else
+            {
+                postProcessingVolume.profile = dayProfile;
+            }
         }
 
         //Waypoint Manager
