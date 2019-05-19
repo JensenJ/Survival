@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviour
                     //If within range of interactable
                     if(Vector3.Distance(transform.position, interactable.transform.position) <= interactable.radius)
                     {
-                        print(interactable.gameObject.name);
+                        interactable.Interact();
                     }
                 }
             }

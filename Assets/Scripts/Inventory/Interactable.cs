@@ -8,5 +8,9 @@ public class Interactable : MonoBehaviour
 {
     public float radius = 3.0f;
 
-
+    //Meant to be overwritten by child classes
+    public virtual void Interact()
+    {
+        Debug.Log("Interacting with " + transform.name);
+    }
 }
