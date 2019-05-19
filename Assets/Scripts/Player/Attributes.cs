@@ -31,6 +31,8 @@ public class Attributes : MonoBehaviour
     private float staminaMeter;
     private Image staminaBar = null;
 
+    public bool bIsOverencumbered = false;
+
     //Hunger
     [Header("Hunger:")]
     [SerializeField] [Range(1, 1000)] public float maxHungerMeter = 100.0f;
@@ -131,7 +133,7 @@ public class Attributes : MonoBehaviour
         if (!bIsStaticStamina)
         {
             //Checks whether regeneration can happen
-            if (bCanRegenStamina)
+            if (bCanRegenStamina && !bIsOverencumbered)
             {
                 staminaMeter += Time.deltaTime * staminaMeterRegenSpeed;
             }
