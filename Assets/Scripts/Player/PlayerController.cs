@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //Day Night Post Process Toggle
+        //Day Night toggle
         if(ec.currentTimeOfDay <= 0.25f || ec.currentTimeOfDay >= 0.75f)
         {
             isNight = true;
@@ -111,6 +111,7 @@ public class PlayerController : MonoBehaviour
             isUnderWater = false;
         }
 
+        //Post process toggle
         if(transform.position.y < mapgen.waterHeight - 0.1f)
         {
             postProcessingVolume.profile = waterProfile;
@@ -124,6 +125,27 @@ public class PlayerController : MonoBehaviour
             else
             {
                 postProcessingVolume.profile = dayProfile;
+            }
+        }
+
+        //Interaction
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            RaycastHit hit;
+
+            //Raycast forward
+            if(Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+            {
+                //Get interactable component
+                Interactable interactable = hit.collider.GetComponent<Interactable>();
+                if(interactable != null)
+                {
+                    //If within range of interactable
+                    if(Vector3.Distance(transform.position, interactable.transform.position) <= interactable.radius)
+                    {
+                        print(interactable.gameObject.name);
+                    }
+                }
             }
         }
 
