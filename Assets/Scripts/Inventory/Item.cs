@@ -8,8 +8,8 @@ using UnityEngine;
 public class Item : ScriptableObject
 {
     //All item data
-    new public string name = "New Item";
+    public string itemName = "New Item";
     public Sprite icon = null;
-    public int weight;
-    public int value;
+    public float weight = 0;
+    public float value = 0;
 }

@@ -3,6 +3,7 @@
 // PURPOSE: Manages the save system
 
 using UnityEngine;
+using UnityEditor;
 
 public class SaveManager : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class SaveManager : MonoBehaviour
     Attributes pa;
     WaypointManager wm;
     EnvironmentController env;
+    Inventory pi;
 
     //Get references
     public void Start()
@@ -21,6 +23,7 @@ public class SaveManager : MonoBehaviour
         mm = transform.root.GetChild(5).GetComponent<MenuManager>();
         mg = transform.root.GetChild(4).GetComponent<MapGenerator>();
         pc = transform.root.GetChild(3).GetComponent<PlayerController>();
+        pi = transform.root.GetChild(3).GetComponent<Inventory>();
         pa = transform.root.GetChild(3).GetComponent<Attributes>();
         wm = transform.root.GetChild(2).GetComponent<WaypointManager>();
         pcl = transform.root.GetChild(3).GetComponent<ChunkLoader>();
@@ -34,6 +37,7 @@ public class SaveManager : MonoBehaviour
         {
             SaveSystem.SaveMap(mg, WorldData.currentlyLoadedName);
             SaveSystem.SavePlayer(pc, WorldData.currentlyLoadedName);
+            SaveSystem.SaveInventory(pi, WorldData.currentlyLoadedName);
             SaveSystem.SaveAttributes(pa, WorldData.currentlyLoadedName);
             SaveSystem.SaveLoadedChunks(pcl, WorldData.currentlyLoadedName);
             SaveSystem.SaveWaypoints(wm, WorldData.currentlyLoadedName);
@@ -69,6 +73,13 @@ public class SaveManager : MonoBehaviour
         pc.transform.position = new Vector3(playerData.position[0], playerData.position[1], playerData.position[2]);
         pc.transform.rotation = Quaternion.Euler(new Vector3(0, playerData.playerRot, 0));
 
+        //Inventory
+        InventoryData inventoryData = SaveSystem.LoadInventory(WorldData.currentlyLoadedName);
+        for (int i = 0; i < inventoryData.itemName.Length; i++)
+        {
+            //Sprite icon = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Textures/Items/" + inventoryData.spriteName[i] + "/.png", typeof(Sprite));
+            pi.LoadInventory(inventoryData.itemName[i], null, inventoryData.weight[i], inventoryData.value[i]);
+        }
         //Player attribute data
         AttributeData attributeData = SaveSystem.LoadAttributes(WorldData.currentlyLoadedName);
 

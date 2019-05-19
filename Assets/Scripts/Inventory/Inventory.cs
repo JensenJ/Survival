@@ -74,6 +74,21 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    //Loads inventory from save
+    public void LoadInventory(string m_name, Sprite m_sprite, float m_weight, float m_value)
+    {
+        Item tempItem = new Item
+        {
+            name = m_name,
+            itemName = m_name,
+            icon = m_sprite,
+            weight = m_weight,
+            value = m_value
+        };
+
+        Add(tempItem);
+    }
+
     //Add item
     public void Add(Item item)
     {
