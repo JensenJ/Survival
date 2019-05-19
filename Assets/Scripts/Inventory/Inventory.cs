@@ -58,7 +58,6 @@ public class Inventory : MonoBehaviour
         if(currentWeight > maxWeight)
         {
             //Changes stamina level to prevent running
-            print("Over inventory weight limit");
             attributes.ChangeStaminaLevel(-attributes.GetStaminaLevel(), false);
             attributes.bIsOverencumbered = true;
         }
@@ -77,14 +76,13 @@ public class Inventory : MonoBehaviour
     //Loads inventory from save
     public void LoadInventory(string m_name, Sprite m_sprite, float m_weight, float m_value)
     {
-        Item tempItem = new Item
-        {
-            name = m_name,
-            itemName = m_name,
-            icon = m_sprite,
-            weight = m_weight,
-            value = m_value
-        };
+        //Creates temporary item for adding to inventory, using paramaters for function
+        Item tempItem = (Item)ScriptableObject.CreateInstance(typeof(Item));
+        tempItem.name = m_name;
+        tempItem.itemName = m_name;
+        tempItem.icon = m_sprite;
+        tempItem.weight = m_weight;
+        tempItem.value = m_value;
 
         Add(tempItem);
     }

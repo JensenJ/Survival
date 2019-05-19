@@ -24,7 +24,7 @@ public class InventoryData
             itemName[i] = inventory.items[i].itemName;
 
             //spriteName[i] = inventory.items[i].icon.ToString(); // Causes issue if no sprite assigned
-            spriteName[i] = "NULL";
+            spriteName[i] = "NULL"; //TODO: Make sprite assets and do a null check for them
 
             weight[i] = inventory.items[i].weight;
             value[i] = inventory.items[i].value;
