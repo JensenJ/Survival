@@ -15,7 +15,7 @@ public class Compass : MonoBehaviour
 
     void Start()
     {
-        directionText = transform.root.GetChild(1).GetChild(4).GetComponent<TextMeshProUGUI>();
+        directionText = transform.root.GetChild(1).GetChild(4).GetChild(0).GetComponent<TextMeshProUGUI>();
     }
 
     // Update every frame

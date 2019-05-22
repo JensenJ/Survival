@@ -31,8 +31,8 @@ public class WorldManager : MonoBehaviour
         worldManagerPanel = transform.root.GetChild(1).GetChild(5).gameObject;
         worldCreatorPanel = transform.root.GetChild(1).GetChild(6).gameObject;
 
-        worldNameInput = worldCreatorPanel.transform.GetChild(2).GetComponent<TMP_InputField>();
-        worldSeedInput = worldCreatorPanel.transform.GetChild(4).GetComponent<TMP_InputField>();
+        worldNameInput = worldCreatorPanel.transform.GetChild(1).GetComponent<TMP_InputField>();
+        worldSeedInput = worldCreatorPanel.transform.GetChild(2).GetComponent<TMP_InputField>();
 
         //Loads world list
         SaveData loadData = SaveSystem.LoadSaves();
