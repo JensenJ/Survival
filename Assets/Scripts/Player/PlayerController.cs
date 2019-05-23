@@ -176,7 +176,7 @@ public class PlayerController : MonoBehaviour
         {
             if (isInMenu)
             {
-                CloseMenus();   
+                CloseMenus();
             }
             else
             {
@@ -186,6 +186,7 @@ public class PlayerController : MonoBehaviour
                 pausePanel.SetActive(true);
                 isInMenu = true;
             }
+            
         }
 
         //Movement
