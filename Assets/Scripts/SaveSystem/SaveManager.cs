@@ -77,7 +77,13 @@ public class SaveManager : MonoBehaviour
         InventoryData inventoryData = SaveSystem.LoadInventory(WorldData.currentlyLoadedName);
         for (int i = 0; i < inventoryData.itemName.Length; i++)
         {
-            Sprite icon = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Textures/Items/" + inventoryData.spriteName[i] + ".png", typeof(Sprite));
+            string path = "ItemIcons/" + inventoryData.spriteName[i];
+            Sprite icon = (Sprite)Resources.Load(path, typeof(Sprite));
+
+            if(icon == null)
+            {
+                Debug.LogError("File not found: " + path);
+            }
             pi.LoadInventory(inventoryData.itemName[i], icon, inventoryData.weight[i], inventoryData.value[i]);
         }
 

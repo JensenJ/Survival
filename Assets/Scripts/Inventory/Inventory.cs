@@ -66,7 +66,7 @@ public class Inventory : MonoBehaviour
             attributes.bIsOverencumbered = false;
         }
 
-        //Updare inventory ui
+        //Update inventory ui
         ui.UpdateUI();
     }
 

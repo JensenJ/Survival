@@ -10,11 +10,11 @@ public class InventorySlot : MonoBehaviour
     Inventory inventory;
 
     Item item;
-    Image icon;
-    Image delBtnIcon;
+    public Image icon;
+    public Image delBtnIcon;
 
-    Button delBtn;
-    Button mainBtn;
+    public Button delBtn;
+    public Button mainBtn;
 
     public int slotID = 0;
 
@@ -29,7 +29,7 @@ public class InventorySlot : MonoBehaviour
         //TODO: Drop Item in World
     }
 
-    void Start()
+    void Awake()
     {
         slotID = transform.GetSiblingIndex();
         inventory = Inventory.instance;

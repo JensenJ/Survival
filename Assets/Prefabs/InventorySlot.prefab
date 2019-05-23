@@ -291,6 +291,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30dd420f410d79744a910238ba6fc400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  icon: {fileID: 7386662457817336185}
+  delBtnIcon: {fileID: 8819234553627796952}
+  delBtn: {fileID: 5637084030299023247}
+  mainBtn: {fileID: 5000589344352159410}
+  slotID: 0
 --- !u!1 &5782454457653301249
 GameObject:
   m_ObjectHideFlags: 0
