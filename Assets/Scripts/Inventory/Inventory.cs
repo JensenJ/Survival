@@ -23,13 +23,12 @@ public class Inventory : MonoBehaviour
 
     #endregion
 
-    //Delegate for UI
-    public delegate void OnItemChanged();
-    public OnItemChanged onItemChangedCallback;
+    InventoryUI ui;
 
     //Attributes
     Attributes attributes;
     public float maxWeight = 100;
+    public float numberOfSlots = 20;
 
     //Inventory item list
     public List<Item> items = new List<Item>();
@@ -38,14 +37,15 @@ public class Inventory : MonoBehaviour
     {
         //Get attribute component and update inventory
         attributes = GetComponent<Attributes>();
-        UpdateInventory();
+        ui = transform.root.GetChild(1).GetChild(6).GetComponent<InventoryUI>();
     }
 
-    //Updates inventory data, such as weight
+    //Updates inventory data, such as weight and number of slots
     public void UpdateInventory()
     {
         //max weight calculation
         maxWeight = attributes.maxStaminaMeter / 100.0f * maxWeight; //Max weight value
+        numberOfSlots = attributes.maxStaminaMeter / 100.0f * numberOfSlots; //Number of slots
 
         //Adds up all weight in inventory
         float currentWeight = 0;
@@ -66,11 +66,8 @@ public class Inventory : MonoBehaviour
             attributes.bIsOverencumbered = false;
         }
 
-        //Call delegate/callback
-        if(onItemChangedCallback != null)
-        {
-            onItemChangedCallback.Invoke();
-        }
+        //Updare inventory ui
+        ui.UpdateUI();
     }
 
     //Loads inventory from save
@@ -83,21 +80,29 @@ public class Inventory : MonoBehaviour
         tempItem.icon = m_sprite;
         tempItem.weight = m_weight;
         tempItem.value = m_value;
-
         Add(tempItem);
     }
 
     //Add item
-    public void Add(Item item)
+    public bool Add(Item item)
     {
+        if(items.Count >= numberOfSlots)
+        {
+            Debug.Log("Not enough room");
+            return false;
+        }
         items.Add(item);
         UpdateInventory();
+        return true;
     }
 
     //Remove item
-    public void Remove(Item item)
+    public void Remove(Item item, int ID)
     {
-        items.Remove(item);
+        if (items.Contains(item))
+        {
+            items.RemoveAt(ID);
+        }
         UpdateInventory();
     }
 }

@@ -7,6 +7,7 @@ using UnityEngine;
 [System.Serializable]
 public class InventoryData
 {
+    //Item values
     public string[] itemName;
     public string[] spriteName;
     public float[] weight;
@@ -14,18 +15,17 @@ public class InventoryData
 
     public InventoryData(Inventory inventory)
     {
+        //Init of arrays
         itemName = new string[inventory.items.Count];
         spriteName = new string[inventory.items.Count];
         weight = new float[inventory.items.Count];
         value = new float[inventory.items.Count];
 
+        //Setting values in arrays
         for (int i = 0; i < inventory.items.Count; i++)
         {
             itemName[i] = inventory.items[i].itemName;
-
-            //spriteName[i] = inventory.items[i].icon.ToString(); // Causes issue if no sprite assigned
-            spriteName[i] = "NULL"; //TODO: Make sprite assets and do a null check for them
-
+            spriteName[i] = inventory.items[i].icon.texture.name;
             weight[i] = inventory.items[i].weight;
             value[i] = inventory.items[i].value;
         }

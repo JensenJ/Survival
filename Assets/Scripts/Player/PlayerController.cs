@@ -24,7 +24,9 @@ public class PlayerController : MonoBehaviour
     //References
     private Attributes attributes = null;
     private WaypointManager waypointManager = null;
+    private InventoryUI inventory = null;
     private bool bCanUseWaypointManager = true;
+    private bool bCanUseInventory = true;
     private PlayerMotor motor;
     MapGenerator mapgen;
     SaveManager sm;
@@ -52,6 +54,7 @@ public class PlayerController : MonoBehaviour
         motor = GetComponent<PlayerMotor>();
         attributes = GetComponent<Attributes>();
         waypointManager = transform.root.GetChild(2).GetComponent<WaypointManager>();
+        inventory = transform.root.GetChild(1).GetChild(6).GetComponent<InventoryUI>();
         mapgen = transform.root.GetChild(4).GetComponent<MapGenerator>();
         Crosshair = transform.root.GetChild(1).GetChild(3).GetComponent<Image>();
         sm = transform.root.GetChild(5).GetComponent<SaveManager>();
@@ -152,22 +155,27 @@ public class PlayerController : MonoBehaviour
         //Waypoint Manager
         if (Input.GetKeyDown(KeyCode.B) && bCanUseWaypointManager)
         {
-            if(waypointManager.waypointManagerPanel.activeSelf == true)
+            if (isInMenu)
             {
-                waypointManager.waypointManagerPanel.SetActive(false);
-                waypointManager.waypointEditorPanel.SetActive(false);
-                Cursor.lockState = CursorLockMode.Locked;
-                Crosshair.gameObject.SetActive(true);
-                bCanMove = true;
-                isInMenu = false;
+                CloseMenus();
             }
             else
             {
-                waypointManager.waypointManagerPanel.SetActive(true);
-                Cursor.lockState = CursorLockMode.None;
-                Crosshair.gameObject.SetActive(false);
-                bCanMove = false;
-                isInMenu = true;
+                OpenMenu(waypointManager.waypointManagerPanel);
+            }
+        }
+
+
+        //Inventory
+        if(Input.GetKeyDown(KeyCode.I) && bCanUseInventory)
+        {
+            if (isInMenu)
+            {
+                CloseMenus();
+            }
+            else
+            {
+                OpenMenu(inventory.gameObject);
             }
         }
 
@@ -180,11 +188,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                Cursor.lockState = CursorLockMode.None;
-                Crosshair.gameObject.SetActive(false);
-                bCanMove = false;
-                pausePanel.SetActive(true);
-                isInMenu = true;
+                OpenMenu(pausePanel);
             }
             
         }
@@ -195,11 +199,23 @@ public class PlayerController : MonoBehaviour
         Jump();
     }
 
+    //Function to open a menu passed in
+    public void OpenMenu(GameObject menu)
+    {
+        menu.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Crosshair.gameObject.SetActive(false);
+        bCanMove = false;
+        isInMenu = true;
+    }
+
+    //Closes all menus
     public void CloseMenus()
     {
         //Menus to close
         waypointManager.waypointManagerPanel.SetActive(false);
         waypointManager.waypointEditorPanel.SetActive(false);
+        inventory.gameObject.SetActive(false);
         pausePanel.SetActive(false);
 
         Cursor.lockState = CursorLockMode.Locked;

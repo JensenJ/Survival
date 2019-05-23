@@ -210,6 +210,7 @@ MonoBehaviour:
   bIsStaticStamina: 0
   bIsExhausted: 0
   bCanRegenStamina: 1
+  bIsOverencumbered: 0
   maxHungerMeter: 100
   hungerMeterDrainSpeed: 0.125
   hungerMeterRegenSpeed: 10
@@ -267,6 +268,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 373b3c9d5d68ea5438934ac3a66ad036, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxWeight: 100
+  numberOfSlots: 20
   items: []
 --- !u!1 &1758035812419762075
 GameObject:
