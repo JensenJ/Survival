@@ -75,6 +75,39 @@ public static class SaveSystem
         }
     }
 
+    //Saves inventory
+    public static void SaveInventory(Inventory inventory, string worldName)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        Directory.CreateDirectory(Application.persistentDataPath + "/Saves/" + worldName);
+        string path = Application.persistentDataPath + "/Saves/" + worldName + "/Inventory.SGSAVE";
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        InventoryData data = new InventoryData(inventory);
+        formatter.Serialize(stream, data);
+        stream.Close();
+    }
+
+    //Loads inventory
+    public static InventoryData LoadInventory(string worldName)
+    {
+        string path = Application.persistentDataPath + "/Saves/" + worldName + "/Inventory.SGSAVE";
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            InventoryData data = formatter.Deserialize(stream) as InventoryData;
+            stream.Close();
+            return data;
+        }
+        else
+        {
+            Debug.LogWarning("Path does not exist: " + path);
+            return null;
+        }
+    }
+
     //Saves waypoint data
     public static void SaveWaypoints(WaypointManager manager, string worldName)
     {

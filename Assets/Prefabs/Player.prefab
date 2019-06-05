@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 5123572326359988360}
   - component: {fileID: 1758035811773659634}
   - component: {fileID: 4694994179229959573}
+  - component: {fileID: -5471475073323532068}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -209,6 +210,7 @@ MonoBehaviour:
   bIsStaticStamina: 0
   bIsExhausted: 0
   bCanRegenStamina: 1
+  bIsOverencumbered: 0
   maxHungerMeter: 100
   hungerMeterDrainSpeed: 0.125
   hungerMeterRegenSpeed: 10
@@ -254,6 +256,21 @@ MonoBehaviour:
   chunkLoaderID: 0
   hitObject: {fileID: 0}
   chunknames: []
+--- !u!114 &-5471475073323532068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1758035811882576791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 373b3c9d5d68ea5438934ac3a66ad036, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxWeight: 100
+  numberOfSlots: 20
+  items: []
 --- !u!1 &1758035812419762075
 GameObject:
   m_ObjectHideFlags: 0
